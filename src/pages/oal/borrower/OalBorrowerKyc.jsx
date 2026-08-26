@@ -670,20 +670,20 @@ export const OalBorrowerKyc = () => {
                         </td>
 
                         <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                          <div className="flex items-center justify-end gap-2">
+                          <div className="flex items-center justify-end gap-1.5">
                             <Button
                               variant="outline"
                               size="sm"
                               icon={Eye}
+                              title="Inspect Hash"
                               onClick={() => setSelectedDoc(doc)}
-                              style={{ fontSize: '11px', height: '30px', padding: '0 10px' }}
-                            >
-                              Inspect Hash
-                            </Button>
+                              style={{ width: '32px', height: '32px', padding: 0, justifyContent: 'center' }}
+                            />
                             <Button
                               variant="outline"
                               size="sm"
                               icon={Download}
+                              title="Download File"
                               onClick={() => {
                                 addToast({
                                   title: 'Document Downloaded',
@@ -691,10 +691,8 @@ export const OalBorrowerKyc = () => {
                                   type: 'info'
                                 });
                               }}
-                              style={{ fontSize: '11px', height: '30px', padding: '0 10px' }}
-                            >
-                              Download
-                            </Button>
+                              style={{ width: '32px', height: '32px', padding: 0, justifyContent: 'center' }}
+                            />
                           </div>
                         </td>
                       </tr>

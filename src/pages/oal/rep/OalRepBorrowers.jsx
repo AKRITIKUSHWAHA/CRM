@@ -89,36 +89,66 @@ export const OalRepBorrowers = () => {
             </Badge>
           </div>
 
-          <div className="flex flex-col gap-2.5 text-xs">
-            <div className="flex justify-between items-center py-1 border-b border-subtle">
-              <span className="text-tertiary">Primary Signatory:</span>
-              <span className="font-semibold text-primary">Dr. Aris Thorne (CEO)</span>
+          {/* Clean 2-Column Institutional Information Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div style={{ padding: '10px 12px', backgroundColor: 'var(--surface-secondary)', borderRadius: '8px', border: '1px solid var(--border)' }}>
+              <span className="text-tertiary block" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600, marginBottom: '2px' }}>
+                Primary Signatory
+              </span>
+              <span className="font-semibold text-primary" style={{ fontSize: '13px' }}>
+                Dr. Aris Thorne (CEO)
+              </span>
             </div>
-            <div className="flex justify-between items-center py-1 border-b border-subtle">
-              <span className="text-tertiary">Registered Entity:</span>
-              <span className="font-semibold text-primary">BioGenix Labs Inc. (DE C-Corp)</span>
+
+            <div style={{ padding: '10px 12px', backgroundColor: 'var(--surface-secondary)', borderRadius: '8px', border: '1px solid var(--border)' }}>
+              <span className="text-tertiary block" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600, marginBottom: '2px' }}>
+                Registered Entity
+              </span>
+              <span className="font-semibold text-primary" style={{ fontSize: '13px' }}>
+                BioGenix Labs Inc. (DE C-Corp)
+              </span>
             </div>
-            <div className="flex justify-between items-center py-1 border-b border-subtle">
-              <span className="text-tertiary">Tax ID / EIN:</span>
-              <span className="font-mono text-secondary">XX-XXX1948</span>
+
+            <div style={{ padding: '10px 12px', backgroundColor: 'var(--surface-secondary)', borderRadius: '8px', border: '1px solid var(--border)' }}>
+              <span className="text-tertiary block" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600, marginBottom: '2px' }}>
+                Tax ID / EIN
+              </span>
+              <span className="font-mono text-secondary" style={{ fontSize: '13px' }}>
+                XX-XXX1948
+              </span>
             </div>
-            <div className="flex justify-between items-center py-1 border-b border-subtle">
-              <span className="text-tertiary">Requested Facility:</span>
-              <span className="font-bold text-success" style={{ fontSize: '13px' }}>$750,000 (36 Months)</span>
+
+            <div style={{ padding: '10px 12px', backgroundColor: 'var(--surface-secondary)', borderRadius: '8px', border: '1px solid var(--border)' }}>
+              <span className="text-tertiary block" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600, marginBottom: '2px' }}>
+                Requested Facility
+              </span>
+              <span className="font-bold text-success" style={{ fontSize: '13px' }}>
+                $750,000 (36 Months)
+              </span>
             </div>
-            <div className="flex justify-between items-center py-1 border-b border-subtle">
-              <span className="text-tertiary">Annual Revenue:</span>
-              <span className="font-semibold text-primary">$8,400,000 (Plaid Verified)</span>
+
+            <div style={{ padding: '10px 12px', backgroundColor: 'var(--surface-secondary)', borderRadius: '8px', border: '1px solid var(--border)' }}>
+              <span className="text-tertiary block" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600, marginBottom: '2px' }}>
+                Annual Revenue
+              </span>
+              <span className="font-semibold text-primary" style={{ fontSize: '13px' }}>
+                $8,400,000 (Plaid Verified)
+              </span>
             </div>
-            <div className="flex justify-between items-center py-1 border-b border-subtle">
-              <span className="text-tertiary">AI Credit Rating:</span>
-              <Badge variant="success" icon={Sparkles} style={{ fontSize: '11px' }}>
-                792 / 850 (Grade A+)
-              </Badge>
+
+            <div style={{ padding: '10px 12px', backgroundColor: 'var(--surface-secondary)', borderRadius: '8px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <span className="text-tertiary block" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600, marginBottom: '2px' }}>
+                AI Credit Rating
+              </span>
+              <div>
+                <Badge variant="success" icon={Sparkles} style={{ fontSize: '11px', padding: '2px 8px' }}>
+                  792 / 850 (Grade A+)
+                </Badge>
+              </div>
             </div>
           </div>
 
-          <form onSubmit={handleUpdateStatus} className="flex flex-col gap-3 pt-2">
+          <form onSubmit={handleUpdateStatus} className="flex flex-col gap-3 pt-2 border-t border-subtle">
             <Select
               label="Update Application Marketplace Stage"
               value={selectedStatus}
@@ -126,15 +156,24 @@ export const OalRepBorrowers = () => {
               options={stageNames.map((name, idx) => ({ label: `Stage ${idx + 1}: ${name}`, value: idx }))}
               style={{ height: '38px', fontSize: '13px' }}
             />
-            <Button
-              variant="primary"
-              size="sm"
-              type="submit"
-              icon={Save}
-              style={{ backgroundColor: 'var(--accent)', borderColor: 'var(--accent)', height: '38px', fontWeight: 600 }}
-            >
-              Update Marketplace Stage
-            </Button>
+            <div className="flex justify-end">
+              <Button
+                variant="primary"
+                size="sm"
+                type="submit"
+                icon={Save}
+                style={{
+                  backgroundColor: 'var(--accent)',
+                  borderColor: 'var(--accent)',
+                  fontSize: '12px',
+                  padding: '6px 16px',
+                  width: 'auto',
+                  fontWeight: 600,
+                }}
+              >
+                Update Marketplace Stage
+              </Button>
+            </div>
           </form>
         </Card>
 
@@ -155,15 +194,17 @@ export const OalRepBorrowers = () => {
               style={{ height: '38px', fontSize: '13px' }}
               required
             />
-            <Button
-              variant="outline"
-              size="sm"
-              type="submit"
-              icon={Plus}
-              style={{ height: '36px', fontWeight: 600, fontSize: '12px' }}
-            >
-              Add Internal Note
-            </Button>
+            <div className="flex justify-end">
+              <Button
+                variant="outline"
+                size="sm"
+                type="submit"
+                icon={Plus}
+                style={{ height: '34px', fontWeight: 600, fontSize: '12px', padding: '0 14px' }}
+              >
+                Add Internal Note
+              </Button>
+            </div>
           </form>
 
           <div className="flex flex-col gap-2.5 mt-1 overflow-y-auto" style={{ maxHeight: '300px' }}>

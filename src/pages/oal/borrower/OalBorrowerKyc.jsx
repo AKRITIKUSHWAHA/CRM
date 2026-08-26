@@ -483,21 +483,22 @@ export const OalBorrowerKyc = () => {
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* 1. Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <Breadcrumb items={[{ label: 'OAL Network' }, { label: 'KYC & Legal Vault' }]} />
-          <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             KYC Identity & Corporate Legal Vault
           </h1>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
           <Button
             variant="outline"
             size="sm"
             icon={RefreshCw}
             disabled={isRefreshing}
             onClick={handleReVerify}
+            style={{ fontSize: '12px' }}
           >
             {isRefreshing ? 'Syncing...' : 'Refresh Telemetry'}
           </Button>
@@ -507,6 +508,7 @@ export const OalBorrowerKyc = () => {
             size="sm"
             icon={FileText}
             onClick={() => setIsCertModalOpen(true)}
+            style={{ fontSize: '12px' }}
           >
             Export KYC Certificate
           </Button>
@@ -515,7 +517,7 @@ export const OalBorrowerKyc = () => {
             variant="primary"
             size="sm"
             icon={CheckCircle2}
-            style={{ backgroundColor: 'var(--success)', borderColor: 'var(--success)' }}
+            style={{ backgroundColor: 'var(--success)', borderColor: 'var(--success)', fontSize: '12px' }}
             onClick={() => navigate('/oal/borrower/offers')}
           >
             View Active Lender Offers
@@ -566,9 +568,19 @@ export const OalBorrowerKyc = () => {
         </Card>
       </div>
 
-      {/* 3. Navigation Tabs */}
-      <div className="flex items-center justify-between gap-3 flex-wrap border-b border-subtle pb-2">
-        <div className="flex items-center gap-1.5 p-1 surface-secondary rounded-lg border-subtle">
+      {/* 3. Navigation Tabs - Horizontal Touch Scrolling on Mobile */}
+      <div className="flex items-center justify-between gap-3 border-b border-subtle pb-2 w-full">
+        <div
+          className="flex items-center gap-1.5 p-1 surface-secondary rounded-lg border-subtle"
+          style={{
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-x',
+            maxWidth: '100%',
+            width: '100%',
+            scrollbarWidth: 'none',
+          }}
+        >
           <button
             type="button"
             onClick={() => setActiveTab('entity')}
@@ -579,6 +591,8 @@ export const OalBorrowerKyc = () => {
               borderRadius: '6px',
               border: 'none',
               cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
               backgroundColor: activeTab === 'entity' ? 'var(--surface)' : 'transparent',
               color: activeTab === 'entity' ? 'var(--text-primary)' : 'var(--text-secondary)',
               boxShadow: activeTab === 'entity' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
@@ -596,6 +610,8 @@ export const OalBorrowerKyc = () => {
               borderRadius: '6px',
               border: 'none',
               cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
               backgroundColor: activeTab === 'owners' ? 'var(--surface)' : 'transparent',
               color: activeTab === 'owners' ? 'var(--text-primary)' : 'var(--text-secondary)',
               boxShadow: activeTab === 'owners' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
@@ -613,6 +629,8 @@ export const OalBorrowerKyc = () => {
               borderRadius: '6px',
               border: 'none',
               cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
               backgroundColor: activeTab === 'vault' ? 'var(--surface)' : 'transparent',
               color: activeTab === 'vault' ? 'var(--text-primary)' : 'var(--text-secondary)',
               boxShadow: activeTab === 'vault' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',

@@ -35,7 +35,11 @@ import {
   Modal,
   Input,
   Select,
-  Timeline
+  Timeline,
+  Dropdown,
+  DropdownItem,
+  DropdownHeader,
+  DropdownDivider
 } from '../../components/ui';
 import { useCrm } from '../../context/CrmContext';
 import { useToast } from '../../context/ToastContext';
@@ -55,6 +59,7 @@ export const CrmDashboard = () => {
   const { addToast } = useToast();
 
   const [activeRange, setActiveRange] = useState('30 Days');
+  const [selectedDateLabel, setSelectedDateLabel] = useState('May 12 – May 18, 2025');
   const [isSyncing, setIsSyncing] = useState(false);
 
   // Modals state
@@ -305,27 +310,68 @@ export const CrmDashboard = () => {
               New Task
             </Button>
 
-            {/* Date Range Selector Pill */}
-            <button
-              type="button"
-              onClick={() => addToast({ title: 'Date Range Selector', message: 'Current reporting cycle: Active Fiscal Q1', type: 'info' })}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-sm text-xs border-subtle surface cursor-pointer font-medium text-primary"
-              style={{
-                backgroundColor: 'var(--surface)',
-                border: '1px solid var(--border)',
-                height: '34px',
-              }}
+            {/* Date Range Selector Dropdown */}
+            <Dropdown
+              trigger={
+                <button
+                  type="button"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-sm text-xs border-subtle surface cursor-pointer font-medium text-primary hover:bg-hover transition-colors"
+                  style={{
+                    backgroundColor: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    height: '34px',
+                  }}
+                >
+                  <Calendar size={14} className="text-secondary" />
+                  <span>{selectedDateLabel}</span>
+                  <ChevronDown size={14} className="text-tertiary" />
+                </button>
+              }
             >
-              <Calendar size={14} className="text-secondary" />
-              <span>May 12 &ndash; May 18, 2025</span>
-              <ChevronDown size={14} className="text-tertiary" />
-            </button>
+              <DropdownHeader>Reporting Cycle Interval</DropdownHeader>
+              <DropdownItem
+                icon={Calendar}
+                onClick={() => {
+                  setSelectedDateLabel('May 12 – May 18, 2025');
+                  addToast({ title: 'Date Range Updated', message: 'Set to May 12 – May 18, 2025 (Current Cycle)', type: 'info' });
+                }}
+              >
+                May 12 &ndash; May 18, 2025 (Current Cycle)
+              </DropdownItem>
+              <DropdownItem
+                icon={Calendar}
+                onClick={() => {
+                  setSelectedDateLabel('May 1 – May 31, 2025');
+                  addToast({ title: 'Date Range Updated', message: 'Set to May 1 – May 31, 2025 (Full Month)', type: 'info' });
+                }}
+              >
+                May 1 &ndash; May 31, 2025 (Full Month)
+              </DropdownItem>
+              <DropdownItem
+                icon={Calendar}
+                onClick={() => {
+                  setSelectedDateLabel('Apr 1 – Jun 30, 2025');
+                  addToast({ title: 'Date Range Updated', message: 'Set to Q2 2025 (Apr 1 – Jun 30, 2025)', type: 'info' });
+                }}
+              >
+                Apr 1 &ndash; Jun 30, 2025 (Fiscal Q2)
+              </DropdownItem>
+              <DropdownItem
+                icon={Calendar}
+                onClick={() => {
+                  setSelectedDateLabel('Jan 1 – Dec 31, 2025');
+                  addToast({ title: 'Date Range Updated', message: 'Set to Fiscal Year 2025', type: 'info' });
+                }}
+              >
+                Jan 1 &ndash; Dec 31, 2025 (Fiscal Year)
+              </DropdownItem>
+            </Dropdown>
           </div>
         </div>
       </div>
 
       {/* 2. Row 1: 4 Executive KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid-responsive-kpi">
         <KPICard
           title="TOTAL LEADS ACQUIRED"
           value={String(totalLeadsDisplay)}
@@ -389,7 +435,7 @@ export const CrmDashboard = () => {
           boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)',
         }}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid-responsive-health">
           {/* Col 1 */}
           <div className="flex flex-col gap-1">
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
@@ -408,7 +454,7 @@ export const CrmDashboard = () => {
           </div>
 
           {/* Col 2 */}
-          <div className="flex flex-col gap-1 sm:border-l sm:border-border sm:pl-6">
+          <div className="flex flex-col gap-1 health-col-bordered">
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               AVG DEAL CYCLE
             </span>
@@ -425,7 +471,7 @@ export const CrmDashboard = () => {
           </div>
 
           {/* Col 3 */}
-          <div className="flex flex-col gap-1 lg:border-l lg:border-border lg:pl-6">
+          <div className="flex flex-col gap-1 health-col-bordered">
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               TENANT SLA LIFETIME
             </span>
@@ -450,7 +496,7 @@ export const CrmDashboard = () => {
           </div>
 
           {/* Col 4 */}
-          <div className="flex flex-col gap-1 lg:border-l lg:border-border lg:pl-6">
+          <div className="flex flex-col gap-1 health-col-bordered">
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               DATA SYNC STATUS
             </span>
@@ -466,7 +512,7 @@ export const CrmDashboard = () => {
       </div>
 
       {/* 4. Row 3: Sales Pipeline Distribution (50%) & Lead Sources & Attribution (50%) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid-responsive-2col">
         {/* Left Card: Sales Pipeline Distribution */}
         <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
           <div className="p-5 flex flex-col gap-4">
@@ -718,7 +764,7 @@ export const CrmDashboard = () => {
       </div>
 
       {/* 5. Row 4: Live CRM Activity Audit (50%) & Upcoming Priority Tasks (50%) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid-responsive-2col">
         {/* Left Card: Live CRM Activity Audit */}
         <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
           <div className="p-5 flex flex-col gap-4">

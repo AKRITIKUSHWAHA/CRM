@@ -4,7 +4,7 @@ import { LogOut, Shield, User } from 'lucide-react';
 import { crmNavigation, oalNavigation } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { getFilteredNavigation, getRoleConfig } from '../../utils/rbac';
+import { getFilteredNavigation, getRoleConfig, normalizeRoleId } from '../../utils/rbac';
 
 export const Sidebar = ({
   isCollapsed = false,
@@ -22,6 +22,10 @@ export const Sidebar = ({
 
   const getProfilePath = () => {
     if (product === 'crm') return '/crm/settings';
+    const roleId = normalizeRoleId(oalUser, 'oal');
+    if (roleId === 'rep') return '/oal/rep/profile';
+    if (roleId === 'lender') return '/oal/lender/profile';
+    if (roleId === 'admin') return '/oal/admin/profile';
     return '/oal/borrower/profile';
   };
 

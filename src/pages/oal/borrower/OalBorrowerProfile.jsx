@@ -27,17 +27,17 @@ export const OalBorrowerProfile = () => {
   const { addToast } = useToast();
   const fileInputRef = useRef(null);
 
-  // Form State initialized from active borrower user
+  // Form State initialized from active user
   const [formData, setFormData] = useState({
     name: oalUser?.name || 'Dr. Aris Thorne',
-    title: 'Chief Executive Officer & Founder',
+    title: oalUser?.role === 'rep' ? 'Licensed Underwriting Representative' : oalUser?.role === 'lender' ? 'Managing Director & Capital Lead' : oalUser?.role === 'admin' ? 'Master Platform Administrator' : 'Chief Executive Officer & Founder',
     email: oalUser?.email || 'a.thorne@biogenix.org',
     phone: '+1 (555) 438-9201',
-    company: oalUser?.company || 'BioGenix Labs Inc.',
+    company: oalUser?.company || (oalUser?.role === 'rep' ? 'OAL Network Underwriting Desk' : oalUser?.role === 'lender' ? 'Vanguard Capital Debt Fund' : 'BioGenix Labs Inc.'),
     ein: 'XX-XXX7201',
     address: '450 Innovation Parkway, Suite 800',
     cityState: 'Cambridge, MA 02142',
-    bio: 'Lead corporate representative managing commercial liquidity facilities and clinical scale-up operations.',
+    bio: 'Lead representative managing commercial underwriting facilities and operations.',
   });
 
   const [avatarPreview, setAvatarPreview] = useState(oalUser?.avatar || null);

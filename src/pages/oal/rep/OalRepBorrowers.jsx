@@ -53,9 +53,6 @@ export const OalRepBorrowers = () => {
           <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             BioGenix Labs Inc. — Borrower Profile
           </h1>
-          <p className="text-xs text-secondary margin-0 mt-0.5">
-            Corporate Signatory: Dr. Aris Thorne (CEO) &bull; Facility Ref: <code className="font-mono">#OAL-7749</code>
-          </p>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">

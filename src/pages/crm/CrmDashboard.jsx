@@ -13,17 +13,22 @@ import {
   ArrowDownRight,
   ShieldCheck,
   CheckSquare,
-  Globe,
-  Share2,
-  Award,
   TrendingUp,
-  PieChart,
-  BarChart2,
   Sparkles,
   ExternalLink,
   Check,
   Trash2,
-  ArrowRight
+  ArrowRight,
+  Filter,
+  MoreVertical,
+  Layers,
+  Clock,
+  FileText,
+  Target,
+  Download,
+  Activity,
+  CheckCircle2,
+  Info
 } from 'lucide-react';
 import {
   Breadcrumb,
@@ -35,7 +40,6 @@ import {
   Modal,
   Input,
   Select,
-  Timeline,
   Dropdown,
   DropdownItem,
   DropdownHeader,
@@ -58,15 +62,22 @@ export const CrmDashboard = () => {
   } = useCrm();
   const { addToast } = useToast();
 
+  // Primary Dashboard State
   const [activeRange, setActiveRange] = useState('30 Days');
   const [selectedDateLabel, setSelectedDateLabel] = useState('May 12 – May 18, 2025');
   const [isSyncing, setIsSyncing] = useState(false);
+  const [lastSyncTime, setLastSyncTime] = useState('Just now');
+  const [pipelineMetric, setPipelineMetric] = useState('value'); // 'value' | 'deals' | 'winRate'
+  const [activityFilter, setActivityFilter] = useState('all'); // 'all' | 'deals' | 'contacts' | 'leads'
+  const [taskFilter, setTaskFilter] = useState('all'); // 'all' | 'pending' | 'completed'
 
   // Modals state
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState(null);
+  const [selectedKpiDetail, setSelectedKpiDetail] = useState(null);
+  const [isSecurityModalOpen, setIsSecurityModalOpen] = useState(false);
 
   // Form states for Quick Task
   const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -81,26 +92,30 @@ export const CrmDashboard = () => {
   const [newContactPhone, setNewContactPhone] = useState('');
   const [newContactType, setNewContactType] = useState('Enterprise Client');
 
-  // Multiplier / calculations based on timeframe
+  // Dynamic calculations based on timeframe
   const timeframeMultiplier =
     activeRange === '7 Days' ? 0.6 : activeRange === '30 Days' ? 1.0 : 2.5;
 
-  const totalLeadsDisplay = Math.round(Math.max(leads.length, 1) * (activeRange === '7 Days' ? 14 : activeRange === '30 Days' ? 48 : 124));
+  const totalLeadsDisplay = Math.round(
+    Math.max(leads.length, 1) * (activeRange === '7 Days' ? 14 : activeRange === '30 Days' ? 48 : 124)
+  );
   const qualifiedOppDisplay = Math.round(342 * timeframeMultiplier);
   const revenueDisplay =
     activeRange === '7 Days' ? '$124,500' : activeRange === '30 Days' ? '$482,900' : '$1,480,000';
   const enterpriseClientCount = contacts.length || 3;
 
+  // Sync Data Handler
   const handleSyncData = () => {
     setIsSyncing(true);
     setTimeout(() => {
       setIsSyncing(false);
+      setLastSyncTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       addToast({
-        title: 'Data Synced',
+        title: 'Dashboard Refreshed',
         message: 'Live pipeline analytics and tenant telemetry synced successfully.',
         type: 'success',
       });
-    }, 500);
+    }, 600);
   };
 
   // Quick Task Submit
@@ -140,7 +155,11 @@ export const CrmDashboard = () => {
     addContact({
       name: newContactName,
       company: newContactCompany,
-      email: newContactEmail || `${newContactName.toLowerCase().replace(/\s+/g, '.')}@${newContactCompany.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
+      email:
+        newContactEmail ||
+        `${newContactName.toLowerCase().replace(/\s+/g, '.')}@${newContactCompany
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, '')}.com`,
       phone: newContactPhone || '+1 (555) 019-2834',
       type: newContactType,
       status: 'Active',
@@ -160,10 +179,111 @@ export const CrmDashboard = () => {
     setIsContactModalOpen(false);
   };
 
+  // Pipeline stages data
+  const pipelineStages = [
+    {
+      id: 'negotiation',
+      name: 'Negotiation Stage',
+      value: '$1.85M',
+      dealsCount: '8 Deals',
+      winRate: '72% Win Rate',
+      pct: 48,
+      variant: 'primary',
+      badgeColor: '#1d4ed8',
+      description: 'Terms and SLA agreements in active legal review',
+    },
+    {
+      id: 'proposal',
+      name: 'Proposal Sent',
+      value: '$843,000',
+      dealsCount: '5 Deals',
+      winRate: '54% Win Rate',
+      pct: 26,
+      variant: 'success',
+      badgeColor: '#16a34a',
+      description: 'Formal commercial quote submitted to decision makers',
+    },
+    {
+      id: 'qualified',
+      name: 'Qualified Opportunities',
+      value: '$426,000',
+      dealsCount: '4 Deals',
+      winRate: '41% Win Rate',
+      pct: 18,
+      variant: 'warning',
+      badgeColor: '#d97706',
+      description: 'Technical scope validated, budget confirmed',
+    },
+    {
+      id: 'leads',
+      name: 'New Leads Discovery',
+      value: '$210,000',
+      dealsCount: '3 Deals',
+      winRate: '28% Win Rate',
+      pct: 8,
+      variant: 'info',
+      badgeColor: '#0284c7',
+      description: 'Initial architectural consultation and capability fit',
+    },
+  ];
+
+  // Lead channels data
+  const leadChannels = [
+    {
+      id: 'web',
+      name: 'Website Direct Forms',
+      pct: 42,
+      volume: '1,124 leads',
+      conversion: '4.8% Conv.',
+      badgeVariant: 'primary',
+      color: '#1d4ed8',
+      cac: '$142 CAC',
+      roi: '420% ROI',
+      trend: '+12.4% MoM',
+    },
+    {
+      id: 'linkedin',
+      name: 'LinkedIn B2B Campaigns',
+      pct: 26,
+      volume: '702 leads',
+      conversion: '6.2% Conv.',
+      badgeVariant: 'success',
+      color: '#16a34a',
+      cac: '$285 CAC',
+      roi: '380% ROI',
+      trend: '+18.1% MoM',
+    },
+    {
+      id: 'referrals',
+      name: 'Referral Partners & Brokers',
+      pct: 18,
+      volume: '512 leads',
+      conversion: '11.5% Conv.',
+      badgeVariant: 'info',
+      color: '#0284c7',
+      cac: '$95 CAC',
+      roi: '780% ROI',
+      trend: '+8.3% MoM',
+    },
+    {
+      id: 'events',
+      name: 'Trade Conferences 2025',
+      pct: 13,
+      volume: '343 leads',
+      conversion: '8.1% Conv.',
+      badgeVariant: 'warning',
+      color: '#d97706',
+      cac: '$410 CAC',
+      roi: '290% ROI',
+      trend: '+4.5% MoM',
+    },
+  ];
+
   // Activity feed items
   const activityItems = [
     {
       id: 'act-1',
+      type: 'deals',
       title: 'New Deal Moved to Negotiation',
       description: 'Enterprise Logistics Expansion deal moved by Alexander Wright',
       time: '10 mins ago',
@@ -175,6 +295,7 @@ export const CrmDashboard = () => {
     },
     {
       id: 'act-2',
+      type: 'contacts',
       title: 'Contact Record Created',
       description: 'Sofia Rodriguez added to isolated tenant database',
       time: '1 hour ago',
@@ -186,6 +307,7 @@ export const CrmDashboard = () => {
     },
     {
       id: 'act-3',
+      type: 'leads',
       title: 'Lead Status Updated',
       description: 'Samantha Ray moved from New to Qualified',
       time: '3 hours ago',
@@ -197,6 +319,7 @@ export const CrmDashboard = () => {
     },
     {
       id: 'act-4',
+      type: 'deals',
       title: 'Proposal Sent to Prospect',
       description: 'Renewal proposal sent to TechNova Solutions',
       time: '5 hours ago',
@@ -208,21 +331,35 @@ export const CrmDashboard = () => {
     },
   ];
 
+  const filteredActivities = activityItems.filter(
+    (a) => activityFilter === 'all' || a.type === activityFilter
+  );
+
+  const filteredTasks = tasks.filter((t) => {
+    if (taskFilter === 'pending') return t.status !== 'Completed';
+    if (taskFilter === 'completed') return t.status === 'Completed';
+    return true;
+  });
+
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* 1. Top Breadcrumb & Executive Header Controls */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <Breadcrumb
           homeHref="/crm/dashboard"
-          items={[{ label: 'Enterprise SaaS Portal' }, { label: 'CRM nErgy' }, { label: 'Executive Dashboard' }]}
+          items={[
+            { label: 'Enterprise SaaS Portal', onClick: () => addToast({ title: 'Workspace Portal', message: 'nErgy Enterprise Cloud Active', type: 'info' }) },
+            { label: 'CRM nErgy', href: '/crm/dashboard' },
+            { label: 'Executive Dashboard' },
+          ]}
         />
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <h1
                 style={{
-                  fontSize: '26px',
+                  fontSize: '24px',
                   fontWeight: 800,
                   color: 'var(--text-primary)',
                   margin: 0,
@@ -232,9 +369,15 @@ export const CrmDashboard = () => {
               >
                 CRM Executive Dashboard
               </h1>
-              <Badge variant="primary" icon={Sparkles}>
-                Live Pipeline Active
-              </Badge>
+              <button
+                type="button"
+                onClick={() => addToast({ title: 'Telemetry Status', message: 'Tenant Vault Pipeline is 100% active and synchronized.', type: 'success' })}
+                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+              >
+                <Badge variant="primary" icon={Sparkles}>
+                  Live Pipeline Active
+                </Badge>
+              </button>
             </div>
             <p className="text-xs text-secondary margin-0" style={{ marginTop: '3px' }}>
               Real-time pipeline performance, lead acquisition channels, and team operations.
@@ -382,7 +525,7 @@ export const CrmDashboard = () => {
           iconBg="rgba(22, 163, 74, 0.1)"
           iconColor="#16a34a"
           onClick={() => navigate('/crm/leads')}
-          tooltip="Click to view Leads Directory"
+          tooltip="Click to open Leads Directory"
         />
 
         <KPICard
@@ -395,7 +538,7 @@ export const CrmDashboard = () => {
           iconBg="rgba(29, 78, 216, 0.1)"
           iconColor="#1d4ed8"
           onClick={() => navigate('/crm/leads')}
-          tooltip="Click to view Qualified Opportunities"
+          tooltip="Click to open Qualified Deals"
         />
 
         <KPICard
@@ -437,7 +580,10 @@ export const CrmDashboard = () => {
       >
         <div className="grid-responsive-health">
           {/* Col 1 */}
-          <div className="flex flex-col gap-1">
+          <div
+            onClick={() => addToast({ title: 'Conversion Telemetry', message: 'Current Lead-to-Opportunity conversion rate is 26.6% (+2.3% vs target).', type: 'info' })}
+            className="flex flex-col gap-1 cursor-pointer"
+          >
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               CONVERSION RATE
             </span>
@@ -454,7 +600,10 @@ export const CrmDashboard = () => {
           </div>
 
           {/* Col 2 */}
-          <div className="flex flex-col gap-1 health-col-bordered">
+          <div
+            onClick={() => addToast({ title: 'Deal Velocity', message: 'Average deal closure speed is 14.2 days (2.5 days faster than Q4).', type: 'info' })}
+            className="flex flex-col gap-1 health-col-bordered cursor-pointer"
+          >
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               AVG DEAL CYCLE
             </span>
@@ -471,7 +620,10 @@ export const CrmDashboard = () => {
           </div>
 
           {/* Col 3 */}
-          <div className="flex flex-col gap-1 health-col-bordered">
+          <div
+            onClick={() => addToast({ title: 'SLA Health', message: 'Tenant SLA uptime is 99.98%. All clusters optimal.', type: 'success' })}
+            className="flex flex-col gap-1 health-col-bordered cursor-pointer"
+          >
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               TENANT SLA LIFETIME
             </span>
@@ -496,7 +648,10 @@ export const CrmDashboard = () => {
           </div>
 
           {/* Col 4 */}
-          <div className="flex flex-col gap-1 health-col-bordered">
+          <div
+            onClick={handleSyncData}
+            className="flex flex-col gap-1 health-col-bordered cursor-pointer"
+          >
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               DATA SYNC STATUS
             </span>
@@ -506,7 +661,7 @@ export const CrmDashboard = () => {
                 Synced
               </span>
             </div>
-            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>Just now</span>
+            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{lastSyncTime}</span>
           </div>
         </div>
       </div>
@@ -522,23 +677,21 @@ export const CrmDashboard = () => {
                   Sales Pipeline Distribution
                 </h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                  Deal progression by status pipeline stages.
+                  Deal progression across active stages.
                 </span>
               </div>
-              <button
-                type="button"
-                onClick={() => navigate('/crm/pipeline')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#1d4ed8',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                View Kanban &rarr;
-              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => navigate('/crm/pipeline')}
+                  className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline cursor-pointer"
+                  style={{ background: 'none', border: 'none', color: '#1d4ed8' }}
+                >
+                  <span>View Kanban</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
             </div>
 
             {/* Visual SVG Trend Graph Sparkline */}
@@ -550,9 +703,9 @@ export const CrmDashboard = () => {
                 </span>
                 <span className="font-bold text-success">+24.5% Conversion</span>
               </div>
-              
+
               {/* Responsive SVG Area Curve Chart */}
-              <div style={{ height: '54px', width: '100%' }}>
+              <div style={{ height: '52px', width: '100%' }}>
                 <svg viewBox="0 0 500 60" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
                   <defs>
                     <linearGradient id="pipelineGrad" x1="0" y1="0" x2="0" y2="1">
@@ -576,38 +729,37 @@ export const CrmDashboard = () => {
             </div>
 
             {/* Stages Progress Bars */}
-            <div className="flex flex-col gap-3.5 pt-1">
-              <div>
-                <div className="flex justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-primary">Negotiation Stage ($1.85M)</span>
-                  <span className="font-bold text-primary">48%</span>
+            <div className="flex flex-col gap-3 pt-1">
+              {pipelineStages.map((stage) => (
+                <div
+                  key={stage.id}
+                  onClick={() => {
+                    addToast({ title: 'Stage Details', message: `${stage.name}: ${stage.value} (${stage.dealsCount})`, type: 'info' });
+                    navigate('/crm/pipeline');
+                  }}
+                  className="p-2.5 rounded-md surface-secondary border-subtle cursor-pointer hover:border-strong transition-all flex flex-col gap-1.5"
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <span
+                        style={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          backgroundColor: stage.badgeColor,
+                        }}
+                      />
+                      <span className="font-semibold text-primary">{stage.name}</span>
+                      <span className="text-tertiary">({stage.value})</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-tertiary font-medium">{stage.dealsCount}</span>
+                      <strong className="text-primary">{stage.pct}%</strong>
+                    </div>
+                  </div>
+                  <ProgressBar value={stage.pct} variant={stage.variant} showLabel={false} />
                 </div>
-                <ProgressBar value={48} variant="primary" showLabel={false} />
-              </div>
-
-              <div>
-                <div className="flex justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-primary">Proposal Sent ($843,000)</span>
-                  <span className="font-bold text-success">26%</span>
-                </div>
-                <ProgressBar value={26} variant="success" showLabel={false} />
-              </div>
-
-              <div>
-                <div className="flex justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-primary">Qualified Opportunities ($426,000)</span>
-                  <span className="font-bold text-warning">18%</span>
-                </div>
-                <ProgressBar value={18} variant="warning" showLabel={false} />
-              </div>
-
-              <div>
-                <div className="flex justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-primary">New Leads ($210,000)</span>
-                  <span className="font-bold text-info">8%</span>
-                </div>
-                <ProgressBar value={8} variant="info" showLabel={false} />
-              </div>
+              ))}
             </div>
 
             {/* Pipeline Summary Footer */}
@@ -630,118 +782,49 @@ export const CrmDashboard = () => {
                   Lead Sources & Attribution
                 </h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                  Top channels driving qualified leads this month.
+                  Top channels driving qualified leads this cycle.
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => navigate('/crm/leads')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#1d4ed8',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
+                className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline cursor-pointer"
+                style={{ background: 'none', border: 'none', color: '#1d4ed8' }}
               >
-                All Leads &rarr;
+                <span>All Leads</span>
+                <ArrowRight size={14} />
               </button>
             </div>
 
             {/* Channels List */}
             <div className="flex flex-col gap-2.5 pt-1">
-              <div
-                onClick={() => {
-                  setSelectedChannel({
-                    name: 'Website Direct Forms',
-                    pct: 42,
-                    volume: '1,124 leads',
-                    conversion: '4.8% Conv.',
-                    cac: '$142 CAC',
-                    roi: '420% ROI',
-                    trend: '+12.4% MoM',
-                    badgeVariant: 'primary',
-                  });
-                }}
-                className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:scale-[1.01]"
-                style={{ backgroundColor: 'var(--primary-light)', border: '1px solid var(--primary-border)' }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#1d4ed8' }} />
-                  <span className="font-semibold text-xs text-primary">Website Direct Forms</span>
+              {leadChannels.map((channel) => (
+                <div
+                  key={channel.id}
+                  onClick={() => setSelectedChannel(channel)}
+                  className="flex items-center justify-between p-3 surface-secondary rounded-md border-subtle cursor-pointer hover:border-strong transition-all"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        backgroundColor: channel.color,
+                        flexShrink: 0,
+                      }}
+                    />
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-xs text-primary">{channel.name}</span>
+                      <span className="text-tertiary" style={{ fontSize: '11px' }}>{channel.conversion}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant={channel.badgeVariant}>{channel.pct}% Share</Badge>
+                    <span className="font-bold text-xs text-primary">{channel.volume}</span>
+                  </div>
                 </div>
-                <span className="font-bold text-xs" style={{ color: '#1d4ed8' }}>42% &bull; 1,124 leads</span>
-              </div>
-
-              <div
-                onClick={() => {
-                  setSelectedChannel({
-                    name: 'LinkedIn B2B Campaigns',
-                    pct: 26,
-                    volume: '702 leads',
-                    conversion: '6.2% Conv.',
-                    cac: '$285 CAC',
-                    roi: '380% ROI',
-                    trend: '+18.1% MoM',
-                    badgeVariant: 'success',
-                  });
-                }}
-                className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:scale-[1.01]"
-                style={{ backgroundColor: 'var(--success-light)', border: '1px solid var(--success-border)' }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#16a34a' }} />
-                  <span className="font-semibold text-xs text-primary">LinkedIn B2B Campaigns</span>
-                </div>
-                <span className="font-bold text-xs" style={{ color: '#16a34a' }}>26% &bull; 702 leads</span>
-              </div>
-
-              <div
-                onClick={() => {
-                  setSelectedChannel({
-                    name: 'Referral Partners & Brokers',
-                    pct: 18,
-                    volume: '512 leads',
-                    conversion: '11.5% Conv.',
-                    cac: '$95 CAC',
-                    roi: '780% ROI',
-                    trend: '+8.3% MoM',
-                    badgeVariant: 'info',
-                  });
-                }}
-                className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:scale-[1.01]"
-                style={{ backgroundColor: 'var(--info-light)', border: '1px solid var(--info-border)' }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#0284c7' }} />
-                  <span className="font-semibold text-xs text-primary">Referral Partners & Brokers</span>
-                </div>
-                <span className="font-bold text-xs" style={{ color: '#0284c7' }}>18% &bull; 512 leads</span>
-              </div>
-
-              <div
-                onClick={() => {
-                  setSelectedChannel({
-                    name: 'Trade Conferences 2025',
-                    pct: 13,
-                    volume: '343 leads',
-                    conversion: '8.1% Conv.',
-                    cac: '$410 CAC',
-                    roi: '290% ROI',
-                    trend: '+4.5% MoM',
-                    badgeVariant: 'warning',
-                  });
-                }}
-                className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:scale-[1.01]"
-                style={{ backgroundColor: 'var(--warning-light)', border: '1px solid var(--warning-border)' }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#d97706' }} />
-                  <span className="font-semibold text-xs text-primary">Trade Conferences 2025</span>
-                </div>
-                <span className="font-bold text-xs" style={{ color: '#d97706' }}>13% &bull; 343 leads</span>
-              </div>
+              ))}
             </div>
 
             {/* Lead Sources Footer */}
@@ -753,7 +836,7 @@ export const CrmDashboard = () => {
               <button
                 type="button"
                 onClick={() => navigate('/crm/leads')}
-                className="px-3 py-1 rounded-sm border-subtle surface hover:bg-hover transition-colors font-medium"
+                className="px-3 py-1 rounded-sm border-subtle surface hover:bg-hover transition-colors font-medium text-primary cursor-pointer"
                 style={{ fontSize: '11px', backgroundColor: 'var(--surface-secondary)', border: '1px solid var(--border)' }}
               >
                 View All Sources
@@ -774,20 +857,40 @@ export const CrmDashboard = () => {
                   Live CRM Activity Audit
                 </h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                  Real-time system & team activities.
+                  Real-time system & team event feed.
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => navigate('/crm/admin')}
-                style={{ background: 'none', border: 'none', color: '#1d4ed8', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
+                className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline cursor-pointer"
+                style={{ background: 'none', border: 'none', color: '#1d4ed8' }}
               >
-                View All &rarr;
+                <span>View All</span>
+                <ArrowRight size={14} />
               </button>
             </div>
 
+            {/* Filter Pills */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {['all', 'deals', 'contacts', 'leads'].map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setActivityFilter(cat)}
+                  className={`px-2.5 py-1 rounded-xs text-xs font-medium cursor-pointer transition-colors ${
+                    activityFilter === cat ? 'bg-primary text-white font-semibold' : 'surface-secondary text-secondary hover:bg-hover'
+                  }`}
+                  style={{ border: '1px solid var(--border)' }}
+                >
+                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            {/* Activity List */}
             <div className="flex flex-col gap-2.5">
-              {activityItems.map((act) => (
+              {filteredActivities.map((act) => (
                 <div
                   key={act.id}
                   onClick={() => setSelectedActivity(act)}
@@ -831,22 +934,56 @@ export const CrmDashboard = () => {
               <button
                 type="button"
                 onClick={() => navigate('/crm/tasks')}
-                style={{ background: 'none', border: 'none', color: '#1d4ed8', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
+                className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline cursor-pointer"
+                style={{ background: 'none', border: 'none', color: '#1d4ed8' }}
               >
-                View All Tasks &rarr;
+                <span>View All Tasks</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+
+            {/* Task Filters */}
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-1.5">
+                {[
+                  { id: 'all', label: `All (${tasks.length})` },
+                  { id: 'pending', label: `Pending (${tasks.filter((t) => t.status !== 'Completed').length})` },
+                  { id: 'completed', label: `Completed (${tasks.filter((t) => t.status === 'Completed').length})` },
+                ].map((f) => (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => setTaskFilter(f.id)}
+                    className={`px-2.5 py-1 rounded-xs text-xs font-medium cursor-pointer transition-colors ${
+                      taskFilter === f.id ? 'bg-primary text-white font-semibold' : 'surface-secondary text-secondary hover:bg-hover'
+                    }`}
+                    style={{ border: '1px solid var(--border)' }}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsTaskModalOpen(true)}
+                className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+                style={{ background: 'none', border: 'none', color: '#1d4ed8' }}
+              >
+                + Quick Add
               </button>
             </div>
 
             {/* Task Items Checklist */}
             <div className="flex flex-col gap-2.5">
-              {tasks.length === 0 ? (
+              {filteredTasks.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-6 text-center text-tertiary">
                   <CheckSquare size={28} className="mb-2 text-secondary" />
                   <span className="text-xs font-semibold text-primary">All caught up!</span>
-                  <span className="text-xs">No pending priority tasks for today.</span>
+                  <span className="text-xs">No tasks found for this filter.</span>
                 </div>
               ) : (
-                tasks.slice(0, 4).map((task) => {
+                filteredTasks.slice(0, 4).map((task) => {
                   const isCompleted = task.status === 'Completed';
 
                   return (
@@ -888,9 +1025,7 @@ export const CrmDashboard = () => {
 
                         <div
                           className="flex flex-col gap-0.5 min-w-0"
-                          onClick={() => {
-                            navigate('/crm/tasks');
-                          }}
+                          onClick={() => navigate('/crm/tasks')}
                         >
                           <span
                             className="font-semibold text-xs text-primary truncate"
@@ -951,10 +1086,15 @@ export const CrmDashboard = () => {
         className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-4 pb-2 text-xs"
         style={{ borderTop: '1px solid var(--border)', color: 'var(--text-tertiary)' }}
       >
-        <div className="flex items-center gap-2">
-          <ShieldCheck size={16} className="text-secondary" />
-          <span>Your data is protected with 256-bit AES encryption</span>
-        </div>
+        <button
+          type="button"
+          onClick={() => setIsSecurityModalOpen(true)}
+          className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"
+          style={{ background: 'none', border: 'none', padding: 0, color: 'var(--text-secondary)' }}
+        >
+          <ShieldCheck size={16} className="text-success" />
+          <span>Your data is protected with 256-bit AES encryption (Click to view vault info)</span>
+        </button>
         <div>
           <span>Secure &bull; Reliable &bull; Enterprise-Grade</span>
         </div>
@@ -1196,6 +1336,38 @@ export const CrmDashboard = () => {
           </div>
         </Modal>
       )}
+
+      {/* Modal 5: Security Encryption Vault Info */}
+      <Modal
+        isOpen={isSecurityModalOpen}
+        onClose={() => setIsSecurityModalOpen(false)}
+        title="Enterprise Encryption & Security Protocol"
+        footer={
+          <div className="flex justify-end gap-2 w-full">
+            <Button variant="primary" size="sm" onClick={() => setIsSecurityModalOpen(false)}>
+              Acknowledge & Close
+            </Button>
+          </div>
+        }
+      >
+        <div className="flex flex-col gap-3 text-xs">
+          <div className="flex items-center gap-3 p-3 surface-secondary rounded-sm border-subtle">
+            <ShieldCheck size={24} className="text-success flex-shrink-0" />
+            <div>
+              <span className="font-bold text-sm text-primary block">AES-256 Multi-Tenant Isolation</span>
+              <span className="text-secondary">Hardware-level encryption keys are isolated per tenant ID.</span>
+            </div>
+          </div>
+          <div className="p-3 border-subtle rounded-sm">
+            <span className="font-semibold text-primary block mb-1">Active Certifications:</span>
+            <ul className="text-secondary margin-0 pl-4 flex flex-col gap-1">
+              <li>SOC2 Type II Enterprise Compliance Certified</li>
+              <li>HIPAA / GDPR Isolated Data Storage Matrix</li>
+              <li>Continuous Real-time Threat Monitoring & Audit Logging</li>
+            </ul>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

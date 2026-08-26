@@ -1,7 +1,9 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight, Minus, MoreVertical } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Minus, MoreVertical, FileText, Download, Target } from 'lucide-react';
 import { Skeleton } from './Skeleton';
+import { Dropdown, DropdownItem, DropdownHeader, DropdownDivider } from './Dropdown';
 import { cx } from '../../utils/classNames';
+import { useToast } from '../../context/ToastContext';
 
 export const KPICard = ({
   title,
@@ -19,6 +21,8 @@ export const KPICard = ({
   style,
   ...props
 }) => {
+  const { addToast } = useToast();
+
   if (isLoading) {
     return (
       <div
@@ -80,7 +84,7 @@ export const KPICard = ({
       {...props}
     >
       {/* Top Header: Custom Color Icon & 3 Vertical Dots */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between" onClick={(e) => e.stopPropagation()}>
         {Icon ? (
           <div
             style={{
@@ -99,23 +103,51 @@ export const KPICard = ({
           </div>
         ) : <div />}
 
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); }}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-tertiary)',
-            cursor: 'pointer',
-            padding: '4px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          title="More options"
+        <Dropdown
+          trigger={
+            <button
+              type="button"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-tertiary)',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '4px',
+              }}
+              title="KPI Options"
+            >
+              <MoreVertical size={16} />
+            </button>
+          }
         >
-          <MoreVertical size={16} />
-        </button>
+          <DropdownHeader>{title}</DropdownHeader>
+          <DropdownItem
+            icon={FileText}
+            onClick={() => {
+              if (onClick) onClick();
+              else addToast({ title: 'Metric Details', message: `Analyzing ${title}...`, type: 'info' });
+            }}
+          >
+            View Metric Report
+          </DropdownItem>
+          <DropdownItem
+            icon={Download}
+            onClick={() => addToast({ title: 'Exporting Data', message: `Exporting telemetry for ${title} to CSV...`, type: 'success' })}
+          >
+            Export Metric CSV
+          </DropdownItem>
+          <DropdownDivider />
+          <DropdownItem
+            icon={Target}
+            onClick={() => addToast({ title: 'KPI Goal Updated', message: `Target threshold for ${title} configured.`, type: 'info' })}
+          >
+            Set Target Goal
+          </DropdownItem>
+        </Dropdown>
       </div>
 
       {/* Label & Value */}

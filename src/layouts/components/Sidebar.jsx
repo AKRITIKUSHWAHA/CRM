@@ -1,13 +1,12 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, LogOut, MoreVertical } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { crmNavigation, oalNavigation } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 
 export const Sidebar = ({
   isCollapsed = false,
-  onToggleCollapse,
   product = 'crm',
   onCloseMobile,
 }) => {
@@ -111,15 +110,15 @@ export const Sidebar = ({
         ))}
       </div>
 
-      {/* Sidebar Footer — PINNED AT BOTTOM ALWAYS */}
+      {/* Sidebar Footer — CLEAN SIGN OUT ONLY */}
       <div
-        className="p-3 flex flex-col gap-1.5 flex-shrink-0"
+        className="p-3 flex flex-col flex-shrink-0"
         style={{ borderTop: '1px solid var(--border)', backgroundColor: 'var(--surface-secondary)' }}
       >
         <button
           type="button"
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-1.5 rounded-sm text-xs font-semibold cursor-pointer transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-xs font-semibold cursor-pointer transition-colors"
           style={{
             backgroundColor: 'transparent',
             color: 'var(--error)',
@@ -132,32 +131,6 @@ export const Sidebar = ({
           <LogOut size={16} className="flex-shrink-0" />
           {!isCollapsed && <span>Sign Out ({product.toUpperCase()})</span>}
         </button>
-
-        <button
-          type="button"
-          onClick={onToggleCollapse}
-          className="w-full flex items-center justify-between px-3 py-1.5 rounded-sm text-xs text-secondary cursor-pointer hidden-mobile transition-colors"
-          style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--surface-hover)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-          title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-        >
-          <div className="flex items-center gap-2">
-            {isCollapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
-            {!isCollapsed && <span>Collapse Menu</span>}
-          </div>
-          {!isCollapsed && <MoreVertical size={14} className="text-tertiary" />}
-        </button>
-
-        {!isCollapsed && (
-          <div className="pt-2 px-1 text-tertiary flex flex-col gap-0.5" style={{ fontSize: '10px', borderTop: '1px solid var(--border)', marginTop: '4px' }}>
-            <span className="font-semibold text-secondary">nErgy Enterprise</span>
-            <span>© 2025 All rights reserved</span>
-          </div>
-        )}
       </div>
     </aside>
   );

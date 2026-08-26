@@ -352,7 +352,7 @@ export const OalBorrowerKyc = () => {
             </div>
 
             <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
+              <div className="form-grid-2x2 text-xs">
                 <div>
                   <label className="form-label mb-1 font-semibold text-secondary">Borrower Legal Name</label>
                   <Input
@@ -363,7 +363,7 @@ export const OalBorrowerKyc = () => {
                 </div>
 
                 <div>
-                  <label className="form-label mb-1 font-semibold text-secondary">Jurisdiction & Entity</label>
+                  <label className="form-label mb-1 font-semibold text-secondary">Jurisdiction & Entity Structure</label>
                   <Input
                     value={incState}
                     onChange={(e) => setIncState(e.target.value)}
@@ -373,14 +373,14 @@ export const OalBorrowerKyc = () => {
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="form-label mb-0 font-semibold text-secondary">Taxpayer ID (EIN)</label>
+                    <label className="form-label mb-0 font-semibold text-secondary">Taxpayer ID (EIN / SSN)</label>
                     <button
                       type="button"
                       onClick={() => setShowEin(!showEin)}
                       className="text-accent text-xs font-semibold"
                       style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                     >
-                      {showEin ? 'Hide' : 'Show'}
+                      {showEin ? 'Hide EIN' : 'Show Full EIN'}
                     </button>
                   </div>
                   <Input
@@ -391,7 +391,7 @@ export const OalBorrowerKyc = () => {
                 </div>
 
                 <div>
-                  <label className="form-label mb-1 font-semibold text-secondary">D-U-N-S Number</label>
+                  <label className="form-label mb-1 font-semibold text-secondary">D-U-N-S Number (Dun & Bradstreet)</label>
                   <Input
                     value={duns}
                     onChange={(e) => setDuns(e.target.value)}
@@ -414,12 +414,12 @@ export const OalBorrowerKyc = () => {
                 </Badge>
               </div>
               <span className="text-xs text-secondary">
-                Authorized signatory with full executive borrowing power
+                Authorized corporate representative legally permitted to execute debt facilities
               </span>
             </div>
 
             <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-3.5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+              <div className="form-grid-2x2 text-xs">
                 <div>
                   <label className="form-label mb-1 font-semibold text-secondary">Authorized Officer Full Legal Name</label>
                   <Input

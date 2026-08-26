@@ -296,7 +296,7 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
             </div>
           </DropdownHeader>
 
-          <DropdownItem icon={User} onClick={() => navigate(product === 'crm' ? '/crm/settings' : '/oal/borrower/settings')}>
+          <DropdownItem icon={User} onClick={() => navigate(product === 'crm' ? '/crm/profile' : '/oal/borrower/profile')}>
             Account Profile
           </DropdownItem>
           <DropdownItem icon={Building2} onClick={() => addToast({ title: 'Tenant Vault', message: `Tenant ID: ${currentUser?.tenantId || 'TENANT-08492'}`, type: 'info' })}>

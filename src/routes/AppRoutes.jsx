@@ -5,6 +5,9 @@ import { OalLayout } from '../layouts/OalLayout';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 
+// Unified Gateway Login
+import { UnifiedLogin } from '../pages/UnifiedLogin';
+
 import { CrmLogin } from '../pages/crm/CrmLogin';
 import { CrmSignup } from '../pages/crm/CrmSignup';
 import { CrmForgotPassword } from '../pages/crm/CrmForgotPassword';
@@ -101,7 +104,9 @@ import { Showcase } from '../pages/Showcase';
 export const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/showcase" replace />} />
+      {/* Default Root opens Login Gateway FIRST */}
+      <Route path="/" element={<UnifiedLogin />} />
+      <Route path="/login" element={<UnifiedLogin />} />
 
       <Route element={<CrmLayout />}>
         <Route path="/showcase" element={<Showcase />} />
@@ -111,7 +116,7 @@ export const AppRoutes = () => {
       <Route path="/crm" element={<Navigate to="/crm/dashboard" replace />} />
       
       <Route element={<AuthLayout />}>
-        <Route path="/crm/login" element={<CrmLogin />} />
+        <Route path="/crm/login" element={<UnifiedLogin />} />
         <Route path="/crm/signup" element={<CrmSignup />} />
         <Route path="/crm/forgot-password" element={<CrmForgotPassword />} />
         <Route path="/crm/verify" element={<CrmVerify />} />
@@ -178,7 +183,7 @@ export const AppRoutes = () => {
       <Route path="/oal" element={<OalLanding />} />
 
       <Route element={<AuthLayout />}>
-        <Route path="/oal/login" element={<OalLogin />} />
+        <Route path="/oal/login" element={<UnifiedLogin />} />
         <Route path="/oal/borrower/signup" element={<OalBorrowerSignup />} />
         <Route path="/oal/lender/signup" element={<OalLenderSignup />} />
         <Route path="/oal/verify" element={<OalVerify />} />
@@ -242,7 +247,7 @@ export const AppRoutes = () => {
         </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/showcase" replace />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 };

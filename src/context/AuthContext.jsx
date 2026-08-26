@@ -42,12 +42,12 @@ export const AuthProvider = ({ children }) => {
 
   const [isCrmAuthenticated, setIsCrmAuthenticated] = useState(() => {
     const saved = localStorage.getItem('crm_is_authenticated');
-    return saved !== null ? JSON.parse(saved) : true;
+    return saved !== null ? JSON.parse(saved) : false;
   });
 
   const [isOalAuthenticated, setIsOalAuthenticated] = useState(() => {
     const saved = localStorage.getItem('oal_is_authenticated');
-    return saved !== null ? JSON.parse(saved) : true;
+    return saved !== null ? JSON.parse(saved) : false;
   });
 
   const [companyData, setCompanyData] = useState(() => {

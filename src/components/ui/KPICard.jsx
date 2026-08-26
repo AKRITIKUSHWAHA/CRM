@@ -10,33 +10,26 @@ export const KPICard = ({
   changeType = 'positive', // 'positive' | 'negative' | 'neutral'
   changePeriod = 'vs last month',
   icon: Icon,
-  badgeText,
   isLoading = false,
   className = '',
   onClick,
 }) => {
   if (isLoading) {
     return (
-      <div className={cx('kpi-card', className)}>
-        <Skeleton width="60%" height="14px" />
-        <Skeleton width="40%" height="24px" />
-        <Skeleton width="70%" height="14px" />
+      <div className={cx('kpi-card', className)} style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem' }}>
+        <Skeleton width="50%" height="12px" />
+        <Skeleton width="40%" height="26px" style={{ margin: '8px 0' }} />
+        <Skeleton width="60%" height="12px" />
       </div>
     );
   }
 
   const TrendIcon = changeType === 'positive' ? ArrowUpRight : changeType === 'negative' ? ArrowDownRight : Minus;
   
-  const trendBg = changeType === 'positive'
-    ? 'rgba(22, 163, 74, 0.08)'
-    : changeType === 'negative'
-    ? 'rgba(220, 38, 38, 0.08)'
-    : 'var(--surface-secondary)';
-
   const trendColor = changeType === 'positive'
-    ? '#16a34a'
+    ? 'var(--success)'
     : changeType === 'negative'
-    ? '#dc2626'
+    ? 'var(--error)'
     : 'var(--text-tertiary)';
 
   return (
@@ -46,36 +39,39 @@ export const KPICard = ({
       style={{
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: '12px',
+        borderRadius: '10px',
         padding: '1.125rem 1.25rem',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        gap: '0.75rem',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.03)',
+        gap: '0.625rem',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
         transition: 'all 0.15s ease',
         cursor: onClick ? 'pointer' : 'default',
+        position: 'relative',
       }}
       onMouseEnter={(e) => {
         if (onClick) {
           e.currentTarget.style.borderColor = 'var(--primary-border)';
-          e.currentTarget.style.boxShadow = '0 4px 12px 0 rgba(0, 0, 0, 0.05)';
+          e.currentTarget.style.boxShadow = '0 3px 8px 0 rgba(0, 0, 0, 0.05)';
         }
       }}
       onMouseLeave={(e) => {
         if (onClick) {
           e.currentTarget.style.borderColor = 'var(--border)';
-          e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.03)';
+          e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.03)';
         }
       }}
     >
+      {/* Top Header: Label & Icon */}
       <div className="flex items-center justify-between">
         <span
           style={{
-            fontSize: '12px',
-            fontWeight: 600,
+            fontSize: '11px',
+            fontWeight: 700,
             color: 'var(--text-secondary)',
-            letterSpacing: '-0.01em',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
           }}
         >
           {title}
@@ -83,10 +79,9 @@ export const KPICard = ({
         {Icon && (
           <div
             style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '9px',
-              backgroundColor: 'var(--primary-light)',
+              padding: '6px',
+              borderRadius: '6px',
+              backgroundColor: 'var(--surface-secondary)',
               color: 'var(--primary)',
               display: 'flex',
               alignItems: 'center',
@@ -94,15 +89,16 @@ export const KPICard = ({
               flexShrink: 0,
             }}
           >
-            <Icon size={17} />
+            <Icon size={16} />
           </div>
         )}
       </div>
 
+      {/* Primary Value */}
       <div
         style={{
-          fontSize: '1.5rem',
-          fontWeight: 800,
+          fontSize: '1.625rem',
+          fontWeight: 700,
           color: 'var(--text-primary)',
           fontFamily: 'var(--font-display)',
           lineHeight: 1.1,
@@ -112,48 +108,25 @@ export const KPICard = ({
         {value}
       </div>
 
-      <div className="flex items-center justify-between gap-2" style={{ fontSize: '12px' }}>
-        {change && (
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '2px',
-              padding: '2px 7px',
-              borderRadius: '9999px',
-              backgroundColor: trendBg,
-              color: trendColor,
-              fontWeight: 600,
-              fontSize: '11px',
-            }}
-          >
-            <TrendIcon size={13} />
-            <span>{change}</span>
-          </div>
-        )}
-
-        {changePeriod && (
-          <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
-            {changePeriod}
-          </span>
-        )}
-
-        {badgeText && (
-          <span
-            style={{
-              fontSize: '10px',
-              fontWeight: 600,
-              padding: '2px 6px',
-              borderRadius: '4px',
-              backgroundColor: 'var(--surface-secondary)',
-              color: 'var(--text-secondary)',
-              border: '1px solid var(--border)',
-            }}
-          >
-            {badgeText}
-          </span>
-        )}
-      </div>
+      {/* Contextual Growth Line */}
+      {(change || changePeriod) && (
+        <div className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-secondary)' }}>
+          {change && (
+            <span
+              className="inline-flex items-center font-bold"
+              style={{ color: trendColor, fontSize: '12px' }}
+            >
+              <TrendIcon size={14} style={{ marginRight: '1px' }} />
+              {change}
+            </span>
+          )}
+          {changePeriod && (
+            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>
+              {changePeriod}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };

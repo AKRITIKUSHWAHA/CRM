@@ -122,20 +122,21 @@ export const OalBorrowerMessages = () => {
   return (
     <div className="flex flex-col gap-5" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* 1. Systematic Top Header Row */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <Breadcrumb items={[{ label: 'OAL Network' }, { label: 'Messages & Underwriter Chat' }]} />
-          <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             Underwriting & Lender Communications
           </h1>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
           <Button
             variant="outline"
             size="sm"
             icon={FileText}
             onClick={() => navigate('/oal/borrower/offers')}
+            style={{ fontSize: '12px' }}
           >
             View Offers
           </Button>
@@ -145,11 +146,12 @@ export const OalBorrowerMessages = () => {
             size="sm"
             icon={Sparkles}
             onClick={() => navigate('/oal/borrower/score')}
+            style={{ fontSize: '12px' }}
           >
             AI Risk Score
           </Button>
 
-          <Badge variant="success" icon={ShieldCheck}>
+          <Badge variant="success" icon={ShieldCheck} style={{ fontSize: '11px' }}>
             Encrypted 256-Bit Channel
           </Badge>
         </div>
@@ -169,6 +171,67 @@ export const OalBorrowerMessages = () => {
         }}
         className="chat-master-grid"
       >
+        {/* Mobile Switcher Tab Bar: Visible on mobile screens <= 860px */}
+        <div
+          className="chat-mobile-toggle-bar"
+          style={{
+            padding: '0.5rem 0.75rem',
+            borderBottom: '1px solid var(--border)',
+            backgroundColor: 'var(--surface-secondary)',
+            gap: '0.5rem',
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setShowMobileChat(false)}
+            style={{
+              flex: 1,
+              padding: '7px 10px',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: !showMobileChat ? 700 : 500,
+              backgroundColor: !showMobileChat ? 'var(--surface)' : 'transparent',
+              color: !showMobileChat ? 'var(--accent)' : 'var(--text-secondary)',
+              border: `1px solid ${!showMobileChat ? 'var(--border)' : 'transparent'}`,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              boxShadow: !showMobileChat ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+            }}
+          >
+            <MessageSquare size={14} />
+            <span>Channels ({contacts.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowMobileChat(true)}
+            style={{
+              flex: 1,
+              padding: '7px 10px',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: showMobileChat ? 700 : 500,
+              backgroundColor: showMobileChat ? 'var(--surface)' : 'transparent',
+              color: showMobileChat ? 'var(--accent)' : 'var(--text-secondary)',
+              border: `1px solid ${showMobileChat ? 'var(--border)' : 'transparent'}`,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              boxShadow: showMobileChat ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+            }}
+          >
+            <User size={14} />
+            <span className="truncate">{activeContact.name}</span>
+          </button>
+        </div>
+
         {/* LEFT PANEL: Contacts / Chat Participants */}
         <div
           style={{
@@ -180,6 +243,7 @@ export const OalBorrowerMessages = () => {
             overflow: 'hidden',
             borderRight: '1px solid var(--border)',
             backgroundColor: 'var(--surface)',
+            boxSizing: 'border-box',
           }}
           className={`chat-panel-left ${showMobileChat ? 'mobile-hide' : ''}`}
         >
@@ -350,25 +414,29 @@ export const OalBorrowerMessages = () => {
               backgroundColor: 'var(--surface)',
             }}
           >
-            <div className="flex items-center gap-3 min-w-0">
-              {/* Mobile Back Button - visible only on mobile screens */}
+            <div className="flex items-center gap-2.5 min-w-0">
+              {/* Mobile Back Button - visible only on mobile screens <= 860px */}
               <button
                 type="button"
                 onClick={() => setShowMobileChat(false)}
                 className="chat-back-btn"
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  padding: '4px',
+                  backgroundColor: 'var(--surface-secondary)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '8px',
+                  padding: '6px 9px',
                   cursor: 'pointer',
                   color: 'var(--text-primary)',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: '2px',
+                  gap: '4px',
+                  fontSize: '11.5px',
+                  fontWeight: 700,
+                  flexShrink: 0,
                 }}
                 title="Back to Conversations"
               >
-                <ArrowLeft size={18} />
+                <ArrowLeft size={15} />
+                <span>Channels</span>
               </button>
 
               <div style={{ position: 'relative', flexShrink: 0 }}>

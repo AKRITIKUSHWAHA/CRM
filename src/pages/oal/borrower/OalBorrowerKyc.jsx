@@ -334,162 +334,168 @@ export const OalBorrowerKyc = () => {
 
       {/* 4. TAB 1: Corporate Entity & Signatory Identity */}
       {activeTab === 'entity' && (
-        <div className="flex flex-col gap-5">
-          <Card style={{ padding: '1.5rem', borderRadius: '12px' }} className="flex flex-col gap-4">
-            <div className="flex items-center justify-between pb-3 border-b border-subtle">
-              <div className="flex items-center gap-2.5">
-                <Building2 size={20} className="text-accent" />
-                <div>
-                  <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-                    Commercial Entity Legal Information
-                  </h3>
-                  <span className="text-xs text-secondary">Registered corporation telemetry verified through Delaware Division of Corporations</span>
-                </div>
+        <div className="flex flex-col gap-6">
+          {/* Section 1: Commercial Entity Legal Information */}
+          <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                  Commercial Entity Legal Information
+                </h2>
+                <span className="text-xs text-secondary">
+                  Registered corporation telemetry verified through Delaware Division of Corporations
+                </span>
               </div>
-              <Badge variant="success" icon={CheckCircle2}>Entity Good Standing: Active</Badge>
+              <Badge variant="success" icon={CheckCircle2} style={{ flexShrink: 0 }}>
+                Entity Good Standing: Active
+              </Badge>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label className="form-label mb-1 font-semibold text-secondary">Borrower Legal Name</label>
+                  <Input
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    style={{ height: '38px', fontSize: '13px' }}
+                  />
+                </div>
+
+                <div>
+                  <label className="form-label mb-1 font-semibold text-secondary">Jurisdiction & Entity Structure</label>
+                  <Input
+                    value={incState}
+                    onChange={(e) => setIncState(e.target.value)}
+                    style={{ height: '38px', fontSize: '13px' }}
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="form-label mb-0 font-semibold text-secondary">Taxpayer ID (EIN / SSN)</label>
+                    <button
+                      type="button"
+                      onClick={() => setShowEin(!showEin)}
+                      className="text-accent text-xs font-semibold"
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                    >
+                      {showEin ? 'Hide EIN' : 'Show Full EIN'}
+                    </button>
+                  </div>
+                  <Input
+                    value={showEin ? '84-9201948' : 'XX-XXX1948'}
+                    readOnly
+                    style={{ height: '38px', fontSize: '13px', fontFamily: 'monospace' }}
+                  />
+                </div>
+
+                <div>
+                  <label className="form-label mb-1 font-semibold text-secondary">D-U-N-S Number (Dun & Bradstreet)</label>
+                  <Input
+                    value={duns}
+                    onChange={(e) => setDuns(e.target.value)}
+                    style={{ height: '38px', fontSize: '13px', fontFamily: 'monospace' }}
+                  />
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          {/* Section 2: Primary Officer Identity */}
+          <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <label className="form-label mb-1 font-semibold text-secondary">Borrower Legal Name</label>
-                <Input
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  style={{ height: '38px', fontSize: '13px' }}
-                />
+                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                  Primary Authorized Signatory & Executive Officer
+                </h2>
+                <span className="text-xs text-secondary">
+                  Authorized corporate representative legally permitted to execute debt facilities
+                </span>
+              </div>
+              <Badge variant="success" icon={ShieldCheck} style={{ flexShrink: 0 }}>
+                Identity Verified
+              </Badge>
+            </div>
+
+            <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label className="form-label mb-1 font-semibold text-secondary">Authorized Officer Full Legal Name</label>
+                  <Input
+                    value={signatoryName}
+                    onChange={(e) => setSignatoryName(e.target.value)}
+                    style={{ height: '38px', fontSize: '13px' }}
+                  />
+                </div>
+
+                <div>
+                  <label className="form-label mb-1 font-semibold text-secondary">Corporate Title / Capacity</label>
+                  <Input
+                    value={signatoryRole}
+                    onChange={(e) => setSignatoryRole(e.target.value)}
+                    style={{ height: '38px', fontSize: '13px' }}
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="form-label mb-1 font-semibold text-secondary">Jurisdiction & Entity Structure</label>
-                <Input
-                  value={incState}
-                  onChange={(e) => setIncState(e.target.value)}
-                  style={{ height: '38px', fontSize: '13px' }}
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="form-label mb-0 font-semibold text-secondary">Taxpayer ID (EIN / SSN)</label>
-                  <button
-                    type="button"
-                    onClick={() => setShowEin(!showEin)}
-                    className="text-accent text-xs font-semibold"
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+              {/* Officer Verification Status Box */}
+              <div className="p-3.5 surface-secondary rounded-lg border-subtle flex items-center justify-between gap-3 text-xs flex-wrap">
+                <div className="flex items-center gap-2.5">
+                  <div
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+                      color: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 800,
+                      fontSize: '12px',
+                    }}
                   >
-                    {showEin ? 'Hide EIN' : 'Show Full EIN'}
-                  </button>
+                    AT
+                  </div>
+                  <div>
+                    <span className="font-bold text-sm text-primary">Dr. Aris Thorne &bull; US Passport #P48920194</span>
+                    <div className="text-secondary">Cryptographic Facial Match: 99.8% &bull; State DMV Record Valid</div>
+                  </div>
                 </div>
-                <Input
-                  value={showEin ? '84-9201948' : 'XX-XXX1948'}
-                  readOnly
-                  style={{ height: '38px', fontSize: '13px', fontFamily: 'monospace' }}
-                />
-              </div>
 
-              <div>
-                <label className="form-label mb-1 font-semibold text-secondary">D-U-N-S Number (Dun & Bradstreet)</label>
-                <Input
-                  value={duns}
-                  onChange={(e) => setDuns(e.target.value)}
-                  style={{ height: '38px', fontSize: '13px', fontFamily: 'monospace' }}
-                />
+                <Badge variant="success">● RealID Validated</Badge>
               </div>
-            </div>
-          </Card>
-
-          {/* Primary Officer Identity Card */}
-          <Card style={{ padding: '1.5rem', borderRadius: '12px' }} className="flex flex-col gap-4">
-            <div className="flex items-center justify-between pb-3 border-b border-subtle">
-              <div className="flex items-center gap-2.5">
-                <User size={20} className="text-accent" />
-                <div>
-                  <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-                    Primary Authorized Signatory & Executive Officer
-                  </h3>
-                  <span className="text-xs text-secondary">Authorized corporate representative legally permitted to execute debt facilities</span>
-                </div>
-              </div>
-              <Badge variant="success" icon={ShieldCheck}>Identity Verified</Badge>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <div>
-                <label className="form-label mb-1 font-semibold text-secondary">Authorized Officer Full Legal Name</label>
-                <Input
-                  value={signatoryName}
-                  onChange={(e) => setSignatoryName(e.target.value)}
-                  style={{ height: '38px', fontSize: '13px' }}
-                />
-              </div>
-
-              <div>
-                <label className="form-label mb-1 font-semibold text-secondary">Corporate Title / Capacity</label>
-                <Input
-                  value={signatoryRole}
-                  onChange={(e) => setSignatoryRole(e.target.value)}
-                  style={{ height: '38px', fontSize: '13px' }}
-                />
-              </div>
-            </div>
-
-            {/* Officer Verification Status Box */}
-            <div className="p-3.5 surface-secondary rounded-lg border-subtle flex items-center justify-between gap-3 text-xs flex-wrap">
-              <div className="flex items-center gap-2.5">
-                <div
-                  style={{
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                    color: '#ffffff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 800,
-                    fontSize: '12px',
-                  }}
-                >
-                  AT
-                </div>
-                <div>
-                  <span className="font-bold text-sm text-primary">Dr. Aris Thorne &bull; US Passport #P48920194</span>
-                  <div className="text-secondary">Cryptographic Facial Match: 99.8% &bull; State DMV Record Valid</div>
-                </div>
-              </div>
-
-              <Badge variant="success">● RealID Validated</Badge>
-            </div>
-          </Card>
+            </Card>
+          </div>
         </div>
       )}
 
       {/* 5. TAB 2: Beneficial Ownership (FinCEN 25%+ Rule) */}
       {activeTab === 'owners' && (
-        <div className="flex flex-col gap-4">
-          <Card style={{ padding: '1.5rem', borderRadius: '12px' }} className="flex flex-col gap-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-subtle">
-              <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-                  Beneficial Ownership Registry (FinCEN Compliance)
-                </h3>
-                <span className="text-xs text-secondary">
-                  Federal regulations require identifying all individuals or entities with 25% or greater equity or executive control.
-                </span>
-              </div>
-
-              <Button
-                variant="outline"
-                size="sm"
-                icon={Plus}
-                onClick={() => setIsAddOwnerOpen(true)}
-                style={{ fontWeight: 600, flexShrink: 0 }}
-              >
-                Add Beneficial Owner
-              </Button>
+        <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                Beneficial Ownership Registry (FinCEN Compliance)
+              </h2>
+              <span className="text-xs text-secondary">
+                Federal regulations require identifying all individuals or entities with 25% or greater equity or executive control.
+              </span>
             </div>
 
-            {/* Beneficial Owners Table */}
+            <Button
+              variant="outline"
+              size="sm"
+              icon={Plus}
+              onClick={() => setIsAddOwnerOpen(true)}
+              style={{ fontWeight: 600, flexShrink: 0 }}
+            >
+              Add Beneficial Owner
+            </Button>
+          </div>
+
+          <Card style={{ padding: '0', borderRadius: '12px', overflow: 'hidden' }}>
             <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
               <Table>
                 <TableHeader>
@@ -560,27 +566,27 @@ export const OalBorrowerKyc = () => {
 
       {/* 6. TAB 3: Legal Document Vault */}
       {activeTab === 'vault' && (
-        <div className="flex flex-col gap-4">
-          {/* Upload Dropzone Card */}
-          <Card style={{ padding: '1.5rem', borderRadius: '12px' }} className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-6">
+          {/* Section 1: Upload Dropzone */}
+          <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                   Institutional Legal Repository
-                </h3>
+                </h2>
                 <span className="text-xs text-secondary">
                   Uploaded files are encrypted via AES-256 and stamped with immutable SHA-256 verification hashes
                 </span>
               </div>
-              <Badge variant="neutral">SHA-256 Protected</Badge>
+              <Badge variant="neutral" style={{ flexShrink: 0 }}>SHA-256 Protected</Badge>
             </div>
 
             {/* Interactive Upload Dropzone */}
-            <div
+            <Card
               onClick={handleFileUpload}
               style={{
                 border: '2px dashed var(--border)',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 padding: '1.75rem',
                 textAlign: 'center',
                 cursor: 'pointer',
@@ -598,11 +604,19 @@ export const OalBorrowerKyc = () => {
                   Supports PDF, DOCX, XLSX, PNG (Corporate Bylaws, Audited Financials, Tax Filings up to 25MB)
                 </p>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </div>
 
-          {/* List of Verified Documents */}
-          <div className="flex flex-col gap-3">
+          {/* Section 2: List of Verified Documents */}
+          <div className="flex flex-col gap-2.5">
+            <div className="flex items-center justify-between">
+              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                Verified Corporate Documents ({documents.length})
+              </h3>
+              <span className="text-xs text-secondary">100% Cryptographically Sealed</span>
+            </div>
+
+            <div className="flex flex-col gap-3">
             {documents.map((doc) => (
               <Card
                 key={doc.id}
@@ -674,6 +688,7 @@ export const OalBorrowerKyc = () => {
                 </div>
               </Card>
             ))}
+            </div>
           </div>
         </div>
       )}

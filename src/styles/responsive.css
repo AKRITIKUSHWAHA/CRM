@@ -9,18 +9,18 @@ html, body, #root, .app-layout, .main-content {
 .visible-mobile { display: flex !important; }
 .hidden-mobile { display: none !important; }
 
-/* Grid Responsive Breakpoints */
+/* Grid Responsive Breakpoints — ALWAYS 2 COLUMNS ON MOBILE */
 .grid-responsive-kpi {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 0.75rem;
   width: 100%;
 }
 
 .grid-responsive-health {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 0.75rem;
   width: 100%;
 }
 
@@ -38,8 +38,8 @@ html, body, #root, .app-layout, .main-content {
 
 .grid-responsive-6kpi {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 0.75rem;
   width: 100%;
 }
 
@@ -149,19 +149,6 @@ html, body, #root, .app-layout, .main-content {
   }
 }
 
-/* 560px (Large Phones / Small Tablets) */
-@media (min-width: 560px) {
-  .grid-responsive-6kpi {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .grid-responsive-kpi {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .grid-responsive-health {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 /* 768px (Tablet Portrait & Large Mobile) */
 @media (min-width: 768px) {
   .visible-mobile { display: none !important; }
@@ -172,36 +159,20 @@ html, body, #root, .app-layout, .main-content {
   }
 }
 
-/* 960px (Tablet Landscape / Laptop) */
-@media (min-width: 960px) {
-  .grid-responsive-6kpi {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 /* 1024px (Tablet Landscape / Laptop) */
 @media (min-width: 1024px) {
   .grid-responsive-kpi {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr) !important;
   }
   .grid-responsive-health {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* 1280px (Desktop Wide) */
-@media (min-width: 1280px) {
-  .container-wide {
-    max-width: 1280px;
-    margin-left: auto;
-    margin-right: auto;
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 }
 
 /* 1400px+ (Ultra Wide Enterprise Screens) */
 @media (min-width: 1400px) {
   .grid-responsive-6kpi {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(6, 1fr) !important;
   }
   .container-wide {
     max-width: 1400px;

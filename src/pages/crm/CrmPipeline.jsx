@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Plus,
   ArrowRight,
@@ -124,39 +125,47 @@ export const CrmPipeline = () => {
         </div>
       </div>
 
-      {/* 2. Pipeline Summary Metrics Strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* 2. Pipeline Summary Metrics Strip — ALWAYS 2 COLUMNS PER ROW ON MOBILE */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         <KPICard
           title="TOTAL PIPELINE VALUE"
           value={`$${(totalPipelineValue / 1000000).toFixed(2)}M`}
-          change="+18.4%"
+          change="18.4%"
           changeType="positive"
           changePeriod="across 8 stages"
           icon={TrendingUp}
+          iconBg="rgba(22, 163, 74, 0.1)"
+          iconColor="#16a34a"
         />
         <KPICard
           title="WEIGHTED VALUE"
           value={`$${(weightedPipelineValue / 1000000).toFixed(2)}M`}
           change="52% Avg"
           changeType="neutral"
-          changePeriod="probability adjusted"
+          changePeriod="probability adj."
           icon={DollarSign}
+          iconBg="rgba(29, 78, 216, 0.1)"
+          iconColor="#1d4ed8"
         />
         <KPICard
           title="TOTAL ACTIVE DEALS"
           value={`${totalDealsCount > 0 ? totalDealsCount : 18}`}
-          change="+3 Deals"
+          change="3 Deals"
           changeType="positive"
           changePeriod="this month"
           icon={Kanban}
+          iconBg="rgba(147, 51, 234, 0.1)"
+          iconColor="#9333ea"
         />
         <KPICard
-          title="WIN CONVERSION RATE"
+          title="WIN CONVERSION"
           value={`${winRate}%`}
-          change="+4.2%"
+          change="4.2%"
           changeType="positive"
           changePeriod="closed deals"
           icon={CheckCircle2}
+          iconBg="rgba(234, 88, 12, 0.1)"
+          iconColor="#ea580c"
         />
       </div>
 

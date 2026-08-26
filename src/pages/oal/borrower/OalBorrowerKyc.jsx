@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ShieldCheck,
@@ -42,9 +42,12 @@ export const OalBorrowerKyc = () => {
   const { applicationDraft, setApplicationStage } = useOal();
   const { addToast } = useToast();
 
+  const fileInputRef = useRef(null);
+
   const [activeTab, setActiveTab] = useState('entity');
   const [isVerified, setIsVerified] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [isAddOwnerOpen, setIsAddOwnerOpen] = useState(false);
   const [isCertModalOpen, setIsCertModalOpen] = useState(false);
@@ -152,26 +155,64 @@ export const OalBorrowerKyc = () => {
     });
   };
 
-  const handleFileUpload = () => {
+  const handleTriggerUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const processUploadedFiles = (files) => {
+    if (!files || files.length === 0) return;
     setIsUploading(true);
+
     setTimeout(() => {
+      const newDocs = Array.from(files).map((file, idx) => {
+        const sizeFormatted = file.size > 1024 * 1024
+          ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+          : `${Math.round(file.size / 1024) || 120} KB`;
+
+        return {
+          id: `doc-${Date.now()}-${idx}`,
+          title: file.name || 'Uploaded Corporate Document.pdf',
+          type: file.type?.includes('pdf') ? 'Corporate Document (PDF)' : 'Corporate Governance',
+          size: sizeFormatted,
+          date: 'Just now',
+          hash: `sha256:${Math.random().toString(36).substring(2)}${Math.random().toString(36).substring(2)}${Math.random().toString(36).substring(2)}`,
+          status: 'Cryptographically Verified',
+        };
+      });
+
+      setDocuments((prev) => [...newDocs, ...prev]);
       setIsUploading(false);
-      const newDoc = {
-        id: `doc-${documents.length + 1}`,
-        title: 'Commercial Lease Agreement & Premises Telemetry',
-        type: 'Facility Tenancy',
-        size: '2.8 MB',
-        date: 'Today',
-        hash: 'sha256:a1d65dfc2d4b1fa3d677284addd200126d90697f83b1657ff1fc53b92dc18148',
-        status: 'Cryptographically Verified',
-      };
-      setDocuments([newDoc, ...documents]);
       addToast({
-        title: 'Document Vault Updated',
-        message: 'File encrypted with 256-bit AES and registered in your compliance ledger.',
+        title: 'Document(s) Encrypted & Vaulted',
+        message: `${newDocs.length} file(s) encrypted with 256-bit AES and saved to your compliance vault.`,
         type: 'success',
       });
-    }, 1200);
+    }, 600);
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      processUploadedFiles(e.target.files);
+    }
+    e.target.value = '';
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      processUploadedFiles(e.dataTransfer.files);
+    }
   };
 
   const handleReVerify = () => {
@@ -558,21 +599,34 @@ export const OalBorrowerKyc = () => {
               <Badge variant="neutral" style={{ flexShrink: 0 }}>SHA-256 Protected</Badge>
             </div>
 
+            {/* Real Hidden File Input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              multiple
+              accept=".pdf,.doc,.docx,.xlsx,.png,.jpg,.jpeg"
+              style={{ display: 'none' }}
+            />
+
             {/* Interactive Upload Dropzone */}
             <Card
-              onClick={handleFileUpload}
+              onClick={handleTriggerUpload}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
               style={{
-                border: '2px dashed var(--border)',
+                border: isDragging ? '2px dashed var(--accent)' : '2px dashed var(--border)',
                 borderRadius: '12px',
                 padding: '1.75rem',
                 textAlign: 'center',
                 cursor: 'pointer',
-                backgroundColor: 'var(--surface-secondary)',
+                backgroundColor: isDragging ? 'rgba(37, 99, 235, 0.05)' : 'var(--surface-secondary)',
                 transition: 'all 0.15s ease',
               }}
               className="hover:border-primary flex flex-col items-center justify-center gap-2"
             >
-              <UploadCloud size={32} className="text-accent" />
+              <UploadCloud size={32} style={{ color: isDragging ? 'var(--accent)' : 'var(--text-secondary)' }} />
               <div>
                 <span className="font-bold text-sm text-primary">
                   {isUploading ? 'Encrypting & Verifying File...' : 'Click to Upload Legal Documents or Drag & Drop'}

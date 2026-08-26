@@ -260,261 +260,260 @@ export const OalBorrowerDashboard = () => {
         </div>
       </div>
 
-      {/* 4. Active Offers & Assigned Representative */}
-      <div className="grid-responsive-2col">
-        {/* Left Column: Active Marketplace Offers */}
-        <div className="flex flex-col gap-3">
-          {/* Section Heading Outside the Card */}
-          <div className="flex items-center justify-between gap-2">
-            <div>
-              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-                Active Marketplace Offers
-              </h2>
-              <span className="text-xs text-secondary">3 Institutional lenders competing for your debt facility</span>
-            </div>
-            {!acceptedOffer && (
-              <Button
-                variant="ghost"
-                size="sm"
-                icon={ChevronRight}
-                onClick={() => navigate('/oal/borrower/offers')}
-                style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '13px' }}
-              >
-                Compare All
-              </Button>
-            )}
+      {/* 4. Section: Active Marketplace Offers */}
+      <div className="flex flex-col gap-3">
+        {/* Section Heading */}
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+              Active Marketplace Offers
+            </h2>
+            <span className="text-xs text-secondary">3 Institutional lenders competing for your commercial debt facility</span>
           </div>
-
-          {/* Offers Content Card */}
-          <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
-            {acceptedOffer ? (
-              <div className="p-4 surface-secondary rounded-lg border-subtle flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <Badge variant="success" icon={CheckCircle2}>Accepted Term Sheet</Badge>
-                  <span className="font-mono text-xs text-tertiary">{acceptedOffer.id}</span>
-                </div>
-                <div className="font-bold text-base text-primary">{acceptedOffer.lender}</div>
-                <div className="text-sm font-bold text-success">{acceptedOffer.amount} at {acceptedOffer.rate}</div>
-                <div className="flex justify-between text-xs text-secondary mt-1">
-                  <span>Monthly: <strong>{acceptedOffer.monthlyPayment}</strong></span>
-                  <span>Term: <strong>{acceptedOffer.term}</strong></span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {offers.map((off, idx) => {
-                  const tagConfig = [
-                    { label: '⚡ Best Match', bg: 'rgba(37, 99, 235, 0.08)', color: 'var(--accent)' },
-                    { label: '🔥 Lowest APR', bg: 'rgba(22, 163, 74, 0.08)', color: 'var(--success)' },
-                    { label: '💎 Max Capital', bg: 'rgba(147, 51, 234, 0.08)', color: '#9333ea' },
-                  ][idx % 3];
-
-                  const initials = off.lender.split(' ').slice(0, 2).map((w) => w[0]).join('');
-
-                  return (
-                    <div
-                      key={off.id}
-                      className="p-3.5 surface-secondary rounded-lg border-subtle flex items-center justify-between gap-3 transition-all hover:border-primary"
-                      style={{ transition: 'all 0.15s ease' }}
-                    >
-                      {/* Left: Lender initials & details */}
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <div
-                          style={{
-                            width: '36px',
-                            height: '36px',
-                            borderRadius: '8px',
-                            backgroundColor: 'var(--surface)',
-                            border: '1px solid var(--border)',
-                            color: 'var(--accent)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontWeight: 800,
-                            fontSize: '12px',
-                            flexShrink: 0,
-                          }}
-                        >
-                          {initials}
-                        </div>
-
-                        <div className="flex flex-col gap-0.5 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
-                              {off.lender}
-                            </span>
-                            <span
-                              style={{
-                                fontSize: '10px',
-                                fontWeight: 700,
-                                padding: '1px 6px',
-                                borderRadius: '4px',
-                                backgroundColor: tagConfig.bg,
-                                color: tagConfig.color,
-                                whiteSpace: 'nowrap',
-                                flexShrink: 0,
-                              }}
-                            >
-                              {tagConfig.label}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
-                            <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '13px' }}>{off.amount}</span>
-                            <span>•</span>
-                            <span style={{ fontWeight: 700, color: 'var(--success)', fontSize: '12px' }}>{off.rate}</span>
-                            <span>•</span>
-                            <span className="text-tertiary">{off.term}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right: Compact Inspect Button */}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleInspectOffer(off)}
-                        style={{ fontSize: '11px', height: '32px', padding: '0 14px', fontWeight: 600, flexShrink: 0 }}
-                      >
-                        Inspect Terms
-                      </Button>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </Card>
+          {!acceptedOffer && (
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={ChevronRight}
+              onClick={() => navigate('/oal/borrower/offers')}
+              style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '13px' }}
+            >
+              Compare All Offers ({offers.length})
+            </Button>
+          )}
         </div>
 
-        {/* Right Column: Assigned OAL Representative */}
-        <div className="flex flex-col gap-3">
-          {/* Section Heading with Profile Outside the Card */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-3 min-w-0">
-              <div style={{ position: 'relative', flexShrink: 0 }}>
-                <div
-                  style={{
-                    width: '38px',
-                    height: '38px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                    color: '#ffffff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 800,
-                    fontSize: '13px',
-                  }}
-                >
-                  SJ
-                </div>
-                <span
-                  style={{
-                    position: 'absolute',
-                    bottom: '0',
-                    right: '0',
-                    width: '10px',
-                    height: '10px',
-                    backgroundColor: '#16a34a',
-                    border: '2px solid var(--surface)',
-                    borderRadius: '50%',
-                  }}
-                />
+        {/* Offers Content Card */}
+        <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
+          {acceptedOffer ? (
+            <div className="p-4 surface-secondary rounded-lg border-subtle flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <Badge variant="success" icon={CheckCircle2}>Accepted Term Sheet</Badge>
+                <span className="font-mono text-xs text-tertiary">{acceptedOffer.id}</span>
               </div>
-
-              <div className="min-w-0">
-                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-                  Sarah Jenkins
-                </h2>
-                <span className="text-xs text-secondary truncate block">
-                  Assigned Underwriter &bull; NMLS #84920
-                </span>
+              <div className="font-bold text-base text-primary">{acceptedOffer.lender}</div>
+              <div className="text-sm font-bold text-success">{acceptedOffer.amount} at {acceptedOffer.rate}</div>
+              <div className="flex justify-between text-xs text-secondary mt-1">
+                <span>Monthly: <strong>{acceptedOffer.monthlyPayment}</strong></span>
+                <span>Term: <strong>{acceptedOffer.term}</strong></span>
               </div>
             </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {offers.map((off, idx) => {
+                const tagConfig = [
+                  { label: '⚡ Best Match', bg: 'rgba(37, 99, 235, 0.08)', color: 'var(--accent)' },
+                  { label: '🔥 Lowest APR', bg: 'rgba(22, 163, 74, 0.08)', color: 'var(--success)' },
+                  { label: '💎 Max Capital', bg: 'rgba(147, 51, 234, 0.08)', color: '#9333ea' },
+                ][idx % 3];
 
-            <Badge variant="success" style={{ padding: '3px 8px', fontSize: '11px', flexShrink: 0 }}>
-              ● Online
-            </Badge>
-          </div>
+                const initials = off.lender.split(' ').slice(0, 2).map((w) => w[0]).join('');
 
-          {/* Real Chat Message Box Card */}
-          <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col justify-between">
-            <div>
-              {/* Chat Stream with Real Message Bubbles */}
-              <div
-                className="flex flex-col gap-3"
-                style={{
-                  maxHeight: '190px',
-                  overflowY: 'auto',
-                  padding: '4px 0',
-                  marginBottom: '1rem',
-                }}
-              >
-                {messages.slice(-2).map((msg, i) => {
-                  const isAgent = msg.sender.includes('Sarah');
-                  return (
-                    <div
-                      key={msg.id || i}
-                      className={`flex flex-col ${isAgent ? 'items-start' : 'items-end'}`}
-                    >
+                return (
+                  <div
+                    key={off.id}
+                    className="p-3.5 surface-secondary rounded-lg border-subtle flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all hover:border-primary"
+                    style={{ transition: 'all 0.15s ease' }}
+                  >
+                    {/* Left: Lender initials & details */}
+                    <div className="flex items-center gap-3.5 min-w-0">
                       <div
                         style={{
-                          maxWidth: '85%',
-                          padding: '0.65rem 0.95rem',
-                          borderRadius: isAgent ? '12px 12px 12px 2px' : '12px 12px 2px 12px',
-                          backgroundColor: isAgent ? 'var(--surface-secondary)' : 'var(--accent)',
-                          color: isAgent ? 'var(--text-primary)' : '#ffffff',
-                          fontSize: '12px',
-                          lineHeight: '1.4',
-                          border: isAgent ? '1px solid var(--border)' : 'none',
+                          width: '40px',
+                          height: '40px',
+                          borderRadius: '10px',
+                          backgroundColor: 'var(--surface)',
+                          border: '1px solid var(--border)',
+                          color: 'var(--accent)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontWeight: 800,
+                          fontSize: '13px',
+                          flexShrink: 0,
                         }}
                       >
-                        {msg.text}
+                        {initials}
                       </div>
-                      <span className="text-tertiary mt-1" style={{ fontSize: '10px', padding: '0 4px' }}>
-                        {msg.time || 'Just now'}
-                      </span>
+
+                      <div className="flex flex-col gap-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-bold text-sm text-primary">
+                            {off.lender}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: '10px',
+                              fontWeight: 700,
+                              padding: '2px 8px',
+                              borderRadius: '4px',
+                              backgroundColor: tagConfig.bg,
+                              color: tagConfig.color,
+                              whiteSpace: 'nowrap',
+                              flexShrink: 0,
+                            }}
+                          >
+                            {tagConfig.label}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-3 text-xs text-secondary flex-wrap">
+                          <span>Facility: <strong style={{ color: 'var(--text-primary)' }}>{off.amount}</strong></span>
+                          <span>&bull;</span>
+                          <span>Interest: <strong style={{ color: 'var(--success)' }}>{off.rate}</strong></span>
+                          <span>&bull;</span>
+                          <span>Term: <strong style={{ color: 'var(--text-primary)' }}>{off.term}</strong></span>
+                          <span>&bull;</span>
+                          <span>Est. Monthly: <strong style={{ color: 'var(--text-primary)' }}>{off.monthlyPayment}</strong></span>
+                        </div>
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
 
-              {/* Quick Reply Composer */}
-              <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 w-full" style={{ marginBottom: '1rem' }}>
-                <Input
-                  value={quickReplyText}
-                  onChange={(e) => setQuickReplyText(e.target.value)}
-                  placeholder="Type a message to Sarah..."
-                  style={{ height: '38px', fontSize: '12px' }}
-                  className="flex-1 min-w-0"
-                />
-                <Button
-                  variant="primary"
-                  size="sm"
-                  type="submit"
-                  icon={Send}
-                  style={{ height: '38px', minWidth: '70px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
-                >
-                  Send
-                </Button>
-              </form>
+                    {/* Right: Compact Inspect Button */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleInspectOffer(off)}
+                      style={{ fontSize: '12px', height: '34px', padding: '0 16px', fontWeight: 600, flexShrink: 0 }}
+                    >
+                      Inspect Terms
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
+          )}
+        </Card>
+      </div>
 
-            {/* Dedicated Chat Portal CTA Button with clean top border */}
-            <div style={{ paddingTop: '0.85rem', borderTop: '1px solid var(--border)' }}>
-              <Button
-                variant="outline"
-                size="sm"
-                icon={MessageSquare}
-                className="w-full justify-center"
-                onClick={() => navigate('/oal/borrower/messages')}
-                style={{ height: '38px', fontWeight: 600 }}
+      {/* 5. Section: Assigned Underwriting Representative */}
+      <div className="flex flex-col gap-3">
+        {/* Section Heading with Profile Outside the Card */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-3 min-w-0">
+            <div style={{ position: 'relative', flexShrink: 0 }}>
+              <div
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: '14px',
+                }}
               >
-                Open Dedicated Chat Portal
-              </Button>
+                SJ
+              </div>
+              <span
+                style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  right: '0',
+                  width: '10px',
+                  height: '10px',
+                  backgroundColor: '#16a34a',
+                  border: '2px solid var(--surface)',
+                  borderRadius: '50%',
+                }}
+              />
             </div>
-          </Card>
+
+            <div className="min-w-0">
+              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                Sarah Jenkins
+              </h2>
+              <span className="text-xs text-secondary truncate block">
+                Assigned Underwriter &bull; Licensed Officer &bull; NMLS #84920
+              </span>
+            </div>
+          </div>
+
+          <Badge variant="success" style={{ padding: '4px 10px', fontSize: '12px', flexShrink: 0 }}>
+            ● Online &bull; Direct Advocate
+          </Badge>
         </div>
+
+        {/* Real Chat Message Box Card */}
+        <Card style={{ padding: '1.5rem', borderRadius: '12px' }} className="flex flex-col justify-between">
+          <div>
+            {/* Chat Stream with Real Message Bubbles */}
+            <div
+              className="flex flex-col gap-3"
+              style={{
+                maxHeight: '220px',
+                overflowY: 'auto',
+                padding: '4px 0',
+                marginBottom: '1.25rem',
+              }}
+            >
+              {messages.map((msg, i) => {
+                const isAgent = msg.sender.includes('Sarah');
+                return (
+                  <div
+                    key={msg.id || i}
+                    className={`flex flex-col ${isAgent ? 'items-start' : 'items-end'}`}
+                  >
+                    <div
+                      style={{
+                        maxWidth: '80%',
+                        padding: '0.75rem 1rem',
+                        borderRadius: isAgent ? '12px 12px 12px 2px' : '12px 12px 2px 12px',
+                        backgroundColor: isAgent ? 'var(--surface-secondary)' : 'var(--accent)',
+                        color: isAgent ? 'var(--text-primary)' : '#ffffff',
+                        fontSize: '13px',
+                        lineHeight: '1.5',
+                        border: isAgent ? '1px solid var(--border)' : 'none',
+                      }}
+                    >
+                      {msg.text}
+                    </div>
+                    <span className="text-tertiary mt-1" style={{ fontSize: '11px', padding: '0 4px' }}>
+                      {msg.time || 'Just now'}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Quick Reply Composer */}
+            <form onSubmit={handleSendQuickReply} className="flex items-center gap-2.5 w-full" style={{ marginBottom: '1.25rem' }}>
+              <Input
+                value={quickReplyText}
+                onChange={(e) => setQuickReplyText(e.target.value)}
+                placeholder="Type a message to Sarah Jenkins..."
+                style={{ height: '40px', fontSize: '13px' }}
+                className="flex-1 min-w-0"
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                type="submit"
+                icon={Send}
+                style={{ height: '40px', minWidth: '80px', padding: '0 16px', flexShrink: 0, justifyContent: 'center' }}
+              >
+                Send
+              </Button>
+            </form>
+          </div>
+
+          {/* Dedicated Chat Portal CTA Button with clean top border */}
+          <div style={{ paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
+            <Button
+              variant="outline"
+              size="sm"
+              icon={MessageSquare}
+              className="w-full justify-center"
+              onClick={() => navigate('/oal/borrower/messages')}
+              style={{ height: '40px', fontWeight: 600, fontSize: '13px' }}
+            >
+              Open Dedicated Chat Portal
+            </Button>
+          </div>
+        </Card>
       </div>
 
       {/* 5. Modal: Inspect Offer Details */}

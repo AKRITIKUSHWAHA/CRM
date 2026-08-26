@@ -388,15 +388,51 @@ export const OalBorrowerDashboard = () => {
 
         {/* Right Column: Assigned OAL Representative */}
         <div className="flex flex-col gap-3">
-          {/* Section Heading Outside the Card */}
+          {/* Section Heading with Profile Outside the Card */}
           <div className="flex items-center justify-between gap-2">
-            <div>
-              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-                Assigned Representative
-              </h2>
-              <span className="text-xs text-secondary">Dedicated underwriting advocate for your application</span>
+            <div className="flex items-center gap-3 min-w-0">
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <div
+                  style={{
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 800,
+                    fontSize: '13px',
+                  }}
+                >
+                  SJ
+                </div>
+                <span
+                  style={{
+                    position: 'absolute',
+                    bottom: '0',
+                    right: '0',
+                    width: '10px',
+                    height: '10px',
+                    backgroundColor: '#16a34a',
+                    border: '2px solid var(--surface)',
+                    borderRadius: '50%',
+                  }}
+                />
+              </div>
+
+              <div className="min-w-0">
+                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                  Sarah Jenkins
+                </h2>
+                <span className="text-xs text-secondary truncate block">
+                  Assigned Underwriter &bull; NMLS #84920
+                </span>
+              </div>
             </div>
-            <Badge variant="success" style={{ padding: '3px 8px', fontSize: '11px' }}>
+
+            <Badge variant="success" style={{ padding: '3px 8px', fontSize: '11px', flexShrink: 0 }}>
               ● Online
             </Badge>
           </div>
@@ -404,59 +440,11 @@ export const OalBorrowerDashboard = () => {
           {/* Real Chat Message Box Card */}
           <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col justify-between">
             <div>
-              {/* Agent Profile Bar */}
-              <div className="flex items-center justify-between pb-3 border-b border-subtle mb-3.5">
-                <div className="flex items-center gap-2.5">
-                  <div style={{ position: 'relative' }}>
-                    <div
-                      style={{
-                        width: '36px',
-                        height: '36px',
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                        color: '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 800,
-                        fontSize: '13px',
-                      }}
-                    >
-                      SJ
-                    </div>
-                    <span
-                      style={{
-                        position: 'absolute',
-                        bottom: '0',
-                        right: '0',
-                        width: '10px',
-                        height: '10px',
-                        backgroundColor: '#16a34a',
-                        border: '2px solid var(--surface)',
-                        borderRadius: '50%',
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <div className="font-bold text-xs text-primary" style={{ fontSize: '13px' }}>
-                      Sarah Jenkins
-                    </div>
-                    <div className="text-xs text-secondary" style={{ fontSize: '11px' }}>
-                      Licensed Underwriting Officer &bull; NMLS #84920
-                    </div>
-                  </div>
-                </div>
-
-                <span className="text-tertiary text-xs" style={{ fontSize: '10px' }}>
-                  Avg Reply: &lt;5m
-                </span>
-              </div>
-
               {/* Chat Stream with Real Message Bubbles */}
               <div
                 className="flex flex-col gap-3"
                 style={{
-                  maxHeight: '160px',
+                  maxHeight: '190px',
                   overflowY: 'auto',
                   padding: '4px 0',
                   marginBottom: '1rem',

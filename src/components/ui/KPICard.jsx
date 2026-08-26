@@ -1,9 +1,7 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight, Minus, MoreVertical, FileText, Download, Target } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Minus, MoreVertical } from 'lucide-react';
 import { Skeleton } from './Skeleton';
-import { Dropdown, DropdownItem, DropdownHeader, DropdownDivider } from './Dropdown';
 import { cx } from '../../utils/classNames';
-import { useToast } from '../../context/ToastContext';
 
 export const KPICard = ({
   title,
@@ -15,30 +13,15 @@ export const KPICard = ({
   iconBg = 'rgba(22, 163, 74, 0.1)',
   iconColor = '#16a34a',
   isLoading = false,
-  onClick,
-  tooltip,
   className = '',
-  style,
-  ...props
+  onClick,
 }) => {
-  const { addToast } = useToast();
-
   if (isLoading) {
     return (
-      <div
-        className={cx('kpi-card', className)}
-        style={{
-          backgroundColor: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: '12px',
-          padding: '1.25rem',
-          ...style,
-        }}
-        {...props}
-      >
-        <Skeleton width="50%" height="12px" />
-        <Skeleton width="40%" height="26px" style={{ margin: '8px 0' }} />
-        <Skeleton width="60%" height="12px" />
+      <div className={cx('kpi-card', className)} style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', padding: '0.75rem' }}>
+        <Skeleton width="50%" height="10px" />
+        <Skeleton width="40%" height="20px" style={{ margin: '6px 0' }} />
+        <Skeleton width="60%" height="10px" />
       </div>
     );
   }
@@ -48,49 +31,44 @@ export const KPICard = ({
   return (
     <div
       onClick={onClick}
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      title={tooltip}
-      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(e); } } : undefined}
-      className={cx('kpi-card', onClick && 'cursor-pointer', className)}
+      className={cx('kpi-card', className)}
       style={{
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: '12px',
-        padding: '1.25rem',
+        borderRadius: '10px',
+        padding: '0.75rem 0.875rem',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        gap: '0.875rem',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.02)',
-        transition: 'all var(--transition-fast)',
+        gap: '0.375rem',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.02)',
+        transition: 'all 0.15s ease',
         cursor: onClick ? 'pointer' : 'default',
         position: 'relative',
-        userSelect: 'none',
-        ...style,
+        boxSizing: 'border-box',
+        minWidth: 0,
       }}
       onMouseEnter={(e) => {
         if (onClick) {
           e.currentTarget.style.borderColor = 'var(--primary-border)';
-          e.currentTarget.style.boxShadow = '0 4px 12px 0 rgba(0, 0, 0, 0.05)';
+          e.currentTarget.style.boxShadow = '0 3px 8px 0 rgba(0, 0, 0, 0.04)';
         }
       }}
       onMouseLeave={(e) => {
         if (onClick) {
           e.currentTarget.style.borderColor = 'var(--border)';
-          e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.02)';
+          e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.02)';
         }
       }}
-      {...props}
     >
       {/* Top Header: Custom Color Icon & 3 Vertical Dots */}
-      <div className="flex items-center justify-between" onClick={(e) => e.stopPropagation()}>
+      <div className="flex items-center justify-between">
         {Icon ? (
           <div
             style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '10px',
+              width: '28px',
+              height: '28px',
+              borderRadius: '7px',
               backgroundColor: iconBg,
               color: iconColor,
               display: 'flex',
@@ -99,73 +77,45 @@ export const KPICard = ({
               flexShrink: 0,
             }}
           >
-            <Icon size={18} />
+            <Icon size={14} />
           </div>
         ) : <div />}
 
-        <Dropdown
-          trigger={
-            <button
-              type="button"
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--text-tertiary)',
-                cursor: 'pointer',
-                padding: '4px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: '4px',
-              }}
-              title="KPI Options"
-            >
-              <MoreVertical size={16} />
-            </button>
-          }
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); }}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-tertiary)',
+            cursor: 'pointer',
+            padding: '2px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
-          <DropdownHeader>{title}</DropdownHeader>
-          <DropdownItem
-            icon={FileText}
-            onClick={() => {
-              if (onClick) onClick();
-              else addToast({ title: 'Metric Details', message: `Analyzing ${title}...`, type: 'info' });
-            }}
-          >
-            View Metric Report
-          </DropdownItem>
-          <DropdownItem
-            icon={Download}
-            onClick={() => addToast({ title: 'Exporting Data', message: `Exporting telemetry for ${title} to CSV...`, type: 'success' })}
-          >
-            Export Metric CSV
-          </DropdownItem>
-          <DropdownDivider />
-          <DropdownItem
-            icon={Target}
-            onClick={() => addToast({ title: 'KPI Goal Updated', message: `Target threshold for ${title} configured.`, type: 'info' })}
-          >
-            Set Target Goal
-          </DropdownItem>
-        </Dropdown>
+          <MoreVertical size={14} />
+        </button>
       </div>
 
       {/* Label & Value */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-0.5">
         <span
+          className="truncate"
           style={{
-            fontSize: '11px',
+            fontSize: '10px',
             fontWeight: 700,
             color: 'var(--text-tertiary)',
             textTransform: 'uppercase',
-            letterSpacing: '0.05em',
+            letterSpacing: '0.04em',
           }}
         >
           {title}
         </span>
         <div
           style={{
-            fontSize: '1.75rem',
+            fontSize: '1.25rem',
             fontWeight: 800,
             color: 'var(--text-primary)',
             fontFamily: 'var(--font-display)',
@@ -177,29 +127,30 @@ export const KPICard = ({
         </div>
       </div>
 
-      {/* Contextual Growth Green Pill Line */}
+      {/* Contextual Growth Pill Line */}
       {(change || changePeriod) && (
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex items-center gap-1.5 text-xs flex-wrap">
           {change && (
             <span
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '2px',
-                padding: '2px 8px',
+                gap: '1px',
+                padding: '1px 5px',
                 borderRadius: '9999px',
-                backgroundColor: changeType === 'positive' ? 'rgba(22, 163, 74, 0.1)' : changeType === 'negative' ? 'rgba(220, 38, 38, 0.1)' : 'var(--surface-secondary)',
-                color: changeType === 'positive' ? '#16a34a' : changeType === 'negative' ? '#dc2626' : 'var(--text-secondary)',
-                fontSize: '11px',
+                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                color: '#16a34a',
+                fontSize: '10px',
                 fontWeight: 700,
+                whiteSpace: 'nowrap',
               }}
             >
-              <TrendIcon size={12} />
+              <TrendIcon size={11} />
               {change}
             </span>
           )}
           {changePeriod && (
-            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+            <span className="truncate" style={{ fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
               {changePeriod}
             </span>
           )}

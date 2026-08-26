@@ -125,8 +125,8 @@ export const CrmPipeline = () => {
         </div>
       </div>
 
-      {/* 2. Pipeline Summary Metrics Strip — ALWAYS 2 COLUMNS PER ROW ON MOBILE */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+      {/* 2. Pipeline Summary Metrics Strip — ALL 4 CARDS IN A SINGLE LINE */}
+      <div className="grid grid-cols-4 gap-2.5">
         <KPICard
           title="TOTAL PIPELINE VALUE"
           value={`$${(totalPipelineValue / 1000000).toFixed(2)}M`}
@@ -142,7 +142,7 @@ export const CrmPipeline = () => {
           value={`$${(weightedPipelineValue / 1000000).toFixed(2)}M`}
           change="52% Avg"
           changeType="neutral"
-          changePeriod="probability adj."
+          changePeriod="prob. adj."
           icon={DollarSign}
           iconBg="rgba(29, 78, 216, 0.1)"
           iconColor="#1d4ed8"

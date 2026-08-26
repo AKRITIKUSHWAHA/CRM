@@ -17,11 +17,12 @@ export const AuthLayout = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1.5rem',
+        padding: '1rem',
         position: 'relative',
+        boxSizing: 'border-box',
       }}
     >
-      <div style={{ position: 'absolute', top: '24px', right: '24px' }}>
+      <div style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10 }}>
         <Button
           variant="outline"
           size="sm"
@@ -32,13 +33,9 @@ export const AuthLayout = () => {
         />
       </div>
 
-      <main style={{ width: '100%', maxWidth: '440px' }}>
+      <main style={{ width: '100%', maxWidth: '1240px', display: 'flex', justifyContent: 'center' }}>
         <Outlet />
       </main>
-
-      <footer style={{ marginTop: '2rem', fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)', textAlign: 'center' }}>
-        © 2026 CRM nErgy + OAL Network Enterprise Platform. All rights reserved.
-      </footer>
 
       <ToastContainer />
     </div>

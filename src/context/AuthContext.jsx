@@ -11,23 +11,104 @@ const defaultPermissionsMatrix = {
   Employee: { View: true, Create: false, Edit: false, Delete: false, Export: false, Admin: false },
 };
 
-const defaultCrmUser = {
-  name: 'Alexander Wright',
-  email: 'a.wright@nergy.io',
-  role: 'Company Owner',
-  company: 'nErgy Enterprise Logistics',
-  tenantId: 'TENANT-08492',
-  avatar: null,
-};
+export const crmRoles = [
+  {
+    id: 'owner',
+    title: 'Company Owner / CEO',
+    name: 'Alexander Wright',
+    email: 'a.wright@nergy.io',
+    role: 'Company Owner',
+    company: 'nErgy Enterprise Logistics',
+    tenantId: 'TENANT-08492',
+    avatar: null,
+  },
+  {
+    id: 'sales',
+    title: 'VP of Sales',
+    name: 'Sarah Jenkins',
+    email: 's.jenkins@nergy.io',
+    role: 'Sales Manager',
+    company: 'nErgy Enterprise Logistics',
+    tenantId: 'TENANT-08492',
+    avatar: null,
+  },
+  {
+    id: 'finance',
+    title: 'Finance Director',
+    name: 'David Chen',
+    email: 'd.chen@nergy.io',
+    role: 'Finance Lead',
+    company: 'nErgy Enterprise Logistics',
+    tenantId: 'TENANT-08492',
+    avatar: null,
+  },
+  {
+    id: 'hr',
+    title: 'HR Manager',
+    name: 'Elena Rostova',
+    email: 'e.rostova@nergy.io',
+    role: 'HR Director',
+    company: 'nErgy Enterprise Logistics',
+    tenantId: 'TENANT-08492',
+    avatar: null,
+  },
+  {
+    id: 'employee',
+    title: 'Standard Employee',
+    name: 'Marcus Vance',
+    email: 'm.vance@nergy.io',
+    role: 'Staff Member',
+    company: 'nErgy Enterprise Logistics',
+    tenantId: 'TENANT-08492',
+    avatar: null,
+  },
+];
 
-const defaultOalUser = {
-  name: 'Dr. Aris Thorne',
-  email: 'a.thorne@biogenix.org',
-  role: 'Borrower Account',
-  company: 'BioGenix Labs',
-  tenantId: 'OAL-BORROWER-9910',
-  avatar: null,
-};
+export const oalRoles = [
+  {
+    id: 'borrower',
+    title: 'Corporate Borrower',
+    name: 'Dr. Aris Thorne',
+    email: 'a.thorne@biogenix.org',
+    role: 'Borrower Account',
+    company: 'BioGenix Labs Inc.',
+    tenantId: 'OAL-BORROWER-9910',
+    avatar: null,
+  },
+  {
+    id: 'lender',
+    title: 'Institutional Lender',
+    name: 'Marcus Sterling',
+    email: 'm.sterling@vanguard.com',
+    role: 'Lender Account',
+    company: 'Vanguard Capital Debt Fund',
+    tenantId: 'OAL-LENDER-9910',
+    avatar: null,
+  },
+  {
+    id: 'rep',
+    title: 'Licensed OAL Representative',
+    name: 'Sarah Jenkins',
+    email: 'agent.sarah@oalnetwork.com',
+    role: 'OAL Agent',
+    company: 'OAL Network Services',
+    tenantId: 'OAL-REP-9910',
+    avatar: null,
+  },
+  {
+    id: 'admin',
+    title: 'Platform Master Admin',
+    name: 'Alexander Wright',
+    email: 'admin.alexander@oalnetwork.com',
+    role: 'Master Admin',
+    company: 'OAL Network Marketplace',
+    tenantId: 'OAL-ADMIN-9910',
+    avatar: null,
+  },
+];
+
+const defaultCrmUser = crmRoles[0];
+const defaultOalUser = oalRoles[0];
 
 export const AuthProvider = ({ children }) => {
   const [crmUser, setCrmUser] = useState(() => {
@@ -42,12 +123,12 @@ export const AuthProvider = ({ children }) => {
 
   const [isCrmAuthenticated, setIsCrmAuthenticated] = useState(() => {
     const saved = localStorage.getItem('crm_is_authenticated');
-    return saved !== null ? JSON.parse(saved) : false;
+    return saved !== null ? JSON.parse(saved) : true;
   });
 
   const [isOalAuthenticated, setIsOalAuthenticated] = useState(() => {
     const saved = localStorage.getItem('oal_is_authenticated');
-    return saved !== null ? JSON.parse(saved) : false;
+    return saved !== null ? JSON.parse(saved) : true;
   });
 
   const [companyData, setCompanyData] = useState(() => {
@@ -121,6 +202,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const switchRole = (roleObj, mode = 'crm') => {
+    const newUser = {
+      name: roleObj.name,
+      email: roleObj.email,
+      role: roleObj.role || roleObj.title,
+      company: roleObj.company || (mode === 'crm' ? 'nErgy Enterprise Logistics' : 'OAL Network Marketplace'),
+      tenantId: roleObj.tenantId || (mode === 'crm' ? 'TENANT-08492' : `OAL-${(roleObj.id || 'ROLE').toUpperCase()}-9910`),
+      avatar: roleObj.avatar || null,
+    };
+    if (mode === 'crm') {
+      setCrmUser(newUser);
+      setIsCrmAuthenticated(true);
+    } else {
+      setOalUser(newUser);
+      setIsOalAuthenticated(true);
+    }
+    return newUser;
+  };
+
   const logout = (mode = 'crm') => {
     if (mode === 'crm') {
       setIsCrmAuthenticated(false);
@@ -159,6 +259,7 @@ export const AuthProvider = ({ children }) => {
         rolesPermissions,
         updateRolesPermissions,
         login,
+        switchRole,
         logout,
       }}
     >

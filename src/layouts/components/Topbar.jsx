@@ -11,10 +11,12 @@ import {
   Sparkles,
   ChevronDown,
   Building2,
-  ExternalLink
+  ExternalLink,
+  Check,
+  UserCheck
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth, crmRoles, oalRoles } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { Button } from '../../components/ui/Button';
 import { Dropdown, DropdownItem, DropdownDivider, DropdownHeader } from '../../components/ui/Dropdown';
@@ -26,11 +28,12 @@ import { useNavigate } from 'react-router-dom';
 
 export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
   const { theme, toggleTheme } = useTheme();
-  const { crmUser, oalUser, logout } = useAuth();
+  const { crmUser, oalUser, switchRole, logout } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
   const currentUser = product === 'crm' ? crmUser : oalUser;
+  const availableRoles = product === 'crm' ? crmRoles : oalRoles;
 
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -44,6 +47,15 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
       type: 'info',
     });
     navigate(product === 'crm' ? '/crm/login' : '/oal/login');
+  };
+
+  const handleSwitchRole = (roleObj) => {
+    const updated = switchRole(roleObj, product);
+    addToast({
+      title: 'Role Switched Successfully',
+      message: `Switched active profile to ${updated.name} (${updated.role})`,
+      type: 'success',
+    });
   };
 
   const handleSearchSubmit = (e) => {
@@ -65,8 +77,10 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
         zIndex: 'var(--z-sticky)',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'between',
+        justifyContent: 'space-between',
         padding: '0 1.25rem',
+        width: '100%',
+        boxSizing: 'border-box',
       }}
     >
       {/* Left: Mobile/Tablet Menu Button + Logo */}
@@ -153,7 +167,7 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
       </div>
 
       {/* Right Actions: Theme Toggle, Notifications, Help, Profile */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2 ml-auto" style={{ marginLeft: 'auto' }}>
         {/* Mobile Search Button */}
         <Button
           variant="ghost"
@@ -224,25 +238,61 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
         {/* Profile Menu */}
         <Dropdown
           trigger={
-            <div className="flex items-center gap-2 cursor-pointer ml-1">
+            <div
+              className="flex items-center gap-2 cursor-pointer px-2 py-1 rounded-md transition-colors"
+              style={{ backgroundColor: 'var(--surface-hover)', border: '1px solid var(--border)' }}
+            >
               <Avatar name={currentUser?.name || 'User'} src={currentUser?.avatar} size="sm" status="online" />
               <div className="hidden-mobile flex flex-col text-left">
-                <span className="font-semibold text-xs text-primary leading-none">{currentUser?.name}</span>
+                <span className="font-semibold text-xs text-primary leading-tight">{currentUser?.name}</span>
                 <span className="text-tertiary text-xs leading-none" style={{ fontSize: '10px', marginTop: '2px' }}>
                   {currentUser?.role}
                 </span>
               </div>
-              <ChevronDown size={14} className="text-tertiary hidden-mobile" />
+              <ChevronDown size={14} className="text-tertiary hidden-mobile ml-1" />
             </div>
           }
         >
-          <DropdownHeader>{currentUser?.company}</DropdownHeader>
+          <DropdownHeader>
+            <div className="flex flex-col">
+              <span className="font-bold text-xs text-primary">{currentUser?.name}</span>
+              <span className="text-tertiary text-xs">{currentUser?.company}</span>
+            </div>
+          </DropdownHeader>
+
           <DropdownItem icon={User} onClick={() => navigate(product === 'crm' ? '/crm/settings' : '/oal/borrower/settings')}>
             Account Profile
           </DropdownItem>
           <DropdownItem icon={Building2} onClick={() => addToast({ title: 'Tenant Vault', message: `Tenant ID: ${currentUser?.tenantId}`, type: 'info' })}>
             Workspace Settings
           </DropdownItem>
+
+          <DropdownDivider />
+
+          {/* Quick Role Switcher Header */}
+          <div className="px-3 py-1.5 text-xs font-bold text-tertiary uppercase tracking-wider flex items-center gap-1.5" style={{ fontSize: '10px' }}>
+            <UserCheck size={12} />
+            <span>Switch Role / Persona</span>
+          </div>
+
+          {availableRoles.map((r) => {
+            const isSelected = currentUser?.email === r.email;
+            return (
+              <DropdownItem
+                key={r.id}
+                onClick={() => handleSwitchRole(r)}
+                className={isSelected ? 'bg-primary-light font-semibold' : ''}
+              >
+                <div className="flex items-center justify-between w-full gap-2">
+                  <div className="flex flex-col text-left">
+                    <span className="text-xs font-semibold text-primary">{r.name}</span>
+                    <span className="text-tertiary" style={{ fontSize: '10px' }}>{r.title}</span>
+                  </div>
+                  {isSelected && <Check size={14} className="text-primary flex-shrink-0" />}
+                </div>
+              </DropdownItem>
+            );
+          })}
 
           <DropdownDivider />
 

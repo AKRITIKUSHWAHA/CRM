@@ -106,9 +106,6 @@ export const OalBorrowerOffers = () => {
           <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             Lender Offers Marketplace
           </h1>
-          <p className="text-xs text-secondary margin-0" style={{ marginTop: '3px' }}>
-            Compare competitive institutional debt proposals, inspect legal covenants, and execute your facility
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">

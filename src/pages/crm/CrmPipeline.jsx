@@ -124,8 +124,8 @@ export const CrmPipeline = () => {
         </div>
       </div>
 
-      {/* 2. Pipeline Summary Metrics Strip — Fluid Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
+      {/* 2. Pipeline Summary Metrics Strip — Fixed Responsive Grid */}
+      <div className="grid-responsive-kpi">
         <KPICard
           title="TOTAL PIPELINE VALUE"
           value={`$${(totalPipelineValue / 1000000).toFixed(2)}M`}

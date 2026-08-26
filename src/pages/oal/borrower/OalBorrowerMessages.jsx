@@ -553,30 +553,52 @@ export const OalBorrowerMessages = () => {
           {/* Quick Negotiation Chips + Composer */}
           <div
             style={{
-              padding: '1rem 1.5rem',
+              padding: '0.85rem 1.25rem',
               borderTop: '1px solid var(--border)',
               backgroundColor: 'var(--surface)',
               display: 'flex',
               flexDirection: 'column',
               gap: '0.65rem',
+              width: '100%',
+              maxWidth: '100%',
+              minWidth: 0,
+              boxSizing: 'border-box',
             }}
           >
-            {/* Quick Action Suggestion Chips */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
-              <span className="text-tertiary text-xs whitespace-nowrap" style={{ fontSize: '11px' }}>Quick Prompts:</span>
+            {/* Quick Action Suggestion Chips - Smooth Horizontal Touch Scroll */}
+            <div
+              className="flex items-center gap-2 pb-1"
+              style={{
+                overflowX: 'auto',
+                WebkitOverflowScrolling: 'touch',
+                touchAction: 'pan-x',
+                width: '100%',
+                maxWidth: '100%',
+                minWidth: 0,
+                display: 'flex',
+                alignItems: 'center',
+                whiteSpace: 'nowrap',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+            >
+              <span className="text-tertiary text-xs whitespace-nowrap" style={{ fontSize: '11px', flexShrink: 0 }}>
+                Quick Prompts:
+              </span>
               <button
                 type="button"
                 onClick={() => handleQuickChip('Can we negotiate 4.8% APR with Vanguard Capital?')}
                 className="chip-btn"
                 style={{
                   fontSize: '11px',
-                  padding: '3px 10px',
+                  padding: '4px 10px',
                   borderRadius: '9999px',
                   backgroundColor: 'var(--surface-secondary)',
                   border: '1px solid var(--border)',
                   color: 'var(--text-primary)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 Rate match 4.8% APR?
@@ -587,13 +609,14 @@ export const OalBorrowerMessages = () => {
                 className="chip-btn"
                 style={{
                   fontSize: '11px',
-                  padding: '3px 10px',
+                  padding: '4px 10px',
                   borderRadius: '9999px',
                   backgroundColor: 'var(--surface-secondary)',
                   border: '1px solid var(--border)',
                   color: 'var(--text-primary)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 Wire transfer timeline?
@@ -604,21 +627,58 @@ export const OalBorrowerMessages = () => {
                 className="chip-btn"
                 style={{
                   fontSize: '11px',
-                  padding: '3px 10px',
+                  padding: '4px 10px',
                   borderRadius: '9999px',
                   backgroundColor: 'var(--surface-secondary)',
                   border: '1px solid var(--border)',
                   color: 'var(--text-primary)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 Covenants review?
               </button>
+              <button
+                type="button"
+                onClick={() => handleQuickChip('All KYC legal documents are verified with 100% SHA-256 seal.')}
+                className="chip-btn"
+                style={{
+                  fontSize: '11px',
+                  padding: '4px 10px',
+                  borderRadius: '9999px',
+                  backgroundColor: 'var(--surface-secondary)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-primary)',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                }}
+              >
+                Confirm KYC status
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickChip('Ready to execute term sheet #VC-9021 via digital signature.')}
+                className="chip-btn"
+                style={{
+                  fontSize: '11px',
+                  padding: '4px 10px',
+                  borderRadius: '9999px',
+                  backgroundColor: 'var(--surface-secondary)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-primary)',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                }}
+              >
+                Execute Term Sheet
+              </button>
             </div>
 
             {/* Chat Input Bar */}
-            <form onSubmit={handleSend} className="flex items-center gap-2">
+            <form onSubmit={handleSend} className="flex items-center gap-2" style={{ width: '100%', minWidth: 0 }}>
               <Input
                 value={inputMsg}
                 onChange={(e) => setInputMsg(e.target.value)}

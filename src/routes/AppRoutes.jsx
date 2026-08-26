@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { CrmLayout } from '../layouts/CrmLayout';
 import { OalLayout } from '../layouts/OalLayout';
 import { AuthLayout } from '../layouts/AuthLayout';
+import { ProtectedRoute } from './ProtectedRoute';
 
 import { CrmLogin } from '../pages/crm/CrmLogin';
 import { CrmSignup } from '../pages/crm/CrmSignup';
@@ -55,7 +56,7 @@ import { CrmReports } from '../pages/crm/CrmReports';
 import { CrmAdmin } from '../pages/crm/CrmAdmin';
 import { CrmSettings } from '../pages/crm/CrmSettings';
 
-// Phase 6 OAL Pages
+// Phase 6 OAL Public Pages
 import { OalLanding } from '../pages/oal/OalLanding';
 import { OalLogin } from '../pages/oal/OalLogin';
 import { OalBorrowerSignup } from '../pages/oal/OalBorrowerSignup';
@@ -106,7 +107,7 @@ export const AppRoutes = () => {
         <Route path="/showcase" element={<Showcase />} />
       </Route>
 
-      {/* CRM Routes */}
+      {/* CRM Auth Routes */}
       <Route path="/crm" element={<Navigate to="/crm/dashboard" replace />} />
       
       <Route element={<AuthLayout />}>
@@ -122,52 +123,55 @@ export const AppRoutes = () => {
         <Route path="/crm/onboarding-complete" element={<CrmOnboardingComplete />} />
       </Route>
 
-      <Route element={<CrmLayout />}>
-        <Route path="/crm/dashboard" element={<CrmDashboard />} />
-        <Route path="/crm/contacts" element={<CrmContacts />} />
-        <Route path="/crm/contacts/:id" element={<CrmContactDetail />} />
-        <Route path="/crm/leads" element={<CrmLeads />} />
-        <Route path="/crm/pipeline" element={<CrmPipeline />} />
-        <Route path="/crm/tasks" element={<CrmTasks />} />
-        <Route path="/crm/communication" element={<CrmCommunication />} />
+      {/* Protected CRM Application Routes */}
+      <Route element={<ProtectedRoute product="crm" />}>
+        <Route element={<CrmLayout />}>
+          <Route path="/crm/dashboard" element={<CrmDashboard />} />
+          <Route path="/crm/contacts" element={<CrmContacts />} />
+          <Route path="/crm/contacts/:id" element={<CrmContactDetail />} />
+          <Route path="/crm/leads" element={<CrmLeads />} />
+          <Route path="/crm/pipeline" element={<CrmPipeline />} />
+          <Route path="/crm/tasks" element={<CrmTasks />} />
+          <Route path="/crm/communication" element={<CrmCommunication />} />
 
-        {/* ERP Routes */}
-        <Route path="/crm/erp" element={<ErpDashboard />} />
-        <Route path="/crm/erp/projects" element={<ErpProjects />} />
-        <Route path="/crm/erp/projects/:id" element={<ErpProjectDetail />} />
-        <Route path="/crm/erp/procurement" element={<ErpProcurement />} />
-        <Route path="/crm/erp/sales-orders" element={<ErpSalesOrders />} />
-        <Route path="/crm/erp/finance" element={<ErpFinance />} />
-        <Route path="/crm/erp/inventory" element={<ErpInventory />} />
-        <Route path="/crm/erp/supply-chain" element={<ErpSupplyChain />} />
-        <Route path="/crm/erp/manufacturing" element={<ErpManufacturing />} />
-        <Route path="/crm/erp/reports" element={<ErpReports />} />
+          {/* ERP Routes */}
+          <Route path="/crm/erp" element={<ErpDashboard />} />
+          <Route path="/crm/erp/projects" element={<ErpProjects />} />
+          <Route path="/crm/erp/projects/:id" element={<ErpProjectDetail />} />
+          <Route path="/crm/erp/procurement" element={<ErpProcurement />} />
+          <Route path="/crm/erp/sales-orders" element={<ErpSalesOrders />} />
+          <Route path="/crm/erp/finance" element={<ErpFinance />} />
+          <Route path="/crm/erp/inventory" element={<ErpInventory />} />
+          <Route path="/crm/erp/supply-chain" element={<ErpSupplyChain />} />
+          <Route path="/crm/erp/manufacturing" element={<ErpManufacturing />} />
+          <Route path="/crm/erp/reports" element={<ErpReports />} />
 
-        {/* HR Routes */}
-        <Route path="/crm/hr" element={<HrDashboard />} />
-        <Route path="/crm/hr/employees" element={<HrEmployees />} />
-        <Route path="/crm/hr/employees/:id" element={<HrEmployeeDetail />} />
-        <Route path="/crm/hr/candidates" element={<HrCandidates />} />
-        <Route path="/crm/hr/jobs" element={<HrJobs />} />
-        <Route path="/crm/hr/interviews" element={<HrInterviews />} />
-        <Route path="/crm/hr/reports" element={<HrReports />} />
+          {/* HR Routes */}
+          <Route path="/crm/hr" element={<HrDashboard />} />
+          <Route path="/crm/hr/employees" element={<HrEmployees />} />
+          <Route path="/crm/hr/employees/:id" element={<HrEmployeeDetail />} />
+          <Route path="/crm/hr/candidates" element={<HrCandidates />} />
+          <Route path="/crm/hr/jobs" element={<HrJobs />} />
+          <Route path="/crm/hr/interviews" element={<HrInterviews />} />
+          <Route path="/crm/hr/reports" element={<HrReports />} />
 
-        {/* Support Routes */}
-        <Route path="/crm/support" element={<SupportDashboard />} />
-        <Route path="/crm/support/tickets" element={<SupportTickets />} />
-        <Route path="/crm/support/tickets/:id" element={<SupportTicketDetail />} />
-        <Route path="/crm/support/chat" element={<SupportChat />} />
-        <Route path="/crm/support/kb" element={<SupportKb />} />
-        <Route path="/crm/support/reports" element={<SupportReports />} />
+          {/* Support Routes */}
+          <Route path="/crm/support" element={<SupportDashboard />} />
+          <Route path="/crm/support/tickets" element={<SupportTickets />} />
+          <Route path="/crm/support/tickets/:id" element={<SupportTicketDetail />} />
+          <Route path="/crm/support/chat" element={<SupportChat />} />
+          <Route path="/crm/support/kb" element={<SupportKb />} />
+          <Route path="/crm/support/reports" element={<SupportReports />} />
 
-        {/* Phase 5 Routes */}
-        <Route path="/crm/ai-studio" element={<CrmAiStudio />} />
-        <Route path="/crm/analytics" element={<CrmAnalytics />} />
-        <Route path="/crm/reports" element={<CrmReports />} />
-        <Route path="/crm/admin" element={<CrmAdmin />} />
-        <Route path="/crm/settings" element={<CrmSettings />} />
+          {/* Phase 5 Routes */}
+          <Route path="/crm/ai-studio" element={<CrmAiStudio />} />
+          <Route path="/crm/analytics" element={<CrmAnalytics />} />
+          <Route path="/crm/reports" element={<CrmReports />} />
+          <Route path="/crm/admin" element={<CrmAdmin />} />
+          <Route path="/crm/settings" element={<CrmSettings />} />
 
-        <Route path="/crm/*" element={<CrmDashboard />} />
+          <Route path="/crm/*" element={<CrmDashboard />} />
+        </Route>
       </Route>
 
       {/* OAL Network Public Routes */}
@@ -181,59 +185,61 @@ export const AppRoutes = () => {
         <Route path="/oal/mfa" element={<OalMfaSetup />} />
       </Route>
 
-      {/* OAL Authenticated Personas */}
-      <Route element={<OalLayout />}>
-        {/* Borrower Routes */}
-        <Route path="/oal/dashboard" element={<OalBorrowerDashboard />} />
-        <Route path="/oal/borrower/dashboard" element={<OalBorrowerDashboard />} />
-        <Route path="/oal/borrower/kyc" element={<OalBorrowerKyc />} />
-        <Route path="/oal/borrower/application" element={<OalBorrowerApplication />} />
-        <Route path="/oal/borrower/documents" element={<OalBorrowerDocuments />} />
-        <Route path="/oal/borrower/score" element={<OalBorrowerScore />} />
-        <Route path="/oal/borrower/offers" element={<OalBorrowerOffers />} />
-        <Route path="/oal/borrower/messages" element={<OalBorrowerMessages />} />
-        <Route path="/oal/borrower/referrals" element={<OalBorrowerReferrals />} />
-        <Route path="/oal/borrower/support" element={<OalBorrowerSupport />} />
-        <Route path="/oal/borrower/settings" element={<OalBorrowerSettings />} />
+      {/* Protected OAL Authenticated Personas */}
+      <Route element={<ProtectedRoute product="oal" />}>
+        <Route element={<OalLayout />}>
+          {/* Borrower Routes */}
+          <Route path="/oal/dashboard" element={<OalBorrowerDashboard />} />
+          <Route path="/oal/borrower/dashboard" element={<OalBorrowerDashboard />} />
+          <Route path="/oal/borrower/kyc" element={<OalBorrowerKyc />} />
+          <Route path="/oal/borrower/application" element={<OalBorrowerApplication />} />
+          <Route path="/oal/borrower/documents" element={<OalBorrowerDocuments />} />
+          <Route path="/oal/borrower/score" element={<OalBorrowerScore />} />
+          <Route path="/oal/borrower/offers" element={<OalBorrowerOffers />} />
+          <Route path="/oal/borrower/messages" element={<OalBorrowerMessages />} />
+          <Route path="/oal/borrower/referrals" element={<OalBorrowerReferrals />} />
+          <Route path="/oal/borrower/support" element={<OalBorrowerSupport />} />
+          <Route path="/oal/borrower/settings" element={<OalBorrowerSettings />} />
 
-        {/* Lender Routes */}
-        <Route path="/oal/lender/dashboard" element={<OalLenderDashboard />} />
-        <Route path="/oal/lender/leads" element={<OalLenderLeads />} />
-        <Route path="/oal/lender/leads/:id" element={<OalLenderLeadDetail />} />
-        <Route path="/oal/lender/applications" element={<OalLenderApplications />} />
-        <Route path="/oal/lender/offers" element={<OalLenderOffers />} />
-        <Route path="/oal/lender/analytics" element={<OalLenderAnalytics />} />
-        <Route path="/oal/lender/reports" element={<OalLenderReports />} />
-        <Route path="/oal/lender/settings" element={<OalLenderSettings />} />
+          {/* Lender Routes */}
+          <Route path="/oal/lender/dashboard" element={<OalLenderDashboard />} />
+          <Route path="/oal/lender/leads" element={<OalLenderLeads />} />
+          <Route path="/oal/lender/leads/:id" element={<OalLenderLeadDetail />} />
+          <Route path="/oal/lender/applications" element={<OalLenderApplications />} />
+          <Route path="/oal/lender/offers" element={<OalLenderOffers />} />
+          <Route path="/oal/lender/analytics" element={<OalLenderAnalytics />} />
+          <Route path="/oal/lender/reports" element={<OalLenderReports />} />
+          <Route path="/oal/lender/settings" element={<OalLenderSettings />} />
 
-        {/* OAL Rep Routes */}
-        <Route path="/oal/rep/dashboard" element={<OalRepDashboard />} />
-        <Route path="/oal/rep/borrowers" element={<OalRepBorrowers />} />
-        <Route path="/oal/rep/applications" element={<OalRepApplications />} />
-        <Route path="/oal/rep/documents" element={<OalRepDocuments />} />
-        <Route path="/oal/rep/messages" element={<OalRepMessages />} />
-        <Route path="/oal/rep/offers" element={<OalRepOffers />} />
-        <Route path="/oal/rep/tasks" element={<OalRepTasks />} />
+          {/* OAL Rep Routes */}
+          <Route path="/oal/rep/dashboard" element={<OalRepDashboard />} />
+          <Route path="/oal/rep/borrowers" element={<OalRepBorrowers />} />
+          <Route path="/oal/rep/applications" element={<OalRepApplications />} />
+          <Route path="/oal/rep/documents" element={<OalRepDocuments />} />
+          <Route path="/oal/rep/messages" element={<OalRepMessages />} />
+          <Route path="/oal/rep/offers" element={<OalRepOffers />} />
+          <Route path="/oal/rep/tasks" element={<OalRepTasks />} />
 
-        {/* Phase 9 OAL Admin Routes */}
-        <Route path="/oal/admin/dashboard" element={<OalAdminDashboard />} />
-        <Route path="/oal/admin/borrowers" element={<OalAdminBorrowers />} />
-        <Route path="/oal/admin/lenders" element={<OalAdminLenders />} />
-        <Route path="/oal/admin/applications" element={<OalAdminApplications />} />
-        <Route path="/oal/admin/verification" element={<OalAdminVerification />} />
-        <Route path="/oal/admin/scoring" element={<OalAdminScoring />} />
-        <Route path="/oal/admin/documents" element={<OalAdminVerification />} />
-        <Route path="/oal/admin/payments" element={<OalAdminPayments />} />
-        <Route path="/oal/admin/subscriptions" element={<OalAdminSubscriptions />} />
-        <Route path="/oal/admin/referrals" element={<OalAdminCms />} />
-        <Route path="/oal/admin/ads" element={<OalAdminCms />} />
-        <Route path="/oal/admin/cms" element={<OalAdminCms />} />
-        <Route path="/oal/admin/support" element={<OalAdminSupport />} />
-        <Route path="/oal/admin/reports" element={<OalAdminAudit />} />
-        <Route path="/oal/admin/audit" element={<OalAdminAudit />} />
-        <Route path="/oal/admin/settings" element={<OalAdminDashboard />} />
+          {/* Phase 9 OAL Admin Routes */}
+          <Route path="/oal/admin/dashboard" element={<OalAdminDashboard />} />
+          <Route path="/oal/admin/borrowers" element={<OalAdminBorrowers />} />
+          <Route path="/oal/admin/lenders" element={<OalAdminLenders />} />
+          <Route path="/oal/admin/applications" element={<OalAdminApplications />} />
+          <Route path="/oal/admin/verification" element={<OalAdminVerification />} />
+          <Route path="/oal/admin/scoring" element={<OalAdminScoring />} />
+          <Route path="/oal/admin/documents" element={<OalAdminVerification />} />
+          <Route path="/oal/admin/payments" element={<OalAdminPayments />} />
+          <Route path="/oal/admin/subscriptions" element={<OalAdminSubscriptions />} />
+          <Route path="/oal/admin/referrals" element={<OalAdminCms />} />
+          <Route path="/oal/admin/ads" element={<OalAdminCms />} />
+          <Route path="/oal/admin/cms" element={<OalAdminCms />} />
+          <Route path="/oal/admin/support" element={<OalAdminSupport />} />
+          <Route path="/oal/admin/reports" element={<OalAdminAudit />} />
+          <Route path="/oal/admin/audit" element={<OalAdminAudit />} />
+          <Route path="/oal/admin/settings" element={<OalAdminDashboard />} />
 
-        <Route path="/oal/*" element={<OalBorrowerDashboard />} />
+          <Route path="/oal/*" element={<OalBorrowerDashboard />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to="/showcase" replace />} />

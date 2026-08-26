@@ -1,9 +1,10 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { ChevronLeft, ChevronRight, LogOut, Sparkles } from 'lucide-react';
 import { crmNavigation, oalNavigation } from '../../data/mockData';
 import { Button } from '../../components/ui/Button';
-import { cx } from '../../utils/classNames';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 
 export const Sidebar = ({
   isCollapsed = false,
@@ -12,7 +13,22 @@ export const Sidebar = ({
   onCloseMobile,
 }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  const { addToast } = useToast();
+
   const navItems = product === 'crm' ? crmNavigation : oalNavigation;
+
+  const handleLogout = () => {
+    logout(product);
+    addToast({
+      title: 'Logged Out',
+      message: `Signed out of ${product === 'crm' ? 'CRM nErgy' : 'OAL Network'}.`,
+      type: 'info',
+    });
+    if (onCloseMobile) onCloseMobile();
+    navigate(product === 'crm' ? '/crm/login' : '/oal/login');
+  };
 
   return (
     <aside
@@ -32,7 +48,7 @@ export const Sidebar = ({
       {/* Navigation List */}
       <div className="flex flex-col gap-1 p-3" style={{ overflowY: 'auto' }}>
         <div className="text-xs font-semibold text-tertiary px-2 py-1 uppercase tracking-wider">
-          {!isCollapsed && (product === 'crm' ? 'CRM nErgy Modules' : 'OAL Borrower Hub')}
+          {!isCollapsed && (product === 'crm' ? 'CRM nErgy Modules' : 'OAL Network Hub')}
         </div>
 
         {navItems.map((item) => {
@@ -67,20 +83,21 @@ export const Sidebar = ({
         })}
       </div>
 
-      {/* Sidebar Footer & Collapse Toggle */}
+      {/* Sidebar Footer & Logout / Collapse Buttons */}
       <div
-        className="p-3 border-t border-subtle flex flex-col gap-2"
+        className="p-3 flex flex-col gap-2"
         style={{ borderTop: '1px solid var(--border)' }}
       >
-        {!isCollapsed && (
-          <div className="flex flex-col gap-1 text-xs text-tertiary px-2">
-            <div className="flex justify-between items-center">
-              <span>System Tenant</span>
-              <span className="font-semibold text-primary">Active</span>
-            </div>
-            <span style={{ fontSize: '10px' }}>v2.6 Enterprise Engine</span>
-          </div>
-        )}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleLogout}
+          className="w-full justify-start text-error"
+          title="Sign out of workspace"
+        >
+          <LogOut size={18} className="flex-shrink-0" />
+          {!isCollapsed && <span className="text-xs font-semibold">Log Out ({product.toUpperCase()})</span>}
+        </Button>
 
         <Button
           variant="ghost"

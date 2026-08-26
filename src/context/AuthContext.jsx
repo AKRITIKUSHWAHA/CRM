@@ -11,17 +11,43 @@ const defaultPermissionsMatrix = {
   Employee: { View: true, Create: false, Edit: false, Delete: false, Export: false, Admin: false },
 };
 
+const defaultCrmUser = {
+  name: 'Alexander Wright',
+  email: 'a.wright@nergy.io',
+  role: 'Company Owner',
+  company: 'nErgy Enterprise Logistics',
+  tenantId: 'TENANT-08492',
+  avatar: null,
+};
+
+const defaultOalUser = {
+  name: 'Dr. Aris Thorne',
+  email: 'a.thorne@biogenix.org',
+  role: 'Borrower Account',
+  company: 'BioGenix Labs',
+  tenantId: 'OAL-BORROWER-9910',
+  avatar: null,
+};
+
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('crm_user');
-    return savedUser ? JSON.parse(savedUser) : {
-      name: 'Alexander Wright',
-      email: 'a.wright@nergy.io',
-      role: 'Company Owner',
-      company: 'nErgy Enterprise Logistics',
-      tenantId: 'TENANT-08492',
-      avatar: null,
-    };
+  const [crmUser, setCrmUser] = useState(() => {
+    const saved = localStorage.getItem('crm_user');
+    return saved ? JSON.parse(saved) : defaultCrmUser;
+  });
+
+  const [oalUser, setOalUser] = useState(() => {
+    const saved = localStorage.getItem('oal_user');
+    return saved ? JSON.parse(saved) : defaultOalUser;
+  });
+
+  const [isCrmAuthenticated, setIsCrmAuthenticated] = useState(() => {
+    const saved = localStorage.getItem('crm_is_authenticated');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+
+  const [isOalAuthenticated, setIsOalAuthenticated] = useState(() => {
+    const saved = localStorage.getItem('oal_is_authenticated');
+    return saved !== null ? JSON.parse(saved) : true;
   });
 
   const [companyData, setCompanyData] = useState(() => {
@@ -57,12 +83,21 @@ export const AuthProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : defaultPermissionsMatrix;
   });
 
-  const [productMode, setProductMode] = useState('crm');
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  useEffect(() => {
+    localStorage.setItem('crm_user', JSON.stringify(crmUser));
+  }, [crmUser]);
 
   useEffect(() => {
-    localStorage.setItem('crm_user', JSON.stringify(user));
-  }, [user]);
+    localStorage.setItem('oal_user', JSON.stringify(oalUser));
+  }, [oalUser]);
+
+  useEffect(() => {
+    localStorage.setItem('crm_is_authenticated', JSON.stringify(isCrmAuthenticated));
+  }, [isCrmAuthenticated]);
+
+  useEffect(() => {
+    localStorage.setItem('oal_is_authenticated', JSON.stringify(isOalAuthenticated));
+  }, [isOalAuthenticated]);
 
   useEffect(() => {
     localStorage.setItem('crm_company_setup', JSON.stringify(companyData));
@@ -77,17 +112,21 @@ export const AuthProvider = ({ children }) => {
   }, [rolesPermissions]);
 
   const login = (userData, mode = 'crm') => {
-    setUser(userData || user);
-    setProductMode(mode);
-    setIsAuthenticated(true);
+    if (mode === 'crm') {
+      setCrmUser(userData || defaultCrmUser);
+      setIsCrmAuthenticated(true);
+    } else {
+      setOalUser(userData || defaultOalUser);
+      setIsOalAuthenticated(true);
+    }
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-  };
-
-  const switchProduct = (mode) => {
-    setProductMode(mode);
+  const logout = (mode = 'crm') => {
+    if (mode === 'crm') {
+      setIsCrmAuthenticated(false);
+    } else {
+      setIsOalAuthenticated(false);
+    }
   };
 
   const updateCompanyData = (data) => {
@@ -105,17 +144,20 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user,
-        setUser,
+        user: crmUser,
+        crmUser,
+        oalUser,
+        setUser: setCrmUser,
+        setCrmUser,
+        setOalUser,
+        isCrmAuthenticated,
+        isOalAuthenticated,
         companyData,
         updateCompanyData,
         invitedEmployees,
         updateInvitedEmployees,
         rolesPermissions,
         updateRolesPermissions,
-        productMode,
-        switchProduct,
-        isAuthenticated,
         login,
         logout,
       }}

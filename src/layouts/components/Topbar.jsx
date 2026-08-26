@@ -26,13 +26,25 @@ import { useNavigate } from 'react-router-dom';
 
 export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
   const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useAuth();
+  const { crmUser, oalUser, logout } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
+
+  const currentUser = product === 'crm' ? crmUser : oalUser;
 
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const handleLogout = () => {
+    logout(product);
+    addToast({
+      title: 'Logged Out',
+      message: `Signed out of ${product === 'crm' ? 'CRM nErgy' : 'OAL Network'}.`,
+      type: 'info',
+    });
+    navigate(product === 'crm' ? '/crm/login' : '/oal/login');
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -53,7 +65,7 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
         zIndex: 'var(--z-sticky)',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'between',
         padding: '0 1.25rem',
       }}
     >
@@ -213,22 +225,22 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
         <Dropdown
           trigger={
             <div className="flex items-center gap-2 cursor-pointer ml-1">
-              <Avatar name={user.name} src={user.avatar} size="sm" status="online" />
+              <Avatar name={currentUser?.name || 'User'} src={currentUser?.avatar} size="sm" status="online" />
               <div className="hidden-mobile flex flex-col text-left">
-                <span className="font-semibold text-xs text-primary leading-none">{user.name}</span>
+                <span className="font-semibold text-xs text-primary leading-none">{currentUser?.name}</span>
                 <span className="text-tertiary text-xs leading-none" style={{ fontSize: '10px', marginTop: '2px' }}>
-                  {user.role}
+                  {currentUser?.role}
                 </span>
               </div>
               <ChevronDown size={14} className="text-tertiary hidden-mobile" />
             </div>
           }
         >
-          <DropdownHeader>{user.company}</DropdownHeader>
-          <DropdownItem icon={User} onClick={() => navigate('/crm/settings')}>
+          <DropdownHeader>{currentUser?.company}</DropdownHeader>
+          <DropdownItem icon={User} onClick={() => navigate(product === 'crm' ? '/crm/settings' : '/oal/borrower/settings')}>
             Account Profile
           </DropdownItem>
-          <DropdownItem icon={Building2} onClick={() => addToast({ title: 'Tenant Switcher', message: `Current Tenant ID: ${user.tenantId}`, type: 'info' })}>
+          <DropdownItem icon={Building2} onClick={() => addToast({ title: 'Tenant Vault', message: `Tenant ID: ${currentUser?.tenantId}`, type: 'info' })}>
             Workspace Settings
           </DropdownItem>
 
@@ -250,8 +262,8 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
 
           <DropdownDivider />
 
-          <DropdownItem icon={LogOut} danger onClick={logout}>
-            Log Out
+          <DropdownItem icon={LogOut} danger onClick={handleLogout}>
+            Log Out ({product.toUpperCase()})
           </DropdownItem>
         </Dropdown>
       </div>

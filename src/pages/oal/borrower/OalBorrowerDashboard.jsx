@@ -265,12 +265,12 @@ export const OalBorrowerDashboard = () => {
         {/* Left Column: Active Marketplace Offers */}
         <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
           {/* Card Header */}
-          <div className="flex items-center justify-between border-b border-subtle pb-3 mb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-subtle pb-3 mb-3">
             <div>
               <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
                 Active Marketplace Offers
               </h3>
-              <span className="text-xs text-secondary">3 Institutional lenders competing for your debt facility</span>
+              <span className="text-xs text-secondary">3 Institutional lenders competing</span>
             </div>
             {!acceptedOffer && (
               <Button
@@ -278,7 +278,7 @@ export const OalBorrowerDashboard = () => {
                 size="sm"
                 icon={ChevronRight}
                 onClick={() => navigate('/oal/borrower/offers')}
-                style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '12px' }}
+                style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '12px', padding: 0, alignSelf: 'flex-start' }}
               >
                 Compare All
               </Button>
@@ -313,10 +313,10 @@ export const OalBorrowerDashboard = () => {
                 return (
                   <div
                     key={off.id}
-                    className="p-3 surface-secondary rounded-lg border-subtle flex items-center justify-between gap-3 transition-all hover:border-primary"
+                    className="p-3 surface-secondary rounded-lg border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-primary"
                     style={{ transition: 'all 0.15s ease' }}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <div
                         style={{
                           width: '34px',
@@ -337,7 +337,7 @@ export const OalBorrowerDashboard = () => {
                       </div>
 
                       <div className="flex flex-col gap-0.5 min-w-0">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 flex-wrap">
                           <span className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
                             {off.lender}
                           </span>
@@ -349,6 +349,7 @@ export const OalBorrowerDashboard = () => {
                               borderRadius: '4px',
                               backgroundColor: tagConfig.bg,
                               color: tagConfig.color,
+                              whiteSpace: 'nowrap',
                               flexShrink: 0,
                             }}
                           >
@@ -370,9 +371,10 @@ export const OalBorrowerDashboard = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => handleInspectOffer(off)}
-                      style={{ fontSize: '11px', height: '30px', padding: '0 10px', fontWeight: 600, flexShrink: 0 }}
+                      className="w-full sm:w-auto justify-center"
+                      style={{ fontSize: '11px', height: '30px', padding: '0 12px', fontWeight: 600, flexShrink: 0 }}
                     >
-                      Inspect
+                      Inspect Terms
                     </Button>
                   </div>
                 );
@@ -385,14 +387,14 @@ export const OalBorrowerDashboard = () => {
         <Card style={{ padding: '1.25rem', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
             {/* Card Header */}
-            <div className="flex items-center justify-between border-b border-subtle pb-3 mb-3">
-              <div>
+            <div className="flex items-center justify-between border-b border-subtle pb-3 mb-3 gap-2">
+              <div className="min-w-0">
                 <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-                  Assigned OAL Representative
+                  Assigned Representative
                 </h3>
-                <span className="text-xs text-secondary">Dedicated underwriting advocate for your facility</span>
+                <span className="text-xs text-secondary truncate block">Dedicated underwriting advocate</span>
               </div>
-              <Badge variant="success" style={{ padding: '2px 7px', fontSize: '11px' }}>
+              <Badge variant="success" style={{ padding: '2px 7px', fontSize: '11px', flexShrink: 0 }}>
                 ● Online
               </Badge>
             </div>
@@ -417,11 +419,11 @@ export const OalBorrowerDashboard = () => {
                 >
                   SJ
                 </div>
-                <div>
-                  <div className="font-bold text-xs text-primary" style={{ fontSize: '13px' }}>
+                <div className="min-w-0">
+                  <div className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
                     Sarah Jenkins
                   </div>
-                  <div className="text-xs text-secondary" style={{ fontSize: '11px' }}>
+                  <div className="text-xs text-secondary truncate" style={{ fontSize: '11px' }}>
                     Licensed Underwriting Officer &bull; NMLS #84920
                   </div>
                 </div>
@@ -447,20 +449,20 @@ export const OalBorrowerDashboard = () => {
             </div>
 
             {/* Quick Mini Reply Input */}
-            <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 mb-3">
+            <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 mb-3 w-full">
               <Input
                 value={quickReplyText}
                 onChange={(e) => setQuickReplyText(e.target.value)}
-                placeholder="Type a quick message to Sarah..."
+                placeholder="Quick message to Sarah..."
                 style={{ height: '36px', fontSize: '12px' }}
-                className="flex-1"
+                className="flex-1 min-w-0"
               />
               <Button
                 variant="primary"
                 size="sm"
                 type="submit"
                 icon={Send}
-                style={{ height: '36px', minWidth: '70px', justifyContent: 'center' }}
+                style={{ height: '36px', minWidth: '60px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
               >
                 Send
               </Button>

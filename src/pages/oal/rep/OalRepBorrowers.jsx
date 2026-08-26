@@ -28,11 +28,30 @@ export const OalRepBorrowers = () => {
   };
 
   const handleAddNote = (e) => {
-    e.preventDefault();
-    if (!internalNote.trim()) return;
-    setNotesList([{ id: Date.now().toString(), author: 'Sarah Jenkins (OAL Rep)', note: internalNote, date: 'Just now' }, ...notesList]);
+    if (e) e.preventDefault();
+    if (!internalNote.trim()) {
+      addToast({
+        title: 'Empty Note',
+        message: 'Please write a note before submitting.',
+        type: 'warning',
+      });
+      return;
+    }
+
+    const newEntry = {
+      id: Date.now().toString(),
+      author: 'Sarah Jenkins (OAL Rep)',
+      note: internalNote.trim(),
+      date: 'Just now',
+    };
+
+    setNotesList((prev) => [newEntry, ...prev]);
     setInternalNote('');
-    addToast({ title: 'Internal Note Added', message: 'Saved to borrower audit ledger.', type: 'info' });
+    addToast({
+      title: 'Internal Note Added',
+      message: 'Note saved successfully to borrower audit ledger.',
+      type: 'success',
+    });
   };
 
   const handleCreateTask = (e) => {
@@ -89,9 +108,14 @@ export const OalRepBorrowers = () => {
           <Input
             value={internalNote}
             onChange={(e) => setInternalNote(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleAddNote(e);
+              }
+            }}
             placeholder="Add confidential agent note regarding DSCR or lender negotiation..."
             style={{ height: '38px', fontSize: '13px' }}
-            required
           />
           <div className="flex justify-end">
             <Button
@@ -99,6 +123,7 @@ export const OalRepBorrowers = () => {
               size="sm"
               type="submit"
               icon={Plus}
+              onClick={handleAddNote}
               style={{ height: '34px', fontWeight: 600, fontSize: '12px', padding: '0 14px' }}
             >
               Add Internal Note

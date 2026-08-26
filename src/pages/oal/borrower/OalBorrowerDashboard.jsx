@@ -241,7 +241,7 @@ export const OalBorrowerDashboard = () => {
         </div>
       </div>
 
-      {/* 4. Section: Active Marketplace Offers (Full-Width Executive Layout) */}
+      {/* 4. Section: Active Marketplace Offers (Static Executive Summary) */}
       <div className="flex flex-col gap-3">
         {/* Section Heading Outside the Card */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -249,25 +249,25 @@ export const OalBorrowerDashboard = () => {
             <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
               Active Marketplace Offers
             </h2>
-            <span className="text-xs text-secondary">3 Institutional lenders competing for your commercial debt facility</span>
+            <span className="text-xs text-secondary">
+              3 Institutional lenders competing for your commercial debt facility
+            </span>
           </div>
-          {!acceptedOffer && (
-            <Button
-              variant="ghost"
-              size="sm"
-              icon={ChevronRight}
-              onClick={() => navigate('/oal/borrower/offers')}
-              style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '13px' }}
-            >
-              Compare All Offers ({offers.length})
-            </Button>
-          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            icon={ChevronRight}
+            onClick={() => navigate('/oal/borrower/offers')}
+            style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '13px' }}
+          >
+            Manage in Offers Portal ({offers.length})
+          </Button>
         </div>
 
-        {/* Offers Content Card */}
-        <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
+        {/* Static Executive Table Card */}
+        <Card style={{ padding: '0', borderRadius: '12px', overflow: 'hidden' }}>
           {acceptedOffer ? (
-            <div className="p-4 surface-secondary rounded-lg border-subtle flex flex-col gap-2">
+            <div className="p-4 surface-secondary flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <Badge variant="success" icon={CheckCircle2}>Accepted Term Sheet</Badge>
                 <span className="font-mono text-xs text-tertiary">{acceptedOffer.id}</span>
@@ -280,167 +280,119 @@ export const OalBorrowerDashboard = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-3">
-              {offers.map((off, idx) => {
-                const tagConfig = [
-                  { label: '⚡ Best Match', bg: 'rgba(37, 99, 235, 0.08)', color: 'var(--accent)' },
-                  { label: '🔥 Lowest APR', bg: 'rgba(22, 163, 74, 0.08)', color: 'var(--success)' },
-                  { label: '💎 Max Capital', bg: 'rgba(147, 51, 234, 0.08)', color: '#9333ea' },
-                ][idx % 3];
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
+                <thead>
+                  <tr style={{ backgroundColor: 'var(--surface-secondary)', borderBottom: '1px solid var(--border)' }}>
+                    <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Lender Partner
+                    </th>
+                    <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Facility Amount
+                    </th>
+                    <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Interest APR
+                    </th>
+                    <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Term Duration
+                    </th>
+                    <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Est. Monthly ACH
+                    </th>
+                    <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Match Category
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {offers.map((off, idx) => {
+                    const tagConfig = [
+                      { label: '⚡ Best Match', bg: 'rgba(37, 99, 235, 0.08)', color: 'var(--accent)' },
+                      { label: '🔥 Lowest APR', bg: 'rgba(22, 163, 74, 0.08)', color: 'var(--success)' },
+                      { label: '💎 Max Capital', bg: 'rgba(147, 51, 234, 0.08)', color: '#9333ea' },
+                    ][idx % 3];
 
-                const initials = off.lender.split(' ').slice(0, 2).map((w) => w[0]).join('');
+                    const initials = off.lender.split(' ').slice(0, 2).map((w) => w[0]).join('');
 
-                return (
-                  <div
-                    key={off.id}
-                    className="p-3.5 surface-secondary rounded-lg border-subtle flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all hover:border-primary"
-                    style={{ transition: 'all 0.15s ease' }}
-                  >
-                    {/* Left: Lender initials, Title & Metrics */}
-                    <div className="flex items-center gap-3.5 min-w-0">
-                      <div
+                    return (
+                      <tr
+                        key={off.id}
+                        onClick={() => navigate('/oal/borrower/offers')}
                         style={{
-                          width: '42px',
-                          height: '42px',
-                          borderRadius: '10px',
-                          backgroundColor: 'var(--surface)',
-                          border: '1px solid var(--border)',
-                          color: 'var(--accent)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontWeight: 800,
-                          fontSize: '13px',
-                          flexShrink: 0,
+                          borderBottom: idx === offers.length - 1 ? 'none' : '1px solid var(--border)',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.15s ease',
                         }}
+                        className="hover:surface-secondary"
                       >
-                        {initials}
-                      </div>
+                        <td style={{ padding: '14px 16px' }}>
+                          <div className="flex items-center gap-3">
+                            <div
+                              style={{
+                                width: '34px',
+                                height: '34px',
+                                borderRadius: '50%',
+                                background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+                                color: '#ffffff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontWeight: 800,
+                                fontSize: '12px',
+                                flexShrink: 0,
+                              }}
+                            >
+                              {initials}
+                            </div>
+                            <div>
+                              <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{off.lender}</div>
+                              <div style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{off.id} &bull; Direct Automated Wire</div>
+                            </div>
+                          </div>
+                        </td>
 
-                      <div className="flex flex-col gap-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-bold text-sm text-primary">
-                            {off.lender}
+                        <td style={{ padding: '14px 16px', fontWeight: 800, color: 'var(--text-primary)', fontSize: '14px' }}>
+                          {off.amount}
+                        </td>
+
+                        <td style={{ padding: '14px 16px' }}>
+                          <span style={{ fontWeight: 800, color: 'var(--success)', fontSize: '13px' }}>
+                            {off.rate}
                           </span>
+                        </td>
+
+                        <td style={{ padding: '14px 16px', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                          {off.term}
+                        </td>
+
+                        <td style={{ padding: '14px 16px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                          {off.monthlyPayment}
+                        </td>
+
+                        <td style={{ padding: '14px 16px' }}>
                           <span
                             style={{
                               fontSize: '11px',
                               fontWeight: 700,
-                              padding: '2px 8px',
+                              padding: '3px 8px',
                               borderRadius: '4px',
                               backgroundColor: tagConfig.bg,
                               color: tagConfig.color,
                               whiteSpace: 'nowrap',
-                              flexShrink: 0,
                             }}
                           >
                             {tagConfig.label}
                           </span>
-                        </div>
-
-                        <div className="flex items-center gap-3 text-xs text-secondary flex-wrap">
-                          <span>Facility: <strong style={{ color: 'var(--text-primary)', fontSize: '13px' }}>{off.amount}</strong></span>
-                          <span>&bull;</span>
-                          <span>Interest: <strong style={{ color: 'var(--success)', fontSize: '13px' }}>{off.rate}</strong></span>
-                          <span>&bull;</span>
-                          <span>Term: <strong style={{ color: 'var(--text-primary)' }}>{off.term}</strong></span>
-                          <span>&bull;</span>
-                          <span>Est. Monthly: <strong style={{ color: 'var(--text-primary)' }}>{off.monthlyPayment}</strong></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: Compact Inspect Button */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleInspectOffer(off)}
-                      style={{ fontSize: '12px', height: '34px', padding: '0 16px', fontWeight: 600, flexShrink: 0 }}
-                    >
-                      Inspect Terms
-                    </Button>
-                  </div>
-                );
-              })}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
         </Card>
       </div>
-
-      {/* 5. Modal: Inspect Offer Details */}
-      <Modal
-        isOpen={isOfferModalOpen}
-        onClose={() => setIsOfferModalOpen(false)}
-        title={selectedOffer ? `${selectedOffer.lender} — Term Sheet` : 'Offer Details'}
-        footer={
-          <>
-            <Button variant="outline" size="sm" onClick={() => setIsOfferModalOpen(false)}>
-              Close
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              icon={MessageSquare}
-              onClick={() => {
-                setIsOfferModalOpen(false);
-                navigate('/oal/borrower/messages');
-              }}
-            >
-              Negotiate in Chat
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              icon={CheckCircle2}
-              style={{ backgroundColor: 'var(--success)', borderColor: 'var(--success)' }}
-              onClick={handleAcceptOffer}
-            >
-              Accept Offer
-            </Button>
-          </>
-        }
-      >
-        {selectedOffer && (
-          <div className="flex flex-col gap-4 text-xs">
-            {/* Highlights Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 surface-secondary rounded-md border-subtle">
-              <div>
-                <span className="text-tertiary" style={{ fontSize: '11px' }}>Facility Size</span>
-                <div className="font-bold text-sm text-primary">{selectedOffer.amount}</div>
-              </div>
-              <div>
-                <span className="text-tertiary" style={{ fontSize: '11px' }}>Interest APR</span>
-                <div className="font-bold text-sm text-success">{selectedOffer.rate}</div>
-              </div>
-              <div>
-                <span className="text-tertiary" style={{ fontSize: '11px' }}>Term Length</span>
-                <div className="font-bold text-sm text-primary">{selectedOffer.term}</div>
-              </div>
-              <div>
-                <span className="text-tertiary" style={{ fontSize: '11px' }}>Monthly Cost</span>
-                <div className="font-bold text-sm text-primary">{selectedOffer.monthlyPayment}</div>
-              </div>
-            </div>
-
-            {/* Key Term Sheet Clauses */}
-            <div>
-              <h4 className="font-bold text-xs text-primary uppercase mb-2">Key Lender Covenants & Features</h4>
-              <div className="flex flex-col gap-2">
-                {selectedOffer.features?.map((feat, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-secondary">
-                    <CheckCircle2 size={14} className="text-success flex-shrink-0" />
-                    <span>{feat}</span>
-                  </div>
-                ))}
-                <div className="flex items-center gap-2 text-secondary">
-                  <CheckCircle2 size={14} className="text-success flex-shrink-0" />
-                  <span>Origination fee capped at {selectedOffer.originationFee}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </Modal>
 
       {/* 6. Modal: Referral Program */}
       <Modal

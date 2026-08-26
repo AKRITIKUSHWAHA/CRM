@@ -401,21 +401,24 @@ export const OalBorrowerMessages = () => {
           {/* Active Contact Seamless Header Bar */}
           <div
             style={{
-              padding: '1rem 1.5rem',
+              padding: '0.85rem 1.25rem',
               borderBottom: '1px solid var(--border)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              gap: '1rem',
+              gap: '0.75rem',
               backgroundColor: 'var(--surface)',
+              width: '100%',
+              boxSizing: 'border-box',
+              minWidth: 0,
             }}
           >
-            <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
               <div style={{ position: 'relative', flexShrink: 0 }}>
                 <div
                   style={{
-                    width: '40px',
-                    height: '40px',
+                    width: '38px',
+                    height: '38px',
                     borderRadius: '50%',
                     background: activeContact.avatarBg,
                     color: '#ffffff',
@@ -434,8 +437,8 @@ export const OalBorrowerMessages = () => {
                       position: 'absolute',
                       bottom: '0',
                       right: '0',
-                      width: '10px',
-                      height: '10px',
+                      width: '9px',
+                      height: '9px',
                       backgroundColor: '#16a34a',
                       border: '2px solid var(--surface)',
                       borderRadius: '50%',
@@ -444,23 +447,23 @@ export const OalBorrowerMessages = () => {
                 )}
               </div>
 
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-sm text-primary">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap min-w-0">
+                  <span className="font-bold text-sm text-primary truncate">
                     {activeContact.name}
                   </span>
                   <Badge variant="success" style={{ fontSize: '10px', padding: '1px 6px' }}>
                     {activeContact.status}
                   </Badge>
                 </div>
-                <div className="text-xs text-secondary truncate">
-                  {activeContact.role} &bull; {activeContact.organization}
+                <div className="text-xs text-secondary truncate" style={{ fontSize: '11px' }}>
+                  {activeContact.role}
                 </div>
               </div>
             </div>
 
-            {/* Direct Desk Badge */}
-            <div className="flex items-center gap-2">
+            {/* Direct Desk Badge - hidden on small mobile to give maximum room */}
+            <div className="hidden-mobile flex items-center gap-2 flex-shrink-0">
               <Badge variant="neutral" style={{ fontSize: '11px' }}>
                 Direct Desk
               </Badge>

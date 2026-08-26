@@ -105,12 +105,20 @@ html, body, #root, .app-layout, .main-content {
   height: calc(100vh - 190px) !important;
   min-height: 540px !important;
   width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
 }
 
 .chat-messages-stream {
   flex: 1 !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .chat-back-btn {
@@ -128,22 +136,33 @@ html, body, #root, .app-layout, .main-content {
     height: auto !important;
     min-height: auto !important;
     border-radius: 12px !important;
-    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
   }
   .chat-messages-stream {
     max-height: 48vh !important;
     min-height: 240px !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    padding: 0.85rem 1rem !important;
   }
   .chat-back-btn {
     display: inline-flex !important;
   }
   .chat-mobile-toggle-bar {
     display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
   .chat-panel-left {
     width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
     border-right: none !important;
     display: flex !important;
   }
@@ -152,6 +171,9 @@ html, body, #root, .app-layout, .main-content {
   }
   .chat-panel-right {
     width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
     display: flex !important;
   }
   .chat-panel-right.mobile-hide {

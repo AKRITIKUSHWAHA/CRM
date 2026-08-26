@@ -9,15 +9,11 @@ import {
   ChevronRight,
   Sparkles,
   CheckCircle2,
-  Send,
   Copy,
   Check,
   Building2,
   Calendar,
-  DollarSign,
-  ArrowRight,
-  ExternalLink,
-  Lock
+  DollarSign
 } from 'lucide-react';
 import {
   Breadcrumb,
@@ -37,17 +33,14 @@ export const OalBorrowerDashboard = () => {
     applicationStage,
     stageNames,
     offers,
-    messages,
     acceptedOffer,
-    acceptLenderOffer,
-    sendAgentMessage
+    acceptLenderOffer
   } = useOal();
   const { addToast } = useToast();
 
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [isReferralModalOpen, setIsReferralModalOpen] = useState(false);
-  const [quickReplyText, setQuickReplyText] = useState('');
   const [copiedLink, setCopiedLink] = useState(false);
 
   const currentStageName = stageNames[applicationStage] || 'Offers';
@@ -67,18 +60,6 @@ export const OalBorrowerDashboard = () => {
         type: 'success',
       });
     }
-  };
-
-  const handleSendQuickReply = (e) => {
-    e.preventDefault();
-    if (!quickReplyText.trim()) return;
-    sendAgentMessage(quickReplyText);
-    setQuickReplyText('');
-    addToast({
-      title: 'Message Sent',
-      message: 'Sarah Jenkins has received your message.',
-      type: 'success',
-    });
   };
 
   const handleCopyReferral = () => {
@@ -220,7 +201,7 @@ export const OalBorrowerDashboard = () => {
         </div>
       </Card>
 
-      {/* 3. Core 4 Clean Metric Cards (Spacious, No Truncation) */}
+      {/* 3. Core 4 Clean Metric Cards */}
       <div className="grid-responsive-kpi">
         <div onClick={() => navigate('/oal/borrower/offers')} className="cursor-pointer">
           <KPICard
@@ -260,10 +241,10 @@ export const OalBorrowerDashboard = () => {
         </div>
       </div>
 
-      {/* 4. Section: Active Marketplace Offers */}
+      {/* 4. Section: Active Marketplace Offers (Full-Width Executive Layout) */}
       <div className="flex flex-col gap-3">
-        {/* Section Heading */}
-        <div className="flex items-center justify-between gap-2">
+        {/* Section Heading Outside the Card */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
               Active Marketplace Offers
@@ -315,12 +296,12 @@ export const OalBorrowerDashboard = () => {
                     className="p-3.5 surface-secondary rounded-lg border-subtle flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all hover:border-primary"
                     style={{ transition: 'all 0.15s ease' }}
                   >
-                    {/* Left: Lender initials & details */}
+                    {/* Left: Lender initials, Title & Metrics */}
                     <div className="flex items-center gap-3.5 min-w-0">
                       <div
                         style={{
-                          width: '40px',
-                          height: '40px',
+                          width: '42px',
+                          height: '42px',
                           borderRadius: '10px',
                           backgroundColor: 'var(--surface)',
                           border: '1px solid var(--border)',
@@ -343,7 +324,7 @@ export const OalBorrowerDashboard = () => {
                           </span>
                           <span
                             style={{
-                              fontSize: '10px',
+                              fontSize: '11px',
                               fontWeight: 700,
                               padding: '2px 8px',
                               borderRadius: '4px',
@@ -358,9 +339,9 @@ export const OalBorrowerDashboard = () => {
                         </div>
 
                         <div className="flex items-center gap-3 text-xs text-secondary flex-wrap">
-                          <span>Facility: <strong style={{ color: 'var(--text-primary)' }}>{off.amount}</strong></span>
+                          <span>Facility: <strong style={{ color: 'var(--text-primary)', fontSize: '13px' }}>{off.amount}</strong></span>
                           <span>&bull;</span>
-                          <span>Interest: <strong style={{ color: 'var(--success)' }}>{off.rate}</strong></span>
+                          <span>Interest: <strong style={{ color: 'var(--success)', fontSize: '13px' }}>{off.rate}</strong></span>
                           <span>&bull;</span>
                           <span>Term: <strong style={{ color: 'var(--text-primary)' }}>{off.term}</strong></span>
                           <span>&bull;</span>
@@ -386,136 +367,6 @@ export const OalBorrowerDashboard = () => {
         </Card>
       </div>
 
-      {/* 5. Section: Assigned Underwriting Representative */}
-      <div className="flex flex-col gap-3">
-        {/* Section Heading with Profile Outside the Card */}
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-3 min-w-0">
-            <div style={{ position: 'relative', flexShrink: 0 }}>
-              <div
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                  color: '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 800,
-                  fontSize: '14px',
-                }}
-              >
-                SJ
-              </div>
-              <span
-                style={{
-                  position: 'absolute',
-                  bottom: '0',
-                  right: '0',
-                  width: '10px',
-                  height: '10px',
-                  backgroundColor: '#16a34a',
-                  border: '2px solid var(--surface)',
-                  borderRadius: '50%',
-                }}
-              />
-            </div>
-
-            <div className="min-w-0">
-              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-                Sarah Jenkins
-              </h2>
-              <span className="text-xs text-secondary truncate block">
-                Assigned Underwriter &bull; Licensed Officer &bull; NMLS #84920
-              </span>
-            </div>
-          </div>
-
-          <Badge variant="success" style={{ padding: '4px 10px', fontSize: '12px', flexShrink: 0 }}>
-            ● Online &bull; Direct Advocate
-          </Badge>
-        </div>
-
-        {/* Real Chat Message Box Card */}
-        <Card style={{ padding: '1.5rem', borderRadius: '12px' }} className="flex flex-col justify-between">
-          <div>
-            {/* Chat Stream with Real Message Bubbles */}
-            <div
-              className="flex flex-col gap-3"
-              style={{
-                maxHeight: '220px',
-                overflowY: 'auto',
-                padding: '4px 0',
-                marginBottom: '1.25rem',
-              }}
-            >
-              {messages.map((msg, i) => {
-                const isAgent = msg.sender.includes('Sarah');
-                return (
-                  <div
-                    key={msg.id || i}
-                    className={`flex flex-col ${isAgent ? 'items-start' : 'items-end'}`}
-                  >
-                    <div
-                      style={{
-                        maxWidth: '80%',
-                        padding: '0.75rem 1rem',
-                        borderRadius: isAgent ? '12px 12px 12px 2px' : '12px 12px 2px 12px',
-                        backgroundColor: isAgent ? 'var(--surface-secondary)' : 'var(--accent)',
-                        color: isAgent ? 'var(--text-primary)' : '#ffffff',
-                        fontSize: '13px',
-                        lineHeight: '1.5',
-                        border: isAgent ? '1px solid var(--border)' : 'none',
-                      }}
-                    >
-                      {msg.text}
-                    </div>
-                    <span className="text-tertiary mt-1" style={{ fontSize: '11px', padding: '0 4px' }}>
-                      {msg.time || 'Just now'}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Quick Reply Composer */}
-            <form onSubmit={handleSendQuickReply} className="flex items-center gap-2.5 w-full" style={{ marginBottom: '1.25rem' }}>
-              <Input
-                value={quickReplyText}
-                onChange={(e) => setQuickReplyText(e.target.value)}
-                placeholder="Type a message to Sarah Jenkins..."
-                style={{ height: '40px', fontSize: '13px' }}
-                className="flex-1 min-w-0"
-              />
-              <Button
-                variant="primary"
-                size="sm"
-                type="submit"
-                icon={Send}
-                style={{ height: '40px', minWidth: '80px', padding: '0 16px', flexShrink: 0, justifyContent: 'center' }}
-              >
-                Send
-              </Button>
-            </form>
-          </div>
-
-          {/* Dedicated Chat Portal CTA Button with clean top border */}
-          <div style={{ paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
-            <Button
-              variant="outline"
-              size="sm"
-              icon={MessageSquare}
-              className="w-full justify-center"
-              onClick={() => navigate('/oal/borrower/messages')}
-              style={{ height: '40px', fontWeight: 600, fontSize: '13px' }}
-            >
-              Open Dedicated Chat Portal
-            </Button>
-          </div>
-        </Card>
-      </div>
-
       {/* 5. Modal: Inspect Offer Details */}
       <Modal
         isOpen={isOfferModalOpen}
@@ -535,7 +386,7 @@ export const OalBorrowerDashboard = () => {
                 navigate('/oal/borrower/messages');
               }}
             >
-              Negotiate with Rep
+              Negotiate in Chat
             </Button>
             <Button
               variant="primary"

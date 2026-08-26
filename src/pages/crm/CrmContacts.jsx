@@ -30,7 +30,8 @@ import {
   Modal,
   Input,
   ConfirmationDialog,
-  Checkbox
+  Checkbox,
+  Avatar
 } from '../../components/ui';
 import { useCrm } from '../../context/CrmContext';
 import { useToast } from '../../context/ToastContext';
@@ -64,6 +65,9 @@ export const CrmContacts = () => {
     status: 'Active',
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+
   // Filter & Sort Logic
   const filteredContacts = contacts
     .filter((c) => {
@@ -80,6 +84,17 @@ export const CrmContacts = () => {
       if (sortField === 'company') return a.company.localeCompare(b.company);
       return 0;
     });
+
+  // Calculate pagination slice
+  const totalPages = Math.ceil(filteredContacts.length / pageSize) || 1;
+  const paginatedContacts = filteredContacts.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filterType, filterStatus]);
 
   // Bulk Selection
   const toggleSelectAll = () => {
@@ -156,21 +171,31 @@ export const CrmContacts = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 w-full">
       {/* Top Header */}
+<<<<<<< HEAD
       <div className="page-header-row">
+=======
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+>>>>>>> fb275112e35eee106b0647d410f02dfd681c8156
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Contacts Directory' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>Contacts & Accounts</h1>
-          <p className="text-xs text-secondary margin-0">
+          <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, color: 'var(--text-primary)', margin: '0.25rem 0 0 0' }}>
+            Contacts & Accounts
+          </h1>
+          <p className="text-xs text-secondary margin-0" style={{ marginTop: '2px' }}>
             Isolated multi-tenant contacts, accounts, and client relationships
           </p>
         </div>
 
+<<<<<<< HEAD
         <div className="header-actions-right">
+=======
+        <div className="flex items-center gap-2 ml-auto" style={{ marginLeft: 'auto' }}>
+>>>>>>> fb275112e35eee106b0647d410f02dfd681c8156
           <Button
             variant="primary"
-            size="sm"
+            size="md"
             icon={Plus}
             onClick={() => {
               setFormData({ name: '', company: '', email: '', phone: '', type: 'Enterprise Client', owner: 'Alexander Wright', status: 'Active' });
@@ -182,53 +207,75 @@ export const CrmContacts = () => {
         </div>
       </div>
 
-      {/* Filter & Search Bar */}
-      <Card className="p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        <Search
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onClear={() => setSearchQuery('')}
-          placeholder="Search by name, company, email..."
-        />
-
-        <div className="flex items-center gap-3 flex-wrap">
-          <Select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            options={[
-              { label: 'All Contact Types', value: 'all' },
-              { label: 'Enterprise Client', value: 'Enterprise Client' },
-              { label: 'Commercial Lead', value: 'Commercial Lead' },
-              { label: 'Investor', value: 'Investor' },
-              { label: 'Borrower Partner', value: 'Borrower Partner' },
-              { label: 'Supplier', value: 'Supplier' },
-            ]}
-            style={{ height: '36px', fontSize: '13px' }}
+      {/* Search & Filter Bar (Clean Direct Layout - No Outer Box Container) */}
+      <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-3 w-full">
+        <div className="flex-1 min-w-[200px]" style={{ flex: '1 1 240px' }}>
+          <Search
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onClear={() => setSearchQuery('')}
+            placeholder="Search by name, company, email address..."
           />
+        </div>
 
-          <Select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            options={[
-              { label: 'All Statuses', value: 'all' },
-              { label: 'Active', value: 'Active' },
-              { label: 'Qualified', value: 'Qualified' },
-              { label: 'Pending KYC', value: 'Pending KYC' },
-              { label: 'Inactive', value: 'Inactive' },
-            ]}
-            style={{ height: '36px', fontSize: '13px' }}
-          />
+        <div className="flex items-center gap-3 flex-wrap md:flex-nowrap" style={{ flexShrink: 0 }}>
+          <div style={{ width: '185px' }}>
+            <Select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              options={[
+                { label: 'All Contact Types', value: 'all' },
+                { label: 'Enterprise Client', value: 'Enterprise Client' },
+                { label: 'Commercial Lead', value: 'Commercial Lead' },
+                { label: 'Investor', value: 'Investor' },
+                { label: 'Borrower Partner', value: 'Borrower Partner' },
+                { label: 'Supplier', value: 'Supplier' },
+              ]}
+              style={{ height: '38px', fontSize: '13px' }}
+            />
+          </div>
+
+          <div style={{ width: '160px' }}>
+            <Select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              options={[
+                { label: 'All Statuses', value: 'all' },
+                { label: 'Active', value: 'Active' },
+                { label: 'Qualified', value: 'Qualified' },
+                { label: 'Pending KYC', value: 'Pending KYC' },
+                { label: 'Inactive', value: 'Inactive' },
+              ]}
+              style={{ height: '38px', fontSize: '13px' }}
+            />
+          </div>
 
           <Button
             variant="outline"
             size="sm"
             icon={ArrowUpDown}
             onClick={() => setSortField((s) => (s === 'name' ? 'company' : 'name'))}
+            style={{ height: '38px', whiteSpace: 'nowrap' }}
           >
             Sort: <strong className="ml-1 capitalize">{sortField}</strong>
           </Button>
+
+          {(searchQuery || filterType !== 'all' || filterStatus !== 'all') && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setSearchQuery('');
+                setFilterType('all');
+                setFilterStatus('all');
+              }}
+              style={{ height: '38px', color: 'var(--text-tertiary)' }}
+            >
+              Reset
+            </Button>
+          )}
         </div>
-      </Card>
+      </div>
 
       {/* Bulk Action Bar */}
       {selectedIds.length > 0 && (
@@ -257,108 +304,172 @@ export const CrmContacts = () => {
         </div>
       )}
 
-      {/* Desktop / Tablet Contacts Table */}
-      <Card className="hidden-mobile">
-        <CardBody className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell isHeader>
+      {/* Desktop / Tablet Contacts Table (Full Width 100% Seamless) */}
+      <div
+        className="hidden-mobile flex flex-col rounded-xl overflow-hidden"
+        style={{
+          width: '100%',
+          backgroundColor: 'var(--surface)',
+          border: '1px solid var(--border)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
+        <div style={{ width: '100%', overflowX: 'auto' }}>
+          <table className="w-full text-left" style={{ width: '100%', minWidth: '850px', borderCollapse: 'collapse', borderSpacing: 0 }}>
+            <thead>
+              <tr style={{ backgroundColor: 'var(--surface-secondary)', borderBottom: '1px solid var(--border)' }}>
+                <th style={{ padding: '0.875rem 1rem', width: '40px', backgroundColor: 'var(--surface-secondary)', borderRight: 'none', borderLeft: 'none' }}>
                   <Checkbox
                     checked={selectedIds.length > 0 && selectedIds.length === filteredContacts.length}
                     onChange={toggleSelectAll}
                   />
-                </TableCell>
-                <TableCell isHeader>Contact ID</TableCell>
-                <TableCell isHeader>Full Name</TableCell>
-                <TableCell isHeader>Company</TableCell>
-                <TableCell isHeader>Type</TableCell>
-                <TableCell isHeader>Status</TableCell>
-                <TableCell isHeader>Owner</TableCell>
-                <TableCell isHeader align="right">Actions</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody isEmpty={filteredContacts.length === 0} emptyMessage="No matching contacts found.">
-              {filteredContacts.map((contact) => {
-                const isSelected = selectedIds.includes(contact.id);
-                return (
-                  <TableRow key={contact.id}>
-                    <TableCell>
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={() => toggleSelectOne(contact.id)}
-                      />
-                    </TableCell>
-                    <TableCell><span className="font-mono text-xs text-tertiary">{contact.id}</span></TableCell>
-                    <TableCell>
-                      <Link to={`/crm/contacts/${contact.id}`} className="font-semibold hover:underline text-primary">
-                        {contact.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell><span className="text-secondary">{contact.company}</span></TableCell>
-                    <TableCell><Badge variant="default">{contact.type}</Badge></TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          contact.status === 'Active'
-                            ? 'success'
-                            : contact.status === 'Pending KYC'
-                            ? 'warning'
-                            : 'info'
-                        }
-                      >
-                        {contact.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{contact.owner}</TableCell>
-                    <TableCell align="right">
-                      <div className="flex items-center justify-end gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          isIconOnly
-                          icon={Eye}
-                          onClick={() => navigate(`/crm/contacts/${contact.id}`)}
-                          title="View Details"
+                </th>
+                <th style={{ padding: '0.875rem 1rem', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: 'var(--surface-secondary)', borderRight: 'none', borderLeft: 'none' }}>Contact ID</th>
+                <th style={{ padding: '0.875rem 1rem', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: 'var(--surface-secondary)', borderRight: 'none', borderLeft: 'none' }}>Full Name</th>
+                <th style={{ padding: '0.875rem 1rem', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: 'var(--surface-secondary)', borderRight: 'none', borderLeft: 'none' }}>Company</th>
+                <th style={{ padding: '0.875rem 1rem', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: 'var(--surface-secondary)', borderRight: 'none', borderLeft: 'none' }}>Type</th>
+                <th style={{ padding: '0.875rem 1rem', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: 'var(--surface-secondary)', borderRight: 'none', borderLeft: 'none' }}>Status</th>
+                <th style={{ padding: '0.875rem 1rem', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: 'var(--surface-secondary)', borderRight: 'none', borderLeft: 'none' }}>Owner</th>
+                <th style={{ padding: '0.875rem 1rem', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', textAlign: 'right', backgroundColor: 'var(--surface-secondary)', borderRight: 'none', borderLeft: 'none' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedContacts.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="p-8 text-center text-secondary text-sm">
+                    No matching contacts found. Try adjusting your filters.
+                  </td>
+                </tr>
+              ) : (
+                paginatedContacts.map((contact) => {
+                  const isSelected = selectedIds.includes(contact.id);
+                  return (
+                    <tr
+                      key={contact.id}
+                      style={{
+                        borderBottom: '1px solid var(--border)',
+                        backgroundColor: isSelected ? 'var(--primary-light)' : 'transparent',
+                        transition: 'background-color var(--transition-fast)',
+                      }}
+                      className="hover:bg-surface-hover"
+                    >
+                      <td style={{ padding: '0.875rem 1rem', borderRight: 'none', borderLeft: 'none' }}>
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={() => toggleSelectOne(contact.id)}
                         />
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          isIconOnly
-                          icon={Edit}
-                          onClick={() => handleOpenEdit(contact)}
-                          title="Edit Contact"
-                        />
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          isIconOnly
-                          icon={Trash2}
-                          onClick={() => handleOpenDelete(contact)}
-                          title="Delete Contact"
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </CardBody>
-        <Pagination
-          currentPage={1}
-          totalPages={1}
-          totalItems={filteredContacts.length}
-          onPageChange={() => {}}
-        />
-      </Card>
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', borderRight: 'none', borderLeft: 'none' }}>
+                        <span className="font-mono text-xs text-tertiary">{contact.id}</span>
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', borderRight: 'none', borderLeft: 'none' }}>
+                        <div className="flex items-center gap-3">
+                          <div style={{ flexShrink: 0, minWidth: '28px' }}>
+                            <Avatar name={contact.name} size="sm" />
+                          </div>
+                          <div className="flex flex-col text-left">
+                            <Link to={`/crm/contacts/${contact.id}`} className="font-bold text-xs text-primary hover:underline">
+                              {contact.name}
+                            </Link>
+                            <span className="text-tertiary text-xs" style={{ fontSize: '11px' }}>{contact.email}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', borderRight: 'none', borderLeft: 'none' }}>
+                        <span className="text-xs text-secondary font-medium">{contact.company}</span>
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', borderRight: 'none', borderLeft: 'none' }}>
+                        <Badge variant="default">{contact.type}</Badge>
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', borderRight: 'none', borderLeft: 'none' }}>
+                        <Badge
+                          variant={
+                            contact.status === 'Active'
+                              ? 'success'
+                              : contact.status === 'Pending KYC'
+                              ? 'warning'
+                              : 'info'
+                          }
+                        >
+                          {contact.status}
+                        </Badge>
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', borderRight: 'none', borderLeft: 'none' }}>
+                        <span className="text-xs text-secondary">{contact.owner}</span>
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', textAlign: 'right', borderRight: 'none', borderLeft: 'none' }}>
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            isIconOnly
+                            icon={Eye}
+                            onClick={() => navigate(`/crm/contacts/${contact.id}`)}
+                            title="View Details"
+                          />
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            isIconOnly
+                            icon={Edit}
+                            onClick={() => handleOpenEdit(contact)}
+                            title="Edit Contact"
+                          />
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            isIconOnly
+                            icon={Trash2}
+                            onClick={() => handleOpenDelete(contact)}
+                            title="Delete Contact"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* BOTTOM FOOTER (Compact Pagination on RIGHT ONLY) */}
+        <div
+          style={{
+            padding: '0.625rem 1rem',
+            borderTop: '1px solid var(--border)',
+            backgroundColor: 'var(--surface-secondary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+        >
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            totalItems={filteredContacts.length}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
+      </div>
 
       {/* Mobile Card List View (< 768px) */}
-      <div className="visible-mobile flex flex-col gap-3">
-        {filteredContacts.map((contact) => (
-          <Card key={contact.id} className="p-4 flex flex-col gap-3">
+      <div className="visible-mobile flex flex-col gap-3.5">
+        <div className="flex items-center justify-between px-1 text-xs text-secondary font-medium">
+          <span>{filteredContacts.length} Contact(s) Found</span>
+          <span>Sorted by {sortField}</span>
+        </div>
+
+        {paginatedContacts.map((contact) => (
+          <Card key={contact.id} className="p-4 flex flex-col gap-3 shadow-sm border-subtle">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-tertiary">{contact.id}</span>
+              <div className="flex items-center gap-2">
+                <Avatar name={contact.name} size="sm" />
+                <span className="font-mono text-xs text-tertiary">{contact.id}</span>
+              </div>
               <Badge
                 variant={
                   contact.status === 'Active'
@@ -373,28 +484,40 @@ export const CrmContacts = () => {
             </div>
 
             <div>
-              <Link to={`/crm/contacts/${contact.id}`} className="font-bold text-base text-primary">
+              <Link to={`/crm/contacts/${contact.id}`} className="font-bold text-base text-primary hover:underline">
                 {contact.name}
               </Link>
-              <div className="text-xs text-secondary">{contact.company}</div>
+              <div className="text-xs text-secondary font-medium">{contact.company}</div>
             </div>
 
-            <div className="flex flex-col gap-1 text-xs text-tertiary border-t border-subtle pt-2">
-              <div className="flex items-center gap-1.5"><Mail size={14} /> {contact.email}</div>
-              <div className="flex items-center gap-1.5"><Phone size={14} /> {contact.phone}</div>
+            <div className="flex flex-col gap-1.5 text-xs text-tertiary border-t border-subtle pt-2.5">
+              <div className="flex items-center gap-2"><Mail size={14} className="text-secondary" /> {contact.email}</div>
+              <div className="flex items-center gap-2"><Phone size={14} className="text-secondary" /> {contact.phone || '+1 (555) 019-2834'}</div>
             </div>
 
             <div className="flex items-center justify-between border-t border-subtle pt-3">
               <Badge variant="default">{contact.type}</Badge>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <Button variant="outline" size="sm" icon={Eye} onClick={() => navigate(`/crm/contacts/${contact.id}`)}>
-                  View Tabs
+                  View
                 </Button>
+                <Button variant="ghost" size="sm" isIconOnly icon={Edit} onClick={() => handleOpenEdit(contact)} />
                 <Button variant="ghost" size="sm" isIconOnly icon={Trash2} onClick={() => handleOpenDelete(contact)} />
               </div>
             </div>
           </Card>
         ))}
+
+        {/* Mobile Pagination Footer */}
+        <div className="p-3 surface-card rounded-lg border-subtle flex flex-col gap-2 items-center text-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            totalItems={filteredContacts.length}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
       </div>
 
       {/* Add Contact Modal */}

@@ -54,6 +54,7 @@ export const Select = React.forwardRef(
               cursor: disabled ? 'not-allowed' : 'pointer',
               paddingRight: '2.25rem',
               ...style,
+              ...props.style,
             }}
             {...props}
           >

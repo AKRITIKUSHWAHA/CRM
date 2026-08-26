@@ -14,20 +14,18 @@ import {
   User,
   Copy,
   Check,
-  ArrowRight,
-  ExternalLink,
-  DollarSign,
+  Building2,
   Calendar,
-  Percent,
-  Info
+  DollarSign,
+  TrendingUp,
+  Clock,
+  ArrowUpRight
 } from 'lucide-react';
 import {
   Breadcrumb,
   Button,
   KPICard,
   Card,
-  CardHeader,
-  CardBody,
   Badge,
   Modal,
   Input
@@ -173,9 +171,9 @@ export const OalBorrowerDashboard = () => {
                 }}
                 className="flex flex-col items-center cursor-pointer transition-all"
                 style={{
-                  minWidth: '70px',
+                  minWidth: '72px',
                   flexShrink: 0,
-                  opacity: isCompleted || isActive ? 1 : 0.65,
+                  opacity: isCompleted || isActive ? 1 : 0.6,
                 }}
                 title={`Click to navigate to ${name}`}
               >
@@ -196,7 +194,7 @@ export const OalBorrowerDashboard = () => {
                       : 'var(--surface-secondary)',
                     color: isCompleted || isActive ? '#ffffff' : 'var(--text-secondary)',
                     border: isActive ? '2px solid var(--accent)' : '1px solid var(--border)',
-                    boxShadow: isActive ? '0 0 0 3px rgba(37, 99, 235, 0.2)' : 'none',
+                    boxShadow: isActive ? '0 0 0 3px rgba(37, 99, 235, 0.25)' : 'none',
                     transition: 'all 0.15s ease',
                   }}
                 >
@@ -220,25 +218,19 @@ export const OalBorrowerDashboard = () => {
         </div>
       </Card>
 
-      {/* 3. Balanced 6 KPI Cards Grid */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1rem',
-        }}
-      >
+      {/* 3. Balanced 6 KPI Cards Grid (Equal 3-Col Desktop / 2-Col Mobile) */}
+      <div className="grid-kpi-6balanced">
         <div onClick={() => navigate('/oal/borrower/offers')} className="cursor-pointer">
           <KPICard title="Application Status" value={currentStageName} change="3 Offers Received" changeType="positive" icon={Landmark} />
         </div>
         <div onClick={() => navigate('/oal/borrower/score')} className="cursor-pointer">
           <KPICard title="AI Credit Rating" value="792 / 850" change="Grade A+ Verified" changeType="positive" icon={Award} />
         </div>
-        <div onClick={() => navigate('/oal/borrower/documents')} className="cursor-pointer">
-          <KPICard title="Vault Documents" value="5 Files" change="100% Verified" changeType="positive" icon={FileCheck} />
-        </div>
         <div onClick={() => navigate('/oal/borrower/offers')} className="cursor-pointer">
           <KPICard title="Best Interest Offer" value="4.8% APR" change="Apex Credit Corp" changeType="positive" icon={CreditCard} />
+        </div>
+        <div onClick={() => navigate('/oal/borrower/documents')} className="cursor-pointer">
+          <KPICard title="Vault Documents" value="5 Files" change="100% Verified" changeType="positive" icon={FileCheck} />
         </div>
         <div onClick={() => navigate('/oal/borrower/messages')} className="cursor-pointer">
           <KPICard title="Agent Messages" value={`${messages.length} Messages`} change="OAL Rep Online" changeType="neutral" icon={MessageSquare} />
@@ -299,14 +291,32 @@ export const OalBorrowerDashboard = () => {
                   className="p-3.5 surface-secondary rounded-md border-subtle flex items-center justify-between gap-3 transition-all hover:border-primary"
                   style={{ transition: 'all 0.15s ease' }}
                 >
-                  <div className="flex flex-col gap-0.5 min-w-0">
-                    <span className="font-bold text-xs text-primary truncate">{off.lender}</span>
-                    <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
-                      <span className="font-semibold text-primary">{off.amount}</span>
-                      <span>•</span>
-                      <span className="font-bold text-success">{off.rate}</span>
-                      <span>•</span>
-                      <span className="text-tertiary">{off.term}</span>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '8px',
+                        backgroundColor: 'var(--surface)',
+                        border: '1px solid var(--border)',
+                        color: 'var(--accent)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Building2 size={18} />
+                    </div>
+                    <div className="flex flex-col gap-0.5 min-w-0">
+                      <span className="font-bold text-xs text-primary truncate">{off.lender}</span>
+                      <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
+                        <span className="font-bold text-success">{off.amount}</span>
+                        <span>•</span>
+                        <Badge variant="primary" style={{ fontSize: '10px', padding: '1px 6px' }}>{off.rate}</Badge>
+                        <span>•</span>
+                        <span className="text-tertiary" style={{ fontSize: '11px' }}>{off.term}</span>
+                      </div>
                     </div>
                   </div>
 
@@ -342,17 +352,18 @@ export const OalBorrowerDashboard = () => {
               <div className="flex items-center gap-3">
                 <div
                   style={{
-                    width: '40px',
-                    height: '40px',
+                    width: '42px',
+                    height: '42px',
                     borderRadius: '50%',
-                    backgroundColor: 'var(--primary-light)',
-                    color: 'var(--primary)',
+                    backgroundColor: 'var(--primary)',
+                    color: '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontWeight: 700,
-                    fontSize: '14px',
+                    fontSize: '15px',
                     flexShrink: 0,
+                    boxShadow: 'var(--shadow-sm)',
                   }}
                 >
                   SJ
@@ -363,21 +374,24 @@ export const OalBorrowerDashboard = () => {
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-sm surface text-xs text-secondary border-subtle">
+              <div className="p-3 rounded-md surface text-xs text-secondary border-subtle" style={{ backgroundColor: 'var(--surface)' }}>
                 <p className="margin-0 italic">"{messages[messages.length - 1]?.text || 'I will review your offer terms with Vanguard.'}"</p>
+                <div className="flex justify-end text-tertiary mt-1" style={{ fontSize: '10px' }}>
+                  {messages[messages.length - 1]?.time || '10:45 AM'} • Delivered
+                </div>
               </div>
             </div>
 
             {/* Quick Mini Reply Input */}
-            <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 mb-3">
+            <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 mb-4">
               <Input
                 value={quickReplyText}
                 onChange={(e) => setQuickReplyText(e.target.value)}
-                placeholder="Quick message to Sarah..."
-                style={{ height: '36px', fontSize: '12px' }}
+                placeholder="Type a quick reply to Sarah..."
+                style={{ height: '38px', fontSize: '12px' }}
                 className="flex-1"
               />
-              <Button variant="primary" size="sm" type="submit" icon={Send} style={{ height: '36px' }}>
+              <Button variant="primary" size="sm" type="submit" icon={Send} style={{ height: '38px' }}>
                 Send
               </Button>
             </form>
@@ -431,7 +445,7 @@ export const OalBorrowerDashboard = () => {
         {selectedOffer && (
           <div className="flex flex-col gap-4 text-xs">
             {/* Highlights Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 surface-secondary rounded-md border-subtle">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 surface-secondary rounded-md border-subtle">
               <div>
                 <span className="text-tertiary" style={{ fontSize: '11px' }}>Facility Size</span>
                 <div className="font-bold text-sm text-primary">{selectedOffer.amount}</div>
@@ -453,15 +467,15 @@ export const OalBorrowerDashboard = () => {
             {/* Key Term Sheet Clauses */}
             <div>
               <h4 className="font-bold text-xs text-primary uppercase mb-2">Key Lender Covenants & Features</h4>
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-2">
                 {selectedOffer.features?.map((feat, idx) => (
                   <div key={idx} className="flex items-center gap-2 text-secondary">
-                    <CheckCircle2 size={13} className="text-success flex-shrink-0" />
+                    <CheckCircle2 size={14} className="text-success flex-shrink-0" />
                     <span>{feat}</span>
                   </div>
                 ))}
                 <div className="flex items-center gap-2 text-secondary">
-                  <CheckCircle2 size={13} className="text-success flex-shrink-0" />
+                  <CheckCircle2 size={14} className="text-success flex-shrink-0" />
                   <span>Origination fee capped at {selectedOffer.originationFee}</span>
                 </div>
               </div>
@@ -482,7 +496,7 @@ export const OalBorrowerDashboard = () => {
         }
       >
         <div className="flex flex-col gap-4 text-xs">
-          <div className="p-3 surface-secondary rounded-md border-subtle flex flex-col gap-1">
+          <div className="p-3.5 surface-secondary rounded-md border-subtle flex flex-col gap-1">
             <span className="font-bold text-sm text-primary">Earn $2,500 for every business introduction</span>
             <span className="text-secondary">
               When a commercial enterprise you refer completes their first debt placement, you receive a direct wire cash bounty.
@@ -496,14 +510,14 @@ export const OalBorrowerDashboard = () => {
                 value="https://oalnetwork.com/ref?code=BIOGENIX-7749"
                 readOnly
                 className="flex-1"
-                style={{ height: '36px' }}
+                style={{ height: '38px' }}
               />
               <Button
                 variant={copiedLink ? 'primary' : 'outline'}
                 size="sm"
                 icon={copiedLink ? Check : Copy}
                 onClick={handleCopyReferral}
-                style={{ height: '36px' }}
+                style={{ height: '38px' }}
               >
                 {copiedLink ? 'Copied' : 'Copy'}
               </Button>

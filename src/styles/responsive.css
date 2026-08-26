@@ -328,3 +328,23 @@ html, body, #root, .app-layout, .main-content {
   gap: 1rem;
 }
 
+/* 6-Card Balanced Grid (2-Col Mobile -> 3-Col Desktop -> 6-Col Ultra Wide) */
+.grid-kpi-6balanced {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (min-width: 860px) {
+  .grid-kpi-6balanced {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1400px) {
+  .grid-kpi-6balanced {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+

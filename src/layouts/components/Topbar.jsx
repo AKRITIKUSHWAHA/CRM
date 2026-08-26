@@ -246,26 +246,6 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
           </DropdownItem>
         </Dropdown>
 
-        {/* Help Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          isIconOnly
-          icon={HelpCircle}
-          onClick={() => setIsHelpOpen(true)}
-          title="Help & Documentation"
-        />
-
-        {/* Settings Gear Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          isIconOnly
-          icon={Settings}
-          onClick={() => navigate(product === 'crm' ? '/crm/settings' : '/oal/borrower/settings')}
-          title="Settings"
-        />
-
         {/* User Profile Dropdown with Role Switcher */}
         <Dropdown
           trigger={

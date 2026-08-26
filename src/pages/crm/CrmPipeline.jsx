@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Plus,
   ArrowRight,
@@ -82,7 +81,7 @@ export const CrmPipeline = () => {
     if (newIndex >= 0 && newIndex < pipelineColumns.length) {
       const newStage = pipelineColumns[newIndex];
       moveDealStage(dealId, newStage);
-      addToast({ title: 'Deal Moved', message: `Moved to ${newStage}`, type: 'info' });
+      addToast({ title: 'Deal Moved', message: `Moved deal to ${newStage}`, type: 'info' });
     }
   };
 
@@ -105,9 +104,9 @@ export const CrmPipeline = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
+    <div className="flex flex-col gap-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
       {/* 1. Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Sales Pipeline Kanban' }]} />
           <h1
@@ -127,7 +126,7 @@ export const CrmPipeline = () => {
           </p>
         </div>
 
-        <div className="dashboard-actions-grid w-full md:w-auto">
+        <div className="header-actions-right">
           <Button
             variant="primary"
             size="sm"
@@ -157,7 +156,7 @@ export const CrmPipeline = () => {
           value={`$${(weightedPipelineValue / 1000000).toFixed(2)}M`}
           change="52% Avg"
           changeType="neutral"
-          changePeriod="probability adj."
+          changePeriod="prob. adj."
           icon={DollarSign}
           iconBg="rgba(29, 78, 216, 0.1)"
           iconColor="#1d4ed8"
@@ -335,32 +334,32 @@ export const CrmPipeline = () => {
                         Owner: <strong className="text-secondary">{deal.owner}</strong>
                       </div>
 
-                      {/* Stage Transfer Buttons */}
+                      {/* Clean Move Stage Action Bar */}
                       <div
-                        className="flex items-center justify-between pt-2"
+                        className="flex items-center justify-between pt-2 text-xs"
                         style={{ borderTop: '1px solid var(--border)', marginTop: '2px' }}
                       >
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          isIconOnly
-                          icon={ArrowLeft}
-                          isDisabled={pipelineColumns.indexOf(col) === 0}
+                        <button
+                          type="button"
+                          disabled={pipelineColumns.indexOf(col) === 0}
                           onClick={() => handleMoveStage(deal.id, col, 'prev')}
-                          title="Move Previous Stage"
-                        />
-                        <span className="text-tertiary" style={{ fontSize: '10px', fontWeight: 600 }}>
-                          Stage Transfer
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          isIconOnly
-                          icon={ArrowRight}
-                          isDisabled={pipelineColumns.indexOf(col) === pipelineColumns.length - 1}
+                          className="flex items-center gap-1 text-tertiary hover:text-primary disabled:opacity-30 cursor-pointer font-medium"
+                          style={{ background: 'none', border: 'none', padding: 0, fontSize: '11px' }}
+                          title="Move to Previous Stage"
+                        >
+                          <ArrowLeft size={12} /> Prev
+                        </button>
+                        <span className="text-tertiary font-semibold" style={{ fontSize: '10px' }}>Move Stage</span>
+                        <button
+                          type="button"
+                          disabled={pipelineColumns.indexOf(col) === pipelineColumns.length - 1}
                           onClick={() => handleMoveStage(deal.id, col, 'next')}
-                          title="Move Next Stage"
-                        />
+                          className="flex items-center gap-1 text-primary hover:text-primary disabled:opacity-30 cursor-pointer font-semibold"
+                          style={{ background: 'none', border: 'none', padding: 0, fontSize: '11px' }}
+                          title="Move to Next Stage"
+                        >
+                          Next <ArrowRight size={12} />
+                        </button>
                       </div>
                     </div>
                   ))

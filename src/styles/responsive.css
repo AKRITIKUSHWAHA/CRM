@@ -3,25 +3,92 @@
 html, body, #root, .app-layout, .main-content {
   overflow-x: hidden !important;
   max-width: 100vw;
+  width: 100%;
 }
 
 /* Default / Mobile Mobile First (< 768px) */
 .visible-mobile { display: flex !important; }
 .hidden-mobile { display: none !important; }
 
-/* Grid Responsive Breakpoints — ALWAYS 2 COLUMNS ON MOBILE */
-.grid-responsive-kpi {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 0.75rem;
-  width: 100%;
+/* Page Header Action Buttons Right Alignment Global Rules */
+.page-header-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex-wrap: wrap !important;
 }
 
+.header-actions-right {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 0.5rem !important;
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .header-actions-right button {
+    font-size: 11px !important;
+    padding: 0.35rem 0.65rem !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* KPI Card Grid — FIXED RESPONSIVE GRID (NO HORIZONTAL SCROLL) */
+/* Desktop (1024px+): 4 cards in 1 row | Tablet (768px-1023px): 2 cards per row | Mobile (<768px): 1 card per row */
+.grid-responsive-kpi {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: visible !important;
+}
+
+@media (min-width: 768px) {
+  .grid-responsive-kpi {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-kpi {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+/* Business Health Grid — Same Responsive Rules */
 .grid-responsive-health {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 0.75rem;
-  width: 100%;
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 768px) {
+  .grid-responsive-health {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-health {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
 }
 
 .health-col-bordered {
@@ -36,7 +103,7 @@ html, body, #root, .app-layout, .main-content {
   }
   .health-col-bordered {
     border-left: 1px solid var(--border);
-    padding-left: 1.5rem;
+    padding-left: 1rem;
   }
 }
 
@@ -92,10 +159,30 @@ html, body, #root, .app-layout, .main-content {
 }
 
 .grid-responsive-6kpi {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 0.75rem;
-  width: 100%;
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+@media (min-width: 640px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
 }
 
 .grid-responsive-2col {
@@ -103,6 +190,8 @@ html, body, #root, .app-layout, .main-content {
   grid-template-columns: repeat(1, 1fr);
   gap: 1.25rem;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* Mobile Login Gateway Responsiveness */

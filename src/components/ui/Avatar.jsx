@@ -18,7 +18,7 @@ export const Avatar = ({
   const fontSize = size === 'sm' ? '11px' : size === 'lg' ? '16px' : size === 'xl' ? '20px' : '13px';
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div style={{ position: 'relative', display: 'inline-block', flexShrink: 0 }}>
       {src ? (
         <img
           src={src}

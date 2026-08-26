@@ -12,7 +12,11 @@ import {
   ChevronLeft,
   ChevronRight,
   CalendarDays,
-  CheckCircle2
+  CheckCircle2,
+  Filter,
+  AlertTriangle,
+  Search,
+  Sparkles
 } from 'lucide-react';
 import {
   Breadcrumb,
@@ -24,7 +28,12 @@ import {
   Modal,
   Input,
   Select,
-  Checkbox
+  KPICard,
+  Table,
+  TableHeader,
+  TableRow,
+  TableCell,
+  TableBody
 } from '../../components/ui';
 import { useCrm } from '../../context/CrmContext';
 import { useToast } from '../../context/ToastContext';
@@ -35,30 +44,35 @@ export const CrmTasks = () => {
   const { tasks, addTask, toggleTaskCompletion, deleteTask } = useCrm();
   const { addToast } = useToast();
 
-  const [viewMode, setViewMode] = useState('calendar'); // Default to 'calendar' or 'list'
+  const [viewMode, setViewMode] = useState('calendar'); // 'calendar' or 'list'
   const [filterPriority, setFilterPriority] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDate, setSelectedDate] = useState('2026-02-18');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [selectedDateForNewTask, setSelectedDateForNewTask] = useState('');
 
-  // Calendar Date State - Default to February 2026 (matching project mock data)
+  // Calendar Date State - Default to February 2026
   const [currentDate, setCurrentDate] = useState(new Date(2026, 1, 1));
 
   const [formData, setFormData] = useState({
     title: '',
     contact: '',
     priority: 'Medium',
-    dueDate: '2026-02-28',
+    dueDate: '2026-02-18',
     reminder: '9:00 AM',
     assignedTo: 'Alexander Wright',
   });
 
-  const filteredTasks = tasks.filter(
-    (t) => filterPriority === 'all' || t.priority === filterPriority
-  );
+  const filteredTasks = tasks.filter((t) => {
+    const matchPriority = filterPriority === 'all' || t.priority === filterPriority;
+    const matchSearch =
+      t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (t.contact && t.contact.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchPriority && matchSearch;
+  });
 
   // Month navigation helpers
   const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth(); // 0-indexed: 0 = Jan, 1 = Feb, etc.
+  const currentMonth = currentDate.getMonth();
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentYear, currentMonth - 1, 1));
@@ -69,15 +83,14 @@ export const CrmTasks = () => {
   };
 
   const handleToday = () => {
-    setCurrentDate(new Date(2026, 1, 1)); // Jump to Feb 2026
+    setCurrentDate(new Date(2026, 1, 1));
   };
 
   // Calendar Calculation Logic
-  const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay(); // 0 = Sun, 1 = Mon, ...
+  const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
   const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
-  // Previous month trailing padding cells
   const prevMonthCells = [];
   for (let i = firstDayIndex - 1; i >= 0; i--) {
     const dayNum = daysInPrevMonth - i;
@@ -91,7 +104,6 @@ export const CrmTasks = () => {
     });
   }
 
-  // Current month cells
   const currentMonthCells = [];
   for (let d = 1; d <= daysInCurrentMonth; d++) {
     const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
@@ -102,7 +114,6 @@ export const CrmTasks = () => {
     });
   }
 
-  // Next month leading padding cells (complete to 35 or 42 grid slots)
   const totalCellsSoFar = prevMonthCells.length + currentMonthCells.length;
   const totalGridSlots = totalCellsSoFar > 35 ? 42 : 35;
   const nextMonthCells = [];
@@ -119,24 +130,15 @@ export const CrmTasks = () => {
   }
 
   const allCalendarGridCells = [...prevMonthCells, ...currentMonthCells, ...nextMonthCells];
-
-  // Month formatted title
   const monthName = currentDate.toLocaleString('default', { month: 'long' });
   const monthYearLabel = `${monthName} ${currentYear}`;
-
-  // Count of tasks in the currently viewed month
-  const tasksInViewedMonth = filteredTasks.filter((t) => {
-    if (!t.dueDate) return false;
-    const [y, m] = t.dueDate.split('-').map(Number);
-    return y === currentYear && m === currentMonth + 1;
-  });
 
   const handleOpenAddModalForDate = (dateStr) => {
     setFormData({
       title: '',
       contact: '',
       priority: 'Medium',
-      dueDate: dateStr || `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-15`,
+      dueDate: dateStr || '2026-02-18',
       reminder: '9:00 AM',
       assignedTo: 'Alexander Wright',
     });
@@ -154,39 +156,76 @@ export const CrmTasks = () => {
     setIsAddModalOpen(false);
   };
 
+  // Selected date tasks
+  const selectedDateTasks = filteredTasks.filter((t) => t.dueDate === selectedDate);
+
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="flex flex-col gap-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+      {/* 1. Header */}
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Tasks & Reminders' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Tasks & Reminders</h1>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>
+            Tasks & Calendar Reminders
+          </h1>
           <p className="text-xs text-secondary margin-0">
-            Schedule follow-up meetings, proposals, and customer reminders
+            Schedule follow-up meetings, deal proposals, and team action items
           </p>
         </div>
 
-        <div className="dashboard-actions-grid w-full md:w-auto">
-          {/* View Switcher Buttons */}
-          <div className="flex items-center border-subtle surface-secondary rounded-sm p-1 gap-1 w-full md:w-auto">
-            <Button
-              variant={viewMode === 'list' ? 'primary' : 'ghost'}
-              size="sm"
-              icon={List}
-              className="flex-1 md:flex-none justify-center"
-              onClick={() => setViewMode('list')}
-            >
-              List View
-            </Button>
-            <Button
-              variant={viewMode === 'calendar' ? 'primary' : 'ghost'}
-              size="sm"
-              icon={Calendar}
-              className="flex-1 md:flex-none justify-center"
+        <div className="header-actions-right">
+          {/* View Switcher Controls */}
+          <div
+            style={{
+              display: 'inline-flex',
+              padding: '3px',
+              borderRadius: '8px',
+              backgroundColor: 'var(--surface-secondary)',
+              border: '1px solid var(--border)',
+            }}
+          >
+            <button
+              type="button"
               onClick={() => setViewMode('calendar')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '6px',
+                fontSize: '12px',
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                backgroundColor: viewMode === 'calendar' ? 'var(--primary)' : 'transparent',
+                color: viewMode === 'calendar' ? '#ffffff' : 'var(--text-secondary)',
+              }}
             >
+              <Calendar size={14} />
               Calendar View
-            </Button>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('list')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '6px',
+                fontSize: '12px',
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                backgroundColor: viewMode === 'list' ? 'var(--primary)' : 'transparent',
+                color: viewMode === 'list' ? '#ffffff' : 'var(--text-secondary)',
+              }}
+            >
+              <List size={14} />
+              List View
+            </button>
           </div>
 
           <Button
@@ -194,17 +233,58 @@ export const CrmTasks = () => {
             size="sm"
             icon={Plus}
             className="w-full md:w-auto justify-center"
-            onClick={() => handleOpenAddModalForDate(`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-05`)}
+            onClick={() => handleOpenAddModalForDate(selectedDate)}
           >
             Create Task
           </Button>
         </div>
       </div>
 
-      {/* Filter Bar */}
-      <Card className="p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        <div className="flex items-center justify-between md:justify-start gap-2 w-full md:w-auto">
-          <span className="text-xs font-semibold text-tertiary whitespace-nowrap">Filter Priority:</span>
+      {/* 2. KPI Cards Strip */}
+      <div className="grid-responsive-kpi">
+        <KPICard
+          title="TOTAL TASKS"
+          value={`${tasks.length}`}
+          change="Live Sync"
+          changeType="positive"
+          icon={CheckSquare}
+        />
+        <KPICard
+          title="PENDING TASKS"
+          value={`${tasks.filter((t) => t.status === 'Pending').length}`}
+          change="Action Required"
+          changeType="warning"
+          icon={Clock}
+        />
+        <KPICard
+          title="HIGH PRIORITY"
+          value={`${tasks.filter((t) => t.priority === 'High' && t.status === 'Pending').length}`}
+          change="Due Soon"
+          changeType="error"
+          icon={AlertCircle}
+        />
+        <KPICard
+          title="COMPLETED RATE"
+          value={`${tasks.length > 0 ? Math.round((tasks.filter((t) => t.status === 'Completed').length / tasks.length) * 100) : 0}%`}
+          change="Sprint Progress"
+          changeType="positive"
+          icon={CheckCircle2}
+        />
+      </div>
+
+      {/* 3. Filter Bar */}
+      <div className="table-toolbar">
+        <div className="table-toolbar-search">
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search tasks by title or contact..."
+            startIcon={Search}
+            style={{ height: '36px' }}
+          />
+        </div>
+
+        <div className="table-toolbar-actions">
           <Select
             value={filterPriority}
             onChange={(e) => setFilterPriority(e.target.value)}
@@ -214,240 +294,298 @@ export const CrmTasks = () => {
               { label: 'Medium Priority', value: 'Medium' },
               { label: 'Low Priority', value: 'Low' },
             ]}
-            style={{ height: '32px', fontSize: '12px' }}
-            className="w-full sm:w-auto"
+            style={{ height: '36px', fontSize: '13px' }}
           />
         </div>
+      </div>
 
-        <span className="text-xs text-secondary font-semibold text-center md:text-left">
-          {tasks.filter((t) => t.status === 'Pending').length} Pending Tasks ({tasksInViewedMonth.length} in {monthName})
-        </span>
-      </Card>
-
-      {/* LIST VIEW */}
-      {viewMode === 'list' && (
-        <Card className="p-4 flex flex-col gap-3">
-          {filteredTasks.length === 0 ? (
-            <div className="text-center p-8 text-xs text-tertiary">No tasks match selected filter.</div>
-          ) : (
-            filteredTasks.map((task) => {
-              const isCompleted = task.status === 'Completed';
-              return (
-                <div
-                  key={task.id}
-                  className="p-3 surface-secondary rounded-md border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-strong transition-all"
-                  style={{ opacity: isCompleted ? 0.65 : 1 }}
-                >
-                  <div className="flex items-start sm:items-center gap-3 flex-1">
-                    <button
-                      onClick={() => {
-                        toggleTaskCompletion(task.id);
-                        addToast({
-                          title: isCompleted ? 'Task Reopened' : 'Task Completed',
-                          message: task.title,
-                          type: isCompleted ? 'info' : 'success',
-                        });
-                      }}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', marginTop: '2px' }}
-                    >
-                      {isCompleted ? (
-                        <CheckSquare size={20} className="text-success" />
-                      ) : (
-                        <Square size={20} className="text-tertiary" />
-                      )}
-                    </button>
-
-                    <div className="flex flex-col">
-                      <span
-                        className="font-semibold text-xs text-primary"
-                        style={{ textDecoration: isCompleted ? 'line-through' : 'none' }}
-                      >
-                        {task.title}
-                      </span>
-                      <span className="text-tertiary text-xs mt-1 sm:mt-0">
-                        Contact: {task.contact} | Assigned: {task.assignedTo}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto mt-2 sm:mt-0 pt-2 sm:pt-0 border-t border-subtle sm:border-none">
-                    <div className="flex items-center gap-1 text-xs text-tertiary">
-                      <Clock size={14} />
-                      <span>{task.dueDate} ({task.reminder})</span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Badge variant={task.priority === 'High' ? 'error' : task.priority === 'Medium' ? 'warning' : 'default'}>
-                        {task.priority}
-                      </Badge>
-
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        isIconOnly
-                        icon={Trash2}
-                        onClick={() => {
-                          deleteTask(task.id);
-                          addToast({ title: 'Task Deleted', type: 'error' });
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </Card>
-      )}
-
-      {/* CALENDAR VIEW — FULL 7-COLUMN RESPONSIVE MONTHLY GRID */}
-      {viewMode === 'calendar' && (
-        <div className="calendar-wrapper">
-          {/* Calendar Header Navigation Bar */}
-          <div className="calendar-header-bar">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <CalendarDays size={20} className="text-primary" />
-                <h2 style={{ fontSize: '18px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+      {/* 4. CALENDAR VIEW */}
+      {viewMode === 'calendar' ? (
+        <div className="flex flex-col gap-5">
+          <Card style={{ padding: '1.25rem' }}>
+            {/* Calendar Month Header */}
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div className="flex items-center gap-3">
+                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
                   {monthYearLabel}
                 </h2>
-              </div>
-              <Badge variant="primary" style={{ fontSize: '11px' }}>
-                {tasksInViewedMonth.length} {tasksInViewedMonth.length === 1 ? 'Task' : 'Tasks'}
-              </Badge>
-            </div>
-
-            {/* Navigation Controls */}
-            <div className="flex items-center gap-2">
-              <div className="flex items-center border-subtle rounded-sm surface-secondary p-0.5">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  isIconOnly
-                  icon={ChevronLeft}
-                  onClick={handlePrevMonth}
-                  title="Previous Month"
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleToday}
-                  style={{ fontSize: '12px', padding: '0.25rem 0.6rem' }}
-                >
+                <Button variant="outline" size="sm" onClick={handleToday} style={{ fontSize: '11px', padding: '2px 8px' }}>
                   Today
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  isIconOnly
-                  icon={ChevronRight}
-                  onClick={handleNextMonth}
-                  title="Next Month"
-                />
               </div>
 
-              <Button
-                variant="outline"
-                size="sm"
-                icon={Plus}
-                onClick={() => handleOpenAddModalForDate(`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`)}
-              >
-                Add Event
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="sm" icon={ChevronLeft} onClick={handlePrevMonth} title="Previous Month" />
+                <Button variant="ghost" size="sm" icon={ChevronRight} onClick={handleNextMonth} title="Next Month" />
+              </div>
             </div>
-          </div>
 
-          {/* 7-Column Calendar Grid Container */}
-          <div className="calendar-grid-container">
-            <div className="calendar-month-grid">
-              {/* 1. Weekday Header Row (7 Equal Columns: Sun - Sat) */}
+            {/* Weekday Columns */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(7, 1fr)',
+                textAlign: 'center',
+                fontWeight: 700,
+                fontSize: '11px',
+                color: 'var(--text-tertiary)',
+                paddingBottom: '0.5rem',
+                borderBottom: '1px solid var(--border)',
+              }}
+            >
               {DAYS_OF_WEEK.map((day) => (
-                <div key={day} className="calendar-weekday-header">
-                  {day}
-                </div>
+                <div key={day} style={{ padding: '4px' }}>{day}</div>
               ))}
+            </div>
 
-              {/* 2. Date Cells (7 Equal Columns, Arranged Horizontally by Weekday) */}
-              {allCalendarGridCells.map((cell, index) => {
-                const dayTasks = filteredTasks.filter((t) => t.dueDate === cell.dateStr);
-                const isToday = cell.dateStr === '2026-02-28' || cell.dateStr === '2026-02-01';
+            {/* Calendar Days Grid */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(7, 1fr)',
+                gap: '4px',
+                marginTop: '4px',
+              }}
+            >
+              {allCalendarGridCells.map((cell, idx) => {
+                const isSelected = selectedDate === cell.dateStr;
+                const cellTasks = filteredTasks.filter((t) => t.dueDate === cell.dateStr);
 
                 return (
                   <div
-                    key={`${cell.dateStr}-${index}`}
-                    className={`calendar-day-cell ${!cell.isCurrentMonth ? 'other-month' : ''} ${isToday ? 'today' : ''}`}
-                    onClick={() => handleOpenAddModalForDate(cell.dateStr)}
-                    title={`Click to schedule task on ${cell.dateStr}`}
+                    key={idx}
+                    onClick={() => setSelectedDate(cell.dateStr)}
+                    style={{
+                      minHeight: '75px',
+                      padding: '6px',
+                      borderRadius: '8px',
+                      backgroundColor: isSelected
+                        ? 'rgba(37, 99, 235, 0.08)'
+                        : cell.isCurrentMonth
+                        ? 'var(--surface)'
+                        : 'var(--surface-secondary)',
+                      border: isSelected
+                        ? '2px solid var(--accent)'
+                        : '1px solid var(--border)',
+                      opacity: cell.isCurrentMonth ? 1 : 0.45,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      transition: 'all 0.15s ease',
+                    }}
                   >
-                    {/* Top Row: Date Number */}
-                    <div className="calendar-day-top">
-                      <span className="calendar-day-number">
+                    <div className="flex items-center justify-between">
+                      <span
+                        style={{
+                          fontSize: '12px',
+                          fontWeight: isSelected ? 800 : cell.isCurrentMonth ? 600 : 400,
+                          color: isSelected ? 'var(--accent)' : 'var(--text-primary)',
+                        }}
+                      >
                         {cell.dayNum}
                       </span>
-                      {dayTasks.length > 0 && (
-                        <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: 600 }}>
-                          {dayTasks.length} {dayTasks.length === 1 ? 'task' : 'tasks'}
+                      {cellTasks.length > 0 && (
+                        <span
+                          style={{
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            padding: '1px 5px',
+                            borderRadius: '10px',
+                            backgroundColor: 'var(--accent)',
+                            color: '#ffffff',
+                          }}
+                        >
+                          {cellTasks.length}
                         </span>
                       )}
                     </div>
 
-                    {/* Tasks inside this Date Cell */}
-                    <div className="flex flex-col gap-1 w-full mt-1">
-                      {dayTasks.map((task) => {
-                        const isCompleted = task.status === 'Completed';
-                        return (
-                          <div
-                            key={task.id}
-                            className={`calendar-task-pill priority-${task.priority}`}
-                            onClick={(e) => {
-                              e.stopPropagation(); // prevent opening add modal
-                              toggleTaskCompletion(task.id);
-                              addToast({
-                                title: isCompleted ? 'Task Reopened' : 'Task Completed',
-                                message: task.title,
-                                type: isCompleted ? 'info' : 'success',
-                              });
-                            }}
-                            title={`${task.title} (${task.priority} Priority) - Click to toggle completion`}
-                            style={{
-                              opacity: isCompleted ? 0.6 : 1,
-                              textDecoration: isCompleted ? 'line-through' : 'none',
-                            }}
-                          >
-                            <span
-                              style={{
-                                width: '6px',
-                                height: '6px',
-                                borderRadius: '50%',
-                                backgroundColor:
-                                  task.priority === 'High'
-                                    ? '#ef4444'
-                                    : task.priority === 'Medium'
-                                    ? '#f59e0b'
-                                    : '#3b82f6',
-                                flexShrink: 0,
-                              }}
-                            />
-                            <span className="truncate flex-1 font-medium" style={{ fontSize: '11px' }}>
-                              {task.title}
-                            </span>
-                          </div>
-                        );
-                      })}
+                    {/* Task Pills in Date Cell */}
+                    <div className="flex flex-col gap-1 mt-1 overflow-hidden">
+                      {cellTasks.slice(0, 2).map((t) => (
+                        <div
+                          key={t.id}
+                          style={{
+                            fontSize: '10px',
+                            padding: '2px 4px',
+                            borderRadius: '4px',
+                            backgroundColor: t.status === 'Completed'
+                              ? 'rgba(34, 197, 94, 0.15)'
+                              : t.priority === 'High'
+                              ? 'rgba(239, 68, 68, 0.15)'
+                              : 'rgba(37, 99, 235, 0.15)',
+                            color: t.status === 'Completed'
+                              ? 'var(--success)'
+                              : t.priority === 'High'
+                              ? 'var(--error)'
+                              : 'var(--accent)',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            fontWeight: 600,
+                          }}
+                        >
+                          {t.title}
+                        </div>
+                      ))}
+                      {cellTasks.length > 2 && (
+                        <span style={{ fontSize: '9px', color: 'var(--text-tertiary)', fontWeight: 600 }}>
+                          +{cellTasks.length - 2} more
+                        </span>
+                      )}
                     </div>
                   </div>
                 );
               })}
             </div>
-          </div>
+          </Card>
+
+          {/* Selected Date Detail Drawer */}
+          <Card style={{ padding: '1.25rem' }}>
+            <div className="flex items-center justify-between mb-3 border-b border-subtle pb-3">
+              <div>
+                <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+                  Tasks Scheduled for {selectedDate}
+                </h3>
+                <span className="text-xs text-secondary">{selectedDateTasks.length} action items on this date</span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                icon={Plus}
+                onClick={() => handleOpenAddModalForDate(selectedDate)}
+              >
+                Add Task for Date
+              </Button>
+            </div>
+
+            {selectedDateTasks.length === 0 ? (
+              <div className="text-center py-6 text-xs text-tertiary">
+                No tasks scheduled for {selectedDate}. Click "+ Add Task for Date" to schedule.
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2.5">
+                {selectedDateTasks.map((t) => (
+                  <div
+                    key={t.id}
+                    className="p-3 surface-secondary rounded-md border-subtle flex items-center justify-between gap-3"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <button
+                        type="button"
+                        onClick={() => toggleTaskCompletion(t.id)}
+                        className="text-secondary hover:text-primary cursor-pointer p-0 bg-transparent border-0"
+                      >
+                        {t.status === 'Completed' ? (
+                          <CheckSquare size={18} className="text-success" />
+                        ) : (
+                          <Square size={18} />
+                        )}
+                      </button>
+                      <div className="flex flex-col gap-0.5 min-w-0">
+                        <span
+                          className="font-bold text-xs text-primary truncate"
+                          style={{ textDecoration: t.status === 'Completed' ? 'line-through' : 'none' }}
+                        >
+                          {t.title}
+                        </span>
+                        <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
+                          {t.contact && <span>Contact: <strong>{t.contact}</strong></span>}
+                          {t.reminder && <span>• At {t.reminder}</span>}
+                          {t.assignedTo && <span>• Owner: {t.assignedTo}</span>}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Badge variant={t.priority === 'High' ? 'error' : t.priority === 'Medium' ? 'warning' : 'primary'}>
+                        {t.priority}
+                      </Badge>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={Trash2}
+                        onClick={() => deleteTask(t.id)}
+                        className="text-error"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
         </div>
+      ) : (
+        /* 5. LIST VIEW */
+        <Card>
+          <CardBody className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell isHeader>Status</TableCell>
+                  <TableCell isHeader>Task Title</TableCell>
+                  <TableCell isHeader>Due Date</TableCell>
+                  <TableCell isHeader>Related Contact</TableCell>
+                  <TableCell isHeader>Priority</TableCell>
+                  <TableCell isHeader>Assigned To</TableCell>
+                  <TableCell isHeader align="right">Actions</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredTasks.map((t) => (
+                  <TableRow key={t.id}>
+                    <TableCell>
+                      <button
+                        type="button"
+                        onClick={() => toggleTaskCompletion(t.id)}
+                        className="cursor-pointer bg-transparent border-0 p-0"
+                      >
+                        {t.status === 'Completed' ? (
+                          <CheckSquare size={16} className="text-success" />
+                        ) : (
+                          <Square size={16} className="text-tertiary" />
+                        )}
+                      </button>
+                    </TableCell>
+                    <TableCell>
+                      <span
+                        className="font-bold text-xs text-primary"
+                        style={{ textDecoration: t.status === 'Completed' ? 'line-through' : 'none' }}
+                      >
+                        {t.title}
+                      </span>
+                    </TableCell>
+                    <TableCell><span className="text-xs font-mono text-secondary">{t.dueDate}</span></TableCell>
+                    <TableCell><span className="text-xs text-secondary">{t.contact || '—'}</span></TableCell>
+                    <TableCell>
+                      <Badge variant={t.priority === 'High' ? 'error' : t.priority === 'Medium' ? 'warning' : 'primary'}>
+                        {t.priority}
+                      </Badge>
+                    </TableCell>
+                    <TableCell><span className="text-xs text-tertiary">{t.assignedTo || 'Alexander Wright'}</span></TableCell>
+                    <TableCell align="right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={Trash2}
+                        onClick={() => deleteTask(t.id)}
+                        className="text-error"
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardBody>
+        </Card>
       )}
 
-      {/* Add Task Modal */}
+      {/* 6. Modal: Create Task */}
       <Modal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        title="Schedule New Task"
+        title="Schedule New CRM Task"
         footer={
           <>
             <Button variant="outline" size="sm" onClick={() => setIsAddModalOpen(false)}>
@@ -459,21 +597,21 @@ export const CrmTasks = () => {
           </>
         }
       >
-        <form className="flex flex-col gap-4">
+        <form onSubmit={handleCreateTask} className="flex flex-col gap-4">
           <Input
             label="Task Title"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            placeholder="e.g. Follow up on proposal contract"
+            placeholder="e.g. Follow-up on debt term sheet with CFO"
             required
           />
           <Input
-            label="Related Contact / Deal"
+            label="Related Contact / Company"
             value={formData.contact}
             onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-            placeholder="e.g. Eleanor Vance"
+            placeholder="e.g. Dr. Aris Thorne (BioGenix Labs)"
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Due Date"
               type="date"
@@ -488,15 +626,15 @@ export const CrmTasks = () => {
               options={['High', 'Medium', 'Low']}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Reminder Time"
               value={formData.reminder}
               onChange={(e) => setFormData({ ...formData, reminder: e.target.value })}
-              placeholder="e.g. 9:00 AM"
+              placeholder="e.g. 10:30 AM"
             />
             <Input
-              label="Assigned To"
+              label="Assigned Owner"
               value={formData.assignedTo}
               onChange={(e) => setFormData({ ...formData, assignedTo: e.target.value })}
               placeholder="e.g. Alexander Wright"

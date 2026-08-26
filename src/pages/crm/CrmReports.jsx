@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { FileText, Download, Filter as FilterIcon, Calendar, User } from 'lucide-react';
-import { Breadcrumb, Button, Card, CardBody, Table, TableHeader, TableBody, TableRow, TableCell, Badge, Select, Input } from '../../components/ui';
+import { FileText, Download, Filter as FilterIcon, Calendar, User, CheckCircle2, Clock, ShieldCheck } from 'lucide-react';
+import { Breadcrumb, Button, Card, CardBody, Table, TableHeader, TableBody, TableRow, TableCell, Badge, Select, Input, KPICard } from '../../components/ui';
 import { useToast } from '../../context/ToastContext';
 
 const reportsList = [
@@ -107,23 +107,33 @@ export const CrmReports = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="flex flex-col gap-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+      {/* 1. Header */}
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Reports Hub' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Enterprise Reports Repository</h1>
-          <p className="text-xs text-secondary margin-0">
-            Generate, filter, and export system audit reports in CSV and PDF formats
+          <h1
+            style={{
+              fontSize: '24px',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              margin: '2px 0 0 0',
+              fontFamily: 'var(--font-display)',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Enterprise Reports Repository
+          </h1>
+          <p className="text-xs text-secondary margin-0" style={{ marginTop: '2px' }}>
+            Generate, filter, and export system audit reports in PDF formats.
           </p>
         </div>
 
-        <div className="dashboard-actions-grid w-full md:w-auto">
+        <div className="header-actions-right">
           <Button
             variant="primary"
             size="sm"
             icon={Download}
-            className="w-full md:w-auto justify-center"
             onClick={() => handleExportPDF('All_CRM_Reports_Summary')}
           >
             Export All (PDF)
@@ -131,7 +141,51 @@ export const CrmReports = () => {
         </div>
       </div>
 
-      {/* Filter Bar */}
+      {/* 2. Top Summary KPI Cards Strip */}
+      <div className="grid-responsive-kpi">
+        <KPICard
+          title="TOTAL AUDIT REPORTS"
+          value={`${reportsList.length}`}
+          change="100% Synced"
+          changeType="positive"
+          changePeriod="system records"
+          icon={FileText}
+          iconBg="rgba(29, 78, 216, 0.1)"
+          iconColor="#1d4ed8"
+        />
+        <KPICard
+          title="APPROVED REPORTS"
+          value={`${reportsList.filter((r) => r.status === 'Approved').length}`}
+          change="80% Verified"
+          changeType="positive"
+          changePeriod="compliance passed"
+          icon={CheckCircle2}
+          iconBg="rgba(22, 163, 74, 0.1)"
+          iconColor="#16a34a"
+        />
+        <KPICard
+          title="PENDING REVIEW"
+          value={`${reportsList.filter((r) => r.status === 'Pending Review').length}`}
+          change="1 In Review"
+          changeType="neutral"
+          changePeriod="auditor queue"
+          icon={Clock}
+          iconBg="rgba(234, 88, 12, 0.1)"
+          iconColor="#ea580c"
+        />
+        <KPICard
+          title="COMPLIANCE SLA"
+          value="100%"
+          change="Certified"
+          changeType="positive"
+          changePeriod="SOX • ISO 27001"
+          icon={ShieldCheck}
+          iconBg="rgba(147, 51, 234, 0.1)"
+          iconColor="#9333ea"
+        />
+      </div>
+
+      {/* 3. Filter Bar — 3 Dropdowns in ONE Horizontal Row */}
       <div className="table-toolbar">
         <div className="table-toolbar-actions" style={{ width: '100%' }}>
           <Select
@@ -145,7 +199,7 @@ export const CrmReports = () => {
               { label: 'Operations', value: 'Operations' },
               { label: 'Support', value: 'Support' },
             ]}
-            style={{ height: '36px', fontSize: '13px' }}
+            style={{ height: '38px', fontSize: '13px' }}
           />
 
           <Select
@@ -157,7 +211,7 @@ export const CrmReports = () => {
               { label: 'Sarah Jenkins', value: 'Sarah Jenkins' },
               { label: 'David Chen', value: 'David Chen' },
             ]}
-            style={{ height: '36px', fontSize: '13px' }}
+            style={{ height: '38px', fontSize: '13px' }}
           />
 
           <Select
@@ -168,12 +222,12 @@ export const CrmReports = () => {
               { label: 'Approved', value: 'Approved' },
               { label: 'Pending Review', value: 'Pending Review' },
             ]}
-            style={{ height: '36px', fontSize: '13px' }}
+            style={{ height: '38px', fontSize: '13px' }}
           />
         </div>
       </div>
 
-      {/* Desktop Reports Table */}
+      {/* 4. Desktop Reports Table */}
       <Card className="hidden-mobile">
         <CardBody className="p-0">
           <Table>
@@ -191,11 +245,11 @@ export const CrmReports = () => {
             <TableBody>
               {filteredReports.map((rep) => (
                 <TableRow key={rep.id}>
-                  <TableCell><span className="font-mono text-xs">{rep.id}</span></TableCell>
-                  <TableCell><span className="font-semibold text-primary">{rep.title}</span></TableCell>
+                  <TableCell><span className="font-mono text-xs text-tertiary">{rep.id}</span></TableCell>
+                  <TableCell><span className="font-bold text-xs text-primary">{rep.title}</span></TableCell>
                   <TableCell><Badge variant="primary">{rep.category}</Badge></TableCell>
-                  <TableCell>{rep.user}</TableCell>
-                  <TableCell>{rep.date}</TableCell>
+                  <TableCell><span className="text-xs text-secondary">{rep.user}</span></TableCell>
+                  <TableCell><span className="text-xs text-tertiary">{rep.date}</span></TableCell>
                   <TableCell><Badge variant={rep.status === 'Approved' ? 'success' : 'warning'}>{rep.status}</Badge></TableCell>
                   <TableCell align="right">
                     <Button

@@ -23,12 +23,14 @@ export const HrEmployees = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'HR' }, { label: 'Employees Directory' }]} />
           <h1 style={{ fontSize: 'var(--text-2xl)' }}>Employee Directory</h1>
         </div>
-        <Button variant="primary" size="sm" icon={Plus} onClick={() => setIsModalOpen(true)}>Add Employee</Button>
+        <div className="header-actions-right">
+          <Button variant="primary" size="sm" icon={Plus} onClick={() => setIsModalOpen(true)}>Add Employee</Button>
+        </div>
       </div>
 
       <Card>

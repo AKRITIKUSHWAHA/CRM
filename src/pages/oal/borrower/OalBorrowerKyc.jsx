@@ -191,9 +191,6 @@ export const OalBorrowerKyc = () => {
           <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             KYC Identity & Corporate Legal Vault
           </h1>
-          <p className="text-xs text-secondary margin-0" style={{ marginTop: '3px' }}>
-            Bank-grade 256-bit encrypted verification for institutional borrowing and FinCEN CDD compliance
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
@@ -324,11 +321,6 @@ export const OalBorrowerKyc = () => {
           >
             3. Legal Document Vault ({documents.length})
           </button>
-        </div>
-
-        <div className="flex items-center gap-2 text-xs text-secondary">
-          <Lock size={14} className="text-accent" />
-          <span>FinCEN Customer Due Diligence (CDD) Certified</span>
         </div>
       </div>
 
@@ -469,15 +461,10 @@ export const OalBorrowerKyc = () => {
       {/* 5. TAB 2: Beneficial Ownership (FinCEN 25%+ Rule) */}
       {activeTab === 'owners' && (
         <div className="flex flex-col gap-2.5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-                Beneficial Ownership Registry (FinCEN Compliance)
-              </h2>
-              <span className="text-xs text-secondary">
-                Federal regulations require identifying all individuals or entities with 25% or greater equity or executive control.
-              </span>
-            </div>
+          <div className="flex items-center justify-between gap-3">
+            <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+              Beneficial Ownership Registry (FinCEN Compliance)
+            </h2>
 
             <Button
               variant="outline"
@@ -564,15 +551,10 @@ export const OalBorrowerKyc = () => {
         <div className="flex flex-col gap-6">
           {/* Section 1: Upload Dropzone */}
           <div className="flex flex-col gap-2.5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-                  Institutional Legal Repository
-                </h2>
-                <span className="text-xs text-secondary">
-                  Uploaded files are encrypted via AES-256 and stamped with immutable SHA-256 verification hashes
-                </span>
-              </div>
+            <div className="flex items-center justify-between gap-2">
+              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                Institutional Legal Repository
+              </h2>
               <Badge variant="neutral" style={{ flexShrink: 0 }}>SHA-256 Protected</Badge>
             </div>
 
@@ -608,7 +590,6 @@ export const OalBorrowerKyc = () => {
               <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                 Verified Corporate Documents ({documents.length})
               </h3>
-              <span className="text-xs text-secondary">100% Cryptographically Sealed</span>
             </div>
 
             <div className="flex flex-col gap-3">

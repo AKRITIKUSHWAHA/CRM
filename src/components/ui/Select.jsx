@@ -7,7 +7,7 @@ export const Select = React.forwardRef(
     {
       label,
       options = [],
-      placeholder = 'Select an option...',
+      placeholder,
       errorMessage,
       helperText,
       value,
@@ -16,6 +16,7 @@ export const Select = React.forwardRef(
       required,
       className = '',
       id,
+      style = {},
       ...props
     },
     ref
@@ -23,7 +24,7 @@ export const Select = React.forwardRef(
     const selectId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
     return (
-      <div className="form-group">
+      <div className="form-group" style={{ margin: 0 }}>
         {label && (
           <label htmlFor={selectId} className="form-label">
             <span>
@@ -32,7 +33,7 @@ export const Select = React.forwardRef(
           </label>
         )}
 
-        <div className="form-control-wrapper">
+        <div className="form-control-wrapper" style={{ position: 'relative', width: '100%' }}>
           <select
             ref={ref}
             id={selectId}
@@ -45,7 +46,15 @@ export const Select = React.forwardRef(
               errorMessage && 'form-control-error',
               className
             )}
-            style={{ appearance: 'none', cursor: disabled ? 'not-allowed' : 'pointer' }}
+            style={{
+              appearance: 'none',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              backgroundImage: 'none',
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              paddingRight: '2.25rem',
+              ...style,
+            }}
             {...props}
           >
             {placeholder && (
@@ -64,8 +73,21 @@ export const Select = React.forwardRef(
             })}
           </select>
 
-          <span className="input-icon-end" style={{ pointerEvents: 'none' }}>
-            <ChevronDown size={18} />
+          <span
+            className="input-icon-end"
+            style={{
+              position: 'absolute',
+              right: '0.75rem',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              pointerEvents: 'none',
+              color: 'var(--text-secondary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <ChevronDown size={16} />
           </span>
         </div>
 

@@ -117,7 +117,7 @@ export const OalBorrowerDashboard = () => {
           </Badge>
         </div>
 
-        <Card style={{ padding: '1.5rem 1.75rem', borderRadius: '12px' }}>
+        <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
           {/* Stepper Horizontal Scroll Container */}
           <div
             style={{
@@ -125,9 +125,14 @@ export const OalBorrowerDashboard = () => {
               padding: '0.5rem 0',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '0.75rem',
+              justifyContent: 'flex-start',
+              gap: '1rem',
               WebkitOverflowScrolling: 'touch',
+              touchAction: 'pan-x',
+              width: '100%',
+              maxWidth: '100%',
+              minWidth: 0,
+              scrollbarWidth: 'none',
             }}
           >
           {stageNames.map((name, idx) => {

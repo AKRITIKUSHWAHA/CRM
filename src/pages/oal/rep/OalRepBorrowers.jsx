@@ -13,7 +13,8 @@ export const OalRepBorrowers = () => {
   const [selectedStatus, setSelectedStatus] = useState(applicationStage);
   const [internalNote, setInternalNote] = useState('');
   const [notesList, setNotesList] = useState([
-    { id: '1', author: 'Sarah Jenkins (OAL Rep)', note: 'Bank statements verified against Plaid telemetry. Outstanding cashflow.', date: 'Today at 09:15 AM' }
+    { id: '1', author: 'Sarah Jenkins (OAL Rep)', note: 'Bank statements verified against Plaid telemetry. Outstanding cashflow.', date: 'Today at 09:15 AM' },
+    { id: '2', author: 'Sarah Jenkins (OAL Rep)', note: 'Vanguard Capital matched 4.8% APR. Term sheet pending borrower review.', date: 'Yesterday at 04:30 PM' }
   ]);
 
   // Create Task Modal State
@@ -37,84 +38,157 @@ export const OalRepBorrowers = () => {
   const handleCreateTask = (e) => {
     e.preventDefault();
     if (!taskTitle.trim()) return;
-    addRepTask({ title: taskTitle, borrower: 'BioGenix Labs', priority: 'High' });
+    addRepTask({ title: taskTitle, borrower: 'BioGenix Labs Inc.', priority: 'High' });
     setTaskTitle('');
     setIsTaskModalOpen(false);
     addToast({ title: 'Task Created', message: `Added rep task: ${taskTitle}`, type: 'success' });
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <Breadcrumb items={[{ label: 'OAL Rep' }, { label: 'Borrower Profile Management' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>BioGenix Labs Inc. — Borrower Profile</h1>
+          <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            BioGenix Labs Inc. — Borrower Profile
+          </h1>
+          <p className="text-xs text-secondary margin-0 mt-0.5">
+            Corporate Signatory: Dr. Aris Thorne (CEO) &bull; Facility Ref: <code className="font-mono">#OAL-7749</code>
+          </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" icon={Plus} onClick={() => setIsTaskModalOpen(true)}>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Button
+            variant="outline"
+            size="sm"
+            icon={Plus}
+            onClick={() => setIsTaskModalOpen(true)}
+            style={{ fontSize: '12px' }}
+          >
             Create Rep Task
           </Button>
-          <Button variant="primary" size="sm" icon={MessageSquare} onClick={() => navigate('/oal/rep/messages')} style={{ backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' }}>
+          <Button
+            variant="primary"
+            size="sm"
+            icon={MessageSquare}
+            onClick={() => navigate('/oal/rep/messages')}
+            style={{ backgroundColor: 'var(--accent)', borderColor: 'var(--accent)', fontSize: '12px' }}
+          >
             Message Borrower
           </Button>
         </div>
       </div>
 
-      <div className="grid-responsive-2col">
-        {/* Left Column: Profile & Status Update */}
-        <Card className="p-6 flex flex-col gap-4">
-          <h3 className="text-base font-semibold">Borrower Information & Stage Control</h3>
-          <div className="flex justify-between text-xs border-b border-subtle pb-2">
-            <span className="text-tertiary">Primary Contact:</span>
-            <span className="font-semibold text-primary">Dr. Aris Thorne (CEO)</span>
-          </div>
-          <div className="flex justify-between text-xs border-b border-subtle pb-2">
-            <span className="text-tertiary">Requested Loan:</span>
-            <span className="font-bold text-success">$750,000 (36 Months)</span>
-          </div>
-          <div className="flex justify-between text-xs border-b border-subtle pb-2">
-            <span className="text-tertiary">AI Credit Rating:</span>
-            <Badge variant="success" icon={Sparkles}>792 / 850 (Grade A+)</Badge>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Left Column: Comprehensive Profile & Stage Control */}
+        <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-4">
+          <div className="flex items-center justify-between border-b border-subtle pb-3">
+            <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+              Borrower Information & Stage Control
+            </h3>
+            <Badge variant="success" icon={ShieldCheck} style={{ fontSize: '11px' }}>
+              Level 3 Verified
+            </Badge>
           </div>
 
-          <form onSubmit={handleUpdateStatus} className="flex flex-col gap-3 border-t border-subtle pt-4">
+          <div className="flex flex-col gap-2.5 text-xs">
+            <div className="flex justify-between items-center py-1 border-b border-subtle">
+              <span className="text-tertiary">Primary Signatory:</span>
+              <span className="font-semibold text-primary">Dr. Aris Thorne (CEO)</span>
+            </div>
+            <div className="flex justify-between items-center py-1 border-b border-subtle">
+              <span className="text-tertiary">Registered Entity:</span>
+              <span className="font-semibold text-primary">BioGenix Labs Inc. (DE C-Corp)</span>
+            </div>
+            <div className="flex justify-between items-center py-1 border-b border-subtle">
+              <span className="text-tertiary">Tax ID / EIN:</span>
+              <span className="font-mono text-secondary">XX-XXX1948</span>
+            </div>
+            <div className="flex justify-between items-center py-1 border-b border-subtle">
+              <span className="text-tertiary">Requested Facility:</span>
+              <span className="font-bold text-success" style={{ fontSize: '13px' }}>$750,000 (36 Months)</span>
+            </div>
+            <div className="flex justify-between items-center py-1 border-b border-subtle">
+              <span className="text-tertiary">Annual Revenue:</span>
+              <span className="font-semibold text-primary">$8,400,000 (Plaid Verified)</span>
+            </div>
+            <div className="flex justify-between items-center py-1 border-b border-subtle">
+              <span className="text-tertiary">AI Credit Rating:</span>
+              <Badge variant="success" icon={Sparkles} style={{ fontSize: '11px' }}>
+                792 / 850 (Grade A+)
+              </Badge>
+            </div>
+          </div>
+
+          <form onSubmit={handleUpdateStatus} className="flex flex-col gap-3 pt-2">
             <Select
               label="Update Application Marketplace Stage"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               options={stageNames.map((name, idx) => ({ label: `Stage ${idx + 1}: ${name}`, value: idx }))}
+              style={{ height: '38px', fontSize: '13px' }}
             />
-            <Button variant="primary" size="sm" type="submit" icon={Save}>
-              Update Mock Status
+            <Button
+              variant="primary"
+              size="sm"
+              type="submit"
+              icon={Save}
+              style={{ backgroundColor: 'var(--accent)', borderColor: 'var(--accent)', height: '38px', fontWeight: 600 }}
+            >
+              Update Marketplace Stage
             </Button>
           </form>
         </Card>
 
-        {/* Right Column: Internal Notes */}
-        <Card className="p-6 flex flex-col gap-4">
-          <h3 className="text-base font-semibold">Rep Internal Underwriting Notes</h3>
-          <form onSubmit={handleAddNote} className="flex flex-col gap-2">
+        {/* Right Column: Internal Underwriting Notes Feed */}
+        <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-4">
+          <div className="flex items-center justify-between border-b border-subtle pb-3">
+            <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+              Rep Internal Underwriting Notes
+            </h3>
+            <span className="text-xs text-tertiary font-mono">Confidential Ledger</span>
+          </div>
+
+          <form onSubmit={handleAddNote} className="flex flex-col gap-2.5">
             <Input
               value={internalNote}
               onChange={(e) => setInternalNote(e.target.value)}
               placeholder="Add confidential agent note regarding DSCR or lender negotiation..."
+              style={{ height: '38px', fontSize: '13px' }}
               required
             />
-            <Button variant="outline" size="sm" type="submit" icon={Plus}>
+            <Button
+              variant="outline"
+              size="sm"
+              type="submit"
+              icon={Plus}
+              style={{ height: '36px', fontWeight: 600, fontSize: '12px' }}
+            >
               Add Internal Note
             </Button>
           </form>
 
-          <div className="flex flex-col gap-2 mt-2">
+          <div className="flex flex-col gap-2.5 mt-1 overflow-y-auto" style={{ maxHeight: '300px' }}>
             {notesList.map((n) => (
-              <div key={n.id} className="p-3 surface-secondary rounded-sm border-subtle flex flex-col gap-1 text-xs">
-                <div className="flex justify-between font-bold text-primary">
+              <div
+                key={n.id}
+                style={{
+                  padding: '10px 14px',
+                  backgroundColor: 'var(--surface-secondary)',
+                  borderRadius: '8px',
+                  border: '1px solid var(--border)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '4px',
+                  fontSize: '12px',
+                }}
+              >
+                <div className="flex justify-between items-center font-bold text-primary">
                   <span>{n.author}</span>
-                  <span className="text-tertiary font-normal">{n.date}</span>
+                  <span className="text-tertiary font-normal" style={{ fontSize: '11px' }}>{n.date}</span>
                 </div>
-                <p className="margin-0 text-secondary">{n.note}</p>
+                <p className="margin-0 text-secondary" style={{ lineHeight: 1.45 }}>{n.note}</p>
               </div>
             ))}
           </div>
@@ -124,8 +198,21 @@ export const OalRepBorrowers = () => {
       {/* Create Task Modal */}
       <Modal isOpen={isTaskModalOpen} onClose={() => setIsTaskModalOpen(false)} title="Create New Agent Action Task">
         <form onSubmit={handleCreateTask} className="flex flex-col gap-4">
-          <Input label="Task Action Title" value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder="e.g. Schedule Underwriting Call with Lender" required />
-          <Button variant="primary" type="submit">Create Task</Button>
+          <Input
+            label="Task Action Title"
+            value={taskTitle}
+            onChange={(e) => setTaskTitle(e.target.value)}
+            placeholder="e.g. Schedule Underwriting Call with Lender"
+            style={{ height: '38px', fontSize: '13px' }}
+            required
+          />
+          <Button
+            variant="primary"
+            type="submit"
+            style={{ backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' }}
+          >
+            Create Task
+          </Button>
         </form>
       </Modal>
     </div>

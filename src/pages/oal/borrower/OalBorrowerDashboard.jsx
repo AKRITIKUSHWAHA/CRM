@@ -263,14 +263,14 @@ export const OalBorrowerDashboard = () => {
       {/* 4. Active Offers & Assigned Representative */}
       <div className="grid-responsive-2col">
         {/* Left Column: Active Marketplace Offers */}
-        <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
+        <Card style={{ padding: '1.5rem', borderRadius: '12px' }}>
           {/* Card Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-subtle pb-3 mb-3">
+          <div className="flex items-center justify-between border-b border-subtle pb-3 mb-4">
             <div>
-              <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
                 Active Marketplace Offers
               </h3>
-              <span className="text-xs text-secondary">3 Institutional lenders competing</span>
+              <span className="text-xs text-secondary">3 Institutional lenders competing for your debt facility</span>
             </div>
             {!acceptedOffer && (
               <Button
@@ -278,7 +278,7 @@ export const OalBorrowerDashboard = () => {
                 size="sm"
                 icon={ChevronRight}
                 onClick={() => navigate('/oal/borrower/offers')}
-                style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '12px', padding: 0, alignSelf: 'flex-start' }}
+                style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '12px' }}
               >
                 Compare All
               </Button>
@@ -300,7 +300,7 @@ export const OalBorrowerDashboard = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col gap-3">
               {offers.map((off, idx) => {
                 const tagConfig = [
                   { label: '⚡ Best Match', bg: 'rgba(37, 99, 235, 0.08)', color: 'var(--accent)' },
@@ -313,14 +313,15 @@ export const OalBorrowerDashboard = () => {
                 return (
                   <div
                     key={off.id}
-                    className="p-3 surface-secondary rounded-lg border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-primary"
+                    className="p-3.5 surface-secondary rounded-lg border-subtle flex items-center justify-between gap-3 transition-all hover:border-primary"
                     style={{ transition: 'all 0.15s ease' }}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    {/* Left: Lender initials & details */}
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div
                         style={{
-                          width: '34px',
-                          height: '34px',
+                          width: '36px',
+                          height: '36px',
                           borderRadius: '8px',
                           backgroundColor: 'var(--surface)',
                           border: '1px solid var(--border)',
@@ -329,7 +330,7 @@ export const OalBorrowerDashboard = () => {
                           alignItems: 'center',
                           justifyContent: 'center',
                           fontWeight: 800,
-                          fontSize: '11px',
+                          fontSize: '12px',
                           flexShrink: 0,
                         }}
                       >
@@ -337,7 +338,7 @@ export const OalBorrowerDashboard = () => {
                       </div>
 
                       <div className="flex flex-col gap-0.5 min-w-0">
-                        <div className="flex items-center gap-1.5 flex-wrap">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
                             {off.lender}
                           </span>
@@ -358,21 +359,21 @@ export const OalBorrowerDashboard = () => {
                         </div>
 
                         <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
-                          <span style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{off.amount}</span>
+                          <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '13px' }}>{off.amount}</span>
                           <span>•</span>
-                          <span style={{ fontWeight: 700, color: 'var(--success)' }}>{off.rate}</span>
+                          <span style={{ fontWeight: 700, color: 'var(--success)', fontSize: '12px' }}>{off.rate}</span>
                           <span>•</span>
                           <span className="text-tertiary">{off.term}</span>
                         </div>
                       </div>
                     </div>
 
+                    {/* Right: Compact Inspect Button */}
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => handleInspectOffer(off)}
-                      className="w-full sm:w-auto justify-center"
-                      style={{ fontSize: '11px', height: '30px', padding: '0 12px', fontWeight: 600, flexShrink: 0 }}
+                      style={{ fontSize: '11px', height: '32px', padding: '0 14px', fontWeight: 600, flexShrink: 0 }}
                     >
                       Inspect Terms
                     </Button>
@@ -384,90 +385,92 @@ export const OalBorrowerDashboard = () => {
         </Card>
 
         {/* Right Column: Assigned OAL Representative */}
-        <Card style={{ padding: '1.25rem', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div>
-            {/* Card Header */}
-            <div className="flex items-center justify-between border-b border-subtle pb-3 mb-3 gap-2">
-              <div className="min-w-0">
-                <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-                  Assigned Representative
-                </h3>
-                <span className="text-xs text-secondary truncate block">Dedicated underwriting advocate</span>
-              </div>
-              <Badge variant="success" style={{ padding: '2px 7px', fontSize: '11px', flexShrink: 0 }}>
-                ● Online
-              </Badge>
+        <Card style={{ padding: '1.5rem', borderRadius: '12px' }} className="flex flex-col gap-4">
+          {/* Card Header */}
+          <div className="flex items-center justify-between border-b border-subtle pb-3 gap-2">
+            <div className="min-w-0">
+              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+                Assigned Representative
+              </h3>
+              <span className="text-xs text-secondary truncate block">Dedicated underwriting advocate</span>
             </div>
+            <Badge variant="success" style={{ padding: '3px 8px', fontSize: '11px', flexShrink: 0 }}>
+              ● Online
+            </Badge>
+          </div>
 
-            {/* Representative Profile Row */}
-            <div className="p-3 surface-secondary rounded-lg border-subtle flex flex-col gap-2.5 mb-3">
-              <div className="flex items-center gap-3">
-                <div
-                  style={{
-                    width: '38px',
-                    height: '38px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                    color: '#ffffff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 800,
-                    fontSize: '13px',
-                    flexShrink: 0,
-                  }}
-                >
-                  SJ
-                </div>
-                <div className="min-w-0">
-                  <div className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
-                    Sarah Jenkins
-                  </div>
-                  <div className="text-xs text-secondary truncate" style={{ fontSize: '11px' }}>
-                    Licensed Underwriting Officer &bull; NMLS #84920
-                  </div>
-                </div>
-              </div>
-
-              {/* Speech Bubble */}
+          {/* Representative Profile Box */}
+          <div className="p-3.5 surface-secondary rounded-lg border-subtle flex flex-col gap-3">
+            <div className="flex items-center gap-3">
               <div
                 style={{
-                  padding: '0.65rem 0.85rem',
-                  backgroundColor: 'var(--surface)',
-                  borderRadius: '6px',
-                  border: '1px solid var(--border)',
-                  borderLeft: '3px solid var(--accent)',
-                  fontSize: '12px',
-                  lineHeight: '1.4',
-                  color: 'var(--text-primary)',
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: '14px',
+                  flexShrink: 0,
+                  boxShadow: '0 2px 4px rgba(37, 99, 235, 0.2)',
                 }}
               >
-                <p className="margin-0 italic">
-                  "{messages[messages.length - 1]?.text || 'I am negotiating directly with Vanguard’s underwriting team. I will update your offers tab shortly.'}"
-                </p>
+                SJ
+              </div>
+              <div className="min-w-0">
+                <div className="font-bold text-xs text-primary truncate" style={{ fontSize: '14px' }}>
+                  Sarah Jenkins
+                </div>
+                <div className="text-xs text-secondary truncate" style={{ fontSize: '11px' }}>
+                  Licensed Underwriting Officer &bull; NMLS #84920
+                </div>
               </div>
             </div>
 
-            {/* Quick Mini Reply Input */}
-            <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 mb-3 w-full">
-              <Input
-                value={quickReplyText}
-                onChange={(e) => setQuickReplyText(e.target.value)}
-                placeholder="Quick message to Sarah..."
-                style={{ height: '36px', fontSize: '12px' }}
-                className="flex-1 min-w-0"
-              />
-              <Button
-                variant="primary"
-                size="sm"
-                type="submit"
-                icon={Send}
-                style={{ height: '36px', minWidth: '60px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
-              >
-                Send
-              </Button>
-            </form>
+            {/* Speech Bubble */}
+            <div
+              style={{
+                padding: '0.75rem 1rem',
+                backgroundColor: 'var(--surface)',
+                borderRadius: '8px',
+                border: '1px solid var(--border)',
+                borderLeft: '3px solid var(--accent)',
+                fontSize: '12px',
+                lineHeight: '1.5',
+                color: 'var(--text-primary)',
+              }}
+            >
+              <p className="margin-0 italic">
+                "{messages[messages.length - 1]?.text || 'I am negotiating directly with Vanguard’s underwriting team. I will update your offers tab shortly.'}"
+              </p>
+              <div className="flex justify-end text-tertiary mt-1" style={{ fontSize: '10px' }}>
+                {messages[messages.length - 1]?.time || '10:45 AM'} &bull; Delivered
+              </div>
+            </div>
           </div>
+
+          {/* Quick Reply Form */}
+          <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 w-full">
+            <Input
+              value={quickReplyText}
+              onChange={(e) => setQuickReplyText(e.target.value)}
+              placeholder="Type a quick message to Sarah..."
+              style={{ height: '38px', fontSize: '12px' }}
+              className="flex-1 min-w-0"
+            />
+            <Button
+              variant="primary"
+              size="sm"
+              type="submit"
+              icon={Send}
+              style={{ height: '38px', minWidth: '70px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
+            >
+              Send
+            </Button>
+          </form>
 
           {/* Dedicated Chat Portal CTA Button */}
           <Button
@@ -476,7 +479,7 @@ export const OalBorrowerDashboard = () => {
             icon={MessageSquare}
             className="w-full justify-center"
             onClick={() => navigate('/oal/borrower/messages')}
-            style={{ height: '36px', fontWeight: 600 }}
+            style={{ height: '38px', fontWeight: 600 }}
           >
             Open Dedicated Chat Portal
           </Button>

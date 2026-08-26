@@ -96,9 +96,6 @@ export const OalRepMessages = () => {
           <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             Borrower Messaging Desk
           </h1>
-          <p className="text-xs text-secondary margin-0 mt-0.5">
-            Direct Underwriting Communication Channel &bull; BioGenix Labs Inc.
-          </p>
         </div>
 
         <div className="flex items-center gap-2">

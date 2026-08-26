@@ -16,9 +16,9 @@ export const KPICard = ({
   if (isLoading) {
     return (
       <div className={cx('kpi-card', className)}>
-        <Skeleton width="60%" height="14px" />
-        <Skeleton width="40%" height="28px" />
-        <Skeleton width="70%" height="14px" />
+        <Skeleton width="60%" height="12px" />
+        <Skeleton width="40%" height="22px" />
+        <Skeleton width="70%" height="12px" />
       </div>
     );
   }
@@ -27,34 +27,43 @@ export const KPICard = ({
   const trendColor = changeType === 'positive' ? 'var(--success)' : changeType === 'negative' ? 'var(--error)' : 'var(--text-tertiary)';
 
   return (
-    <div className={cx('kpi-card', className)}>
+    <div
+      className={cx('kpi-card', className)}
+      style={{
+        padding: '0.875rem 1rem',
+        gap: '0.375rem',
+      }}
+    >
       <div className="flex items-center justify-between">
-        <span className="kpi-title">{title}</span>
+        <span className="kpi-title" style={{ fontSize: '11px', letterSpacing: '0.04em' }}>{title}</span>
         {Icon && (
           <div
             style={{
-              padding: '8px',
-              borderRadius: 'var(--radius-sm)',
+              padding: '6px',
+              borderRadius: 'var(--radius-xs)',
               backgroundColor: 'var(--surface-secondary)',
               color: 'var(--primary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            <Icon size={18} />
+            <Icon size={15} />
           </div>
         )}
       </div>
 
-      <div className="kpi-value">{value}</div>
+      <div className="kpi-value" style={{ fontSize: '1.35rem', fontWeight: 700, margin: '2px 0' }}>{value}</div>
 
       {(change || changePeriod) && (
-        <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+        <div className="flex items-center gap-1 text-xs" style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
           {change && (
             <span className="flex items-center font-semibold" style={{ color: trendColor }}>
-              <TrendIcon size={14} />
+              <TrendIcon size={13} />
               {change}
             </span>
           )}
-          {changePeriod && <span>{changePeriod}</span>}
+          {changePeriod && <span className="text-tertiary">{changePeriod}</span>}
         </div>
       )}
     </div>

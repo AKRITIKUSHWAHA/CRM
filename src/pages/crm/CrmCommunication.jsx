@@ -46,7 +46,7 @@ const initialMockMessages = [
     senderBg: '#1d4ed8',
     subject: 'Re: Enterprise Logistics Master Service Agreement',
     timestamp: '10:42 AM',
-    unread: true,
+    unread: false,
     history: [
       { id: 'h1', sender: 'Eleanor Vance', text: 'Hi Alexander, our legal team reviewed the contract terms and approved the SLAs. Please send over the final execution copy for signature.', time: '10:42 AM', isMe: false },
     ],
@@ -90,7 +90,7 @@ const initialMockMessages = [
     senderBg: '#ea580c',
     subject: 'SMS Alert: Urgent Contract Review',
     timestamp: '11:15 AM',
-    unread: true,
+    unread: false,
     history: [
       { id: 'h4', sender: 'Dr. Aris Thorne', text: 'Alex, just sent over the revised NDA text via SMS gateway. Please confirm once received.', time: '11:15 AM', isMe: false },
     ],
@@ -120,7 +120,7 @@ const initialMockMessages = [
     senderBg: '#2563eb',
     subject: 'Q2 Executive Pipeline Sync',
     timestamp: '11:50 AM',
-    unread: true,
+    unread: false,
     history: [
       { id: 'h6', sender: 'Sarah Jenkins', text: 'Team, outstanding progress on qualified opportunities this week! Let us ensure all pending proposals are dispatched by Friday.', time: '11:50 AM', isMe: false },
     ],
@@ -454,27 +454,26 @@ export const CrmCommunication = () => {
                       backgroundColor: isSelected ? 'var(--primary-light)' : 'var(--surface)',
                       border: isSelected ? '1px solid var(--primary-border)' : '1px solid var(--border)',
                       borderRadius: '10px',
-                      padding: '0.75rem',
+                      padding: '0.875rem 1rem',
                       display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '0.75rem',
+                      alignItems: 'center',
+                      gap: '0.875rem',
                       cursor: 'pointer',
                       transition: 'all 0.15s ease',
-                      position: 'relative',
                     }}
                   >
                     {/* Avatar Badge */}
                     <div
                       style={{
-                        width: '34px',
-                        height: '34px',
+                        width: '36px',
+                        height: '36px',
                         borderRadius: '50%',
                         backgroundColor: msg.senderBg || '#1d4ed8',
                         color: '#ffffff',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '11px',
+                        fontSize: '12px',
                         fontWeight: 700,
                         flexShrink: 0,
                       }}
@@ -487,7 +486,7 @@ export const CrmCommunication = () => {
                         <span className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
                           {msg.sender}
                         </span>
-                        <span className="text-tertiary" style={{ fontSize: '10px' }}>
+                        <span className="text-tertiary font-medium ml-2 flex-shrink-0" style={{ fontSize: '11px' }}>
                           {msg.timestamp}
                         </span>
                       </div>
@@ -498,20 +497,6 @@ export const CrmCommunication = () => {
                         {msg.history[msg.history.length - 1]?.text}
                       </p>
                     </div>
-
-                    {msg.unread && (
-                      <span
-                        style={{
-                          width: '8px',
-                          height: '8px',
-                          borderRadius: '50%',
-                          backgroundColor: '#1d4ed8',
-                          position: 'absolute',
-                          top: '12px',
-                          right: '12px',
-                        }}
-                      />
-                    )}
                   </div>
                 );
               })
@@ -533,7 +518,7 @@ export const CrmCommunication = () => {
         >
           {activeMessage ? (
             <div className="flex flex-col justify-between flex-1 gap-5">
-              {/* Thread Header Info — Perfect Spacing & Responsive Alignment */}
+              {/* Thread Header Info — Ample Spacing & Clear Layout */}
               <div
                 className="border-b border-subtle pb-4 flex flex-col gap-3"
                 style={{ width: '100%', boxSizing: 'border-box' }}
@@ -557,33 +542,35 @@ export const CrmCommunication = () => {
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 text-xs flex-wrap">
-                  <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex items-center justify-between gap-4 text-xs flex-wrap">
+                  <div className="flex items-center gap-3 min-w-0">
                     <div
                       style={{
-                        width: '28px',
-                        height: '28px',
+                        width: '32px',
+                        height: '32px',
                         borderRadius: '50%',
                         backgroundColor: activeMessage.senderBg || '#1d4ed8',
                         color: '#ffffff',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '11px',
+                        fontSize: '12px',
                         fontWeight: 700,
                         flexShrink: 0,
                       }}
                     >
                       {activeMessage.senderInitials}
                     </div>
-                    <span className="truncate text-secondary">
-                      From: <strong className="text-primary">{activeMessage.sender}</strong>{' '}
-                      <span className="text-tertiary">({activeMessage.senderEmail})</span>
-                    </span>
+                    <div className="flex items-center gap-2 flex-wrap text-xs">
+                      <span className="text-secondary font-medium">From:</span>
+                      <strong className="text-primary font-bold">{activeMessage.sender}</strong>
+                      <span className="text-tertiary font-normal">({activeMessage.senderEmail})</span>
+                    </div>
                   </div>
+
                   <span
                     className="text-tertiary font-medium flex-shrink-0"
-                    style={{ fontSize: '11px', backgroundColor: 'var(--surface-secondary)', padding: '2px 8px', borderRadius: '6px' }}
+                    style={{ fontSize: '11px', backgroundColor: 'var(--surface-secondary)', padding: '3px 10px', borderRadius: '6px' }}
                   >
                     {activeMessage.timestamp}
                   </span>

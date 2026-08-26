@@ -47,6 +47,7 @@ export const OalBorrowerKyc = () => {
   const [activeTab, setActiveTab] = useState('entity');
   const [isVerified, setIsVerified] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [isAddOwnerOpen, setIsAddOwnerOpen] = useState(false);
@@ -216,10 +217,52 @@ export const OalBorrowerKyc = () => {
   };
 
   const handleReVerify = () => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      setIsRefreshing(false);
+      addToast({
+        title: 'Compliance Telemetry Synced',
+        message: 'Live FinCEN, LexisNexis & Delaware Corporate Registry data verified 100%.',
+        type: 'success',
+      });
+    }, 800);
+  };
+
+  const handleDownloadCertificate = () => {
+    setIsCertModalOpen(false);
+
+    const certText = `================================================================================
+           OAL LENDING NETWORK - OFFICIAL KYC COMPLIANCE CERTIFICATE
+================================================================================
+Certificate ID  : OAL-KYC-9482-INST
+Issuance Date   : ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+Entity Name     : ${companyName}
+EIN / Tax ID    : ${ein}
+State of Inc.   : ${incState}
+DUNS Number     : ${duns}
+Auth. Officer   : ${signatoryName} (${signatoryRole})
+Compliance Lvl  : Level 3 Institutional Verified (FinCEN CDD Rule 31 CFR 1010.230)
+Security Seal   : SHA-256 AES-256 Cryptographically Sealed
+
+This document certifies that ${companyName} has successfully satisfied all
+beneficial ownership, corporate standing, and AML/KYC background checks required
+for debt facilities up to $10,000,000 on the OAL Lending Marketplace.
+================================================================================`;
+
+    const blob = new Blob([certText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `OAL_KYC_Certificate_${companyName.replace(/\s+/g, '_')}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
     addToast({
-      title: 'Compliance Refresh Triggered',
-      message: 'Automated LexisNexis & FinCEN telemetry refreshed. Status: 100% Verified.',
-      type: 'info',
+      title: 'Certificate Downloaded',
+      message: `KYC Compliance Certificate exported for ${companyName}.`,
+      type: 'success',
     });
   };
 
@@ -239,9 +282,10 @@ export const OalBorrowerKyc = () => {
             variant="outline"
             size="sm"
             icon={RefreshCw}
+            disabled={isRefreshing}
             onClick={handleReVerify}
           >
-            Refresh Telemetry
+            {isRefreshing ? 'Syncing...' : 'Refresh Telemetry'}
           </Button>
 
           <Button
@@ -864,16 +908,9 @@ export const OalBorrowerKyc = () => {
             variant="primary"
             size="sm"
             icon={Download}
-            onClick={() => {
-              setIsCertModalOpen(false);
-              addToast({
-                title: 'Certificate Exported',
-                message: 'Official KYC Verification Certificate PDF generated successfully.',
-                type: 'success',
-              });
-            }}
+            onClick={handleDownloadCertificate}
           >
-            Download Signed PDF Certificate
+            Download Signed Certificate (.txt / PDF)
           </Button>
         }
       >

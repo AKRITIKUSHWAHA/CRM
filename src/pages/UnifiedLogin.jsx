@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   ShieldCheck,
   User,
@@ -10,11 +10,11 @@ import {
   TrendingUp,
   DollarSign,
   Users,
-  Briefcase,
   Landmark,
   Shield,
   CheckCircle2,
-  ChevronRight
+  ChevronRight,
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -133,33 +133,41 @@ const oalRoles = [
   },
 ];
 
-export const UnifiedLogin = () => {
+export const UnifiedLogin = ({ mode }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const { addToast } = useToast();
 
-  const [activePlatform, setActivePlatform] = useState('crm');
-  const [selectedRole, setSelectedRole] = useState(crmRoles[0]);
-  const [email, setEmail] = useState(crmRoles[0].email);
-  const [password, setPassword] = useState(crmRoles[0].password);
+  // Determine current active platform based on prop or current URL path
+  const currentPlatform = mode || (location.pathname.includes('/oal') ? 'oal' : 'crm');
+
+  const roleList = currentPlatform === 'crm' ? crmRoles : oalRoles;
+
+  const [selectedRole, setSelectedRole] = useState(roleList[0]);
+  const [email, setEmail] = useState(roleList[0].email);
+  const [password, setPassword] = useState(roleList[0].password);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSelectRole = (r, platform) => {
+  useEffect(() => {
+    const list = currentPlatform === 'crm' ? crmRoles : oalRoles;
+    setSelectedRole(list[0]);
+    setEmail(list[0].email);
+    setPassword(list[0].password);
+  }, [currentPlatform]);
+
+  const handleSelectRole = (r) => {
     setSelectedRole(r);
     setEmail(r.email);
     setPassword(r.password);
-    setActivePlatform(platform);
   };
 
-  const handlePlatformTabChange = (platform) => {
-    setActivePlatform(platform);
-    const firstRole = platform === 'crm' ? crmRoles[0] : oalRoles[0];
-    setSelectedRole(firstRole);
-    setEmail(firstRole.email);
-    setPassword(firstRole.password);
+  const handleSwitchPlatform = () => {
+    const targetPath = currentPlatform === 'crm' ? '/oal/login' : '/crm/login';
+    navigate(targetPath);
   };
 
-  const executeLogin = (roleObj, platformMode) => {
+  const executeLogin = (roleObj) => {
     setIsLoading(true);
 
     setTimeout(() => {
@@ -169,9 +177,9 @@ export const UnifiedLogin = () => {
           email: roleObj.email,
           role: roleObj.role,
           company: roleObj.company,
-          tenantId: platformMode === 'crm' ? 'TENANT-08492' : `OAL-${roleObj.id.toUpperCase()}-9910`,
+          tenantId: currentPlatform === 'crm' ? 'TENANT-08492' : `OAL-${roleObj.id.toUpperCase()}-9910`,
         },
-        platformMode
+        currentPlatform
       );
 
       addToast({
@@ -187,17 +195,20 @@ export const UnifiedLogin = () => {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    executeLogin(selectedRole, activePlatform);
+    executeLogin(selectedRole);
   };
 
-  const currentRoleList = activePlatform === 'crm' ? crmRoles : oalRoles;
+  const primaryThemeColor = currentPlatform === 'crm' ? '#1d4ed8' : '#0f766e';
+  const primaryLightBg = currentPlatform === 'crm' ? 'var(--primary-light)' : 'var(--accent-light)';
 
   return (
     <div
       style={{
         minHeight: '100vh',
         backgroundColor: 'var(--background)',
-        backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(29, 78, 216, 0.03) 0%, transparent 65%)',
+        backgroundImage: currentPlatform === 'crm'
+          ? 'radial-gradient(circle at 50% 0%, rgba(29, 78, 216, 0.03) 0%, transparent 65%)'
+          : 'radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.03) 0%, transparent 65%)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -229,41 +240,22 @@ export const UnifiedLogin = () => {
         >
           {/* Brand Identity */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '8px',
-                  backgroundColor: '#1d4ed8',
-                  color: '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 800,
-                  fontSize: '13px',
-                  fontFamily: 'var(--font-display)',
-                }}
-              >
-                nE
-              </div>
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '8px',
-                  backgroundColor: '#0f766e',
-                  color: '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 800,
-                  fontSize: '13px',
-                  fontFamily: 'var(--font-display)',
-                }}
-              >
-                OA
-              </div>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '8px',
+                backgroundColor: primaryThemeColor,
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+                fontSize: '14px',
+                fontFamily: 'var(--font-display)',
+              }}
+            >
+              {currentPlatform === 'crm' ? 'nE' : 'OA'}
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -279,50 +271,41 @@ export const UnifiedLogin = () => {
                     letterSpacing: '-0.02em',
                   }}
                 >
-                  CRM nErgy & OAL Network
+                  {currentPlatform === 'crm' ? 'CRM nErgy Enterprise Gateway' : 'OAL Network Marketplace Gateway'}
                 </h1>
-                <span
-                  style={{
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    color: 'var(--text-secondary)',
-                  }}
-                >
-                  Unified Enterprise Access
-                </span>
               </div>
               <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '2px' }}>
-                Secure access to your business and lending workspace
+                {currentPlatform === 'crm'
+                  ? 'All 5 CRM Role Presets — Select any role on the left to auto-fill & login instantly'
+                  : 'All 4 OAL Marketplace Role Presets — Select any persona role to auto-fill & login instantly'}
               </span>
             </div>
           </div>
 
-          {/* System Status Indicator */}
-          <div
+          {/* Switch Platform Gateway Button */}
+          <button
+            type="button"
+            onClick={handleSwitchPlatform}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
-              padding: '0.375rem 0.75rem',
-              borderRadius: '9999px',
+              padding: '0.5rem 1rem',
+              borderRadius: '8px',
               backgroundColor: 'var(--surface)',
               border: '1px solid var(--border)',
               fontSize: '12px',
-              fontWeight: 500,
-              color: 'var(--text-secondary)',
+              fontWeight: 600,
+              color: 'var(--text-primary)',
+              cursor: 'pointer',
+              transition: 'all var(--transition-fast)',
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = primaryThemeColor; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; }}
           >
-            <span
-              style={{
-                width: '7px',
-                height: '7px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--success)',
-                display: 'inline-block',
-              }}
-            />
-            <span>Secure Demo Environment</span>
-          </div>
+            <span>Switch to {currentPlatform === 'crm' ? 'OAL Network Marketplace Login (4 Roles)' : 'CRM nErgy Enterprise Login (5 Roles)'}</span>
+            <ChevronRight size={14} style={{ color: primaryThemeColor }} />
+          </button>
         </div>
 
         {/* Main 2-Column Desktop Grid / 1-Column Mobile Stack */}
@@ -335,7 +318,7 @@ export const UnifiedLogin = () => {
           }}
           className="login-grid-wrapper"
         >
-          {/* Left Panel: Segmented Control & Role Selection List (7 Cols) */}
+          {/* Left Panel: All Roles for Current Platform (7 Cols) */}
           <div
             style={{
               gridColumn: 'span 7 / span 7',
@@ -351,7 +334,6 @@ export const UnifiedLogin = () => {
             className="login-left-card"
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              {/* Segmented Control Platform Switcher */}
               <div
                 style={{
                   display: 'flex',
@@ -362,104 +344,39 @@ export const UnifiedLogin = () => {
                   borderBottom: '1px solid var(--border)',
                 }}
               >
-                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
-                  Select Persona Role
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  {currentPlatform === 'crm' ? 'CRM nErgy Roles (5 Presets)' : 'OAL Network Roles (4 Presets)'}
                 </span>
-
-                {/* Polished Segmented Control */}
-                <div
+                <span
                   style={{
-                    display: 'inline-flex',
-                    padding: '3px',
-                    borderRadius: '8px',
-                    backgroundColor: 'var(--surface-secondary)',
-                    border: '1px solid var(--border)',
+                    fontSize: '11px',
+                    color: primaryThemeColor,
+                    backgroundColor: primaryLightBg,
+                    padding: '3px 8px',
+                    borderRadius: '9999px',
+                    fontWeight: 600,
                   }}
                 >
-                  <button
-                    type="button"
-                    onClick={() => handlePlatformTabChange('crm')}
-                    style={{
-                      padding: '0.4rem 0.875rem',
-                      borderRadius: '6px',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      border: 'none',
-                      cursor: 'pointer',
-                      transition: 'all var(--transition-fast)',
-                      backgroundColor: activePlatform === 'crm' ? '#1d4ed8' : 'transparent',
-                      color: activePlatform === 'crm' ? '#ffffff' : 'var(--text-secondary)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                    }}
-                  >
-                    <span>CRM Enterprise</span>
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        padding: '1px 5px',
-                        borderRadius: '4px',
-                        backgroundColor: activePlatform === 'crm' ? 'rgba(255,255,255,0.2)' : 'var(--border)',
-                      }}
-                    >
-                      5 roles
-                    </span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handlePlatformTabChange('oal')}
-                    style={{
-                      padding: '0.4rem 0.875rem',
-                      borderRadius: '6px',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      border: 'none',
-                      cursor: 'pointer',
-                      transition: 'all var(--transition-fast)',
-                      backgroundColor: activePlatform === 'oal' ? '#0f766e' : 'transparent',
-                      color: activePlatform === 'oal' ? '#ffffff' : 'var(--text-secondary)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                    }}
-                  >
-                    <span>OAL Marketplace</span>
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        padding: '1px 5px',
-                        borderRadius: '4px',
-                        backgroundColor: activePlatform === 'oal' ? 'rgba(255,255,255,0.2)' : 'var(--border)',
-                      }}
-                    >
-                      4 roles
-                    </span>
-                  </button>
-                </div>
+                  Click any role card to auto-fill credentials
+                </span>
               </div>
 
-              {/* Role Cards List */}
+              {/* Role Cards List for Current Platform */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                {currentRoleList.map((r) => {
+                {roleList.map((r) => {
                   const Icon = r.icon;
                   const isSelected = selectedRole.id === r.id;
 
                   return (
                     <div
                       key={r.id}
-                      onClick={() => handleSelectRole(r, activePlatform)}
+                      onClick={() => handleSelectRole(r)}
                       style={{
                         padding: '0.875rem 1rem',
                         borderRadius: '10px',
                         border: '1px solid',
-                        borderColor: isSelected
-                          ? activePlatform === 'crm' ? '#1d4ed8' : '#0f766e'
-                          : 'var(--border)',
-                        backgroundColor: isSelected
-                          ? activePlatform === 'crm' ? 'var(--primary-light)' : 'var(--accent-light)'
-                          : 'var(--surface)',
+                        borderColor: isSelected ? primaryThemeColor : 'var(--border)',
+                        backgroundColor: isSelected ? primaryLightBg : 'var(--surface)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -470,12 +387,10 @@ export const UnifiedLogin = () => {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
                         <div
                           style={{
-                            width: '36px',
-                            height: '36px',
+                            width: '38px',
+                            height: '38px',
                             borderRadius: '50%',
-                            backgroundColor: isSelected
-                              ? activePlatform === 'crm' ? '#1d4ed8' : '#0f766e'
-                              : 'var(--surface-secondary)',
+                            backgroundColor: isSelected ? primaryThemeColor : 'var(--surface-secondary)',
                             color: isSelected ? '#ffffff' : 'var(--text-secondary)',
                             display: 'flex',
                             alignItems: 'center',
@@ -492,13 +407,10 @@ export const UnifiedLogin = () => {
                               {r.title}
                             </span>
                             {isSelected && (
-                              <CheckCircle2
-                                size={14}
-                                style={{ color: activePlatform === 'crm' ? '#1d4ed8' : '#0f766e' }}
-                              />
+                              <CheckCircle2 size={14} style={{ color: primaryThemeColor }} />
                             )}
                           </div>
-                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '1px' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
                             {r.name} &bull; <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)' }}>{r.email}</span>
                           </span>
                         </div>
@@ -511,7 +423,7 @@ export const UnifiedLogin = () => {
                             fontSize: '11px',
                             color: 'var(--text-tertiary)',
                             backgroundColor: 'var(--surface-secondary)',
-                            padding: '3px 7px',
+                            padding: '4px 8px',
                             borderRadius: '4px',
                             border: '1px solid var(--border)',
                           }}
@@ -523,24 +435,20 @@ export const UnifiedLogin = () => {
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleSelectRole(r, activePlatform);
-                            executeLogin(r, activePlatform);
+                            handleSelectRole(r);
+                            executeLogin(r);
                           }}
                           style={{
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '0.375rem',
-                            padding: '0.375rem 0.75rem',
+                            padding: '0.4rem 0.875rem',
                             borderRadius: '6px',
                             fontSize: '12px',
                             fontWeight: 600,
                             border: '1px solid',
-                            borderColor: isSelected
-                              ? activePlatform === 'crm' ? '#1d4ed8' : '#0f766e'
-                              : 'var(--border)',
-                            backgroundColor: isSelected
-                              ? activePlatform === 'crm' ? '#1d4ed8' : '#0f766e'
-                              : 'var(--surface)',
+                            borderColor: isSelected ? primaryThemeColor : 'var(--border)',
+                            backgroundColor: isSelected ? primaryThemeColor : 'var(--surface)',
                             color: isSelected ? '#ffffff' : 'var(--text-primary)',
                             cursor: 'pointer',
                             transition: 'all var(--transition-fast)',
@@ -568,8 +476,10 @@ export const UnifiedLogin = () => {
                 borderTop: '1px solid var(--border)',
               }}
             >
-              <span>Tenant-isolated enterprise environment</span>
-              <span>Select a role to continue</span>
+              <span>{currentPlatform === 'crm' ? 'Isolated CRM Tenant Database' : 'OAL Marketplace Underwriting Vault'}</span>
+              <span style={{ fontWeight: 600, color: primaryThemeColor }}>
+                {currentPlatform === 'crm' ? '5 CRM Roles Available' : '4 OAL Roles Available'}
+              </span>
             </div>
           </div>
 
@@ -605,7 +515,7 @@ export const UnifiedLogin = () => {
                     width: '44px',
                     height: '44px',
                     borderRadius: '10px',
-                    backgroundColor: activePlatform === 'crm' ? '#1d4ed8' : '#0f766e',
+                    backgroundColor: primaryThemeColor,
                     color: '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
@@ -616,7 +526,7 @@ export const UnifiedLogin = () => {
                     marginBottom: '0.5rem',
                   }}
                 >
-                  {activePlatform === 'crm' ? 'nE' : 'OA'}
+                  {currentPlatform === 'crm' ? 'nE' : 'OA'}
                 </div>
                 <h2
                   style={{
@@ -629,7 +539,7 @@ export const UnifiedLogin = () => {
                   {selectedRole.title}
                 </h2>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                  Sign in to continue to your {activePlatform === 'crm' ? 'CRM workspace' : 'OAL lending portal'}.
+                  Sign in to continue to your {currentPlatform === 'crm' ? 'CRM workspace' : 'OAL lending portal'}.
                 </span>
               </div>
 
@@ -659,7 +569,6 @@ export const UnifiedLogin = () => {
                       color: 'var(--text-primary)',
                       fontSize: '13px',
                       outline: 'none',
-                      transition: 'border-color var(--transition-fast)',
                     }}
                   />
                 </div>
@@ -667,7 +576,7 @@ export const UnifiedLogin = () => {
 
               {/* Form Input: Password */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', textAlign: 'left' }}>
-                <div style={{ display: 'flex', itemsCenter: 'center', justifyBetween: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
                     Password
                   </label>
@@ -730,7 +639,7 @@ export const UnifiedLogin = () => {
                   width: '100%',
                   height: '48px',
                   borderRadius: '8px',
-                  backgroundColor: activePlatform === 'crm' ? '#1d4ed8' : '#0f766e',
+                  backgroundColor: primaryThemeColor,
                   color: '#ffffff',
                   border: 'none',
                   fontSize: '14px',

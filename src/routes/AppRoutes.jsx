@@ -5,7 +5,7 @@ import { OalLayout } from '../layouts/OalLayout';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 
-// Unified Gateway Login
+// Gateway Login Pages
 import { UnifiedLogin } from '../pages/UnifiedLogin';
 
 import { CrmSignup } from '../pages/crm/CrmSignup';
@@ -102,11 +102,11 @@ import { Showcase } from '../pages/Showcase';
 export const AppRoutes = () => {
   return (
     <Routes>
-      {/* Standalone Gateway Login Routes */}
-      <Route path="/" element={<UnifiedLogin />} />
-      <Route path="/login" element={<UnifiedLogin />} />
-      <Route path="/crm/login" element={<UnifiedLogin />} />
-      <Route path="/oal/login" element={<UnifiedLogin />} />
+      {/* Separate Gateway Login Pages */}
+      <Route path="/" element={<UnifiedLogin mode="crm" />} />
+      <Route path="/login" element={<UnifiedLogin mode="crm" />} />
+      <Route path="/crm/login" element={<UnifiedLogin mode="crm" />} />
+      <Route path="/oal/login" element={<UnifiedLogin mode="oal" />} />
 
       <Route element={<CrmLayout />}>
         <Route path="/showcase" element={<Showcase />} />
@@ -245,7 +245,7 @@ export const AppRoutes = () => {
         </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/crm/login" replace />} />
     </Routes>
   );
 };

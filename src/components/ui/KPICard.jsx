@@ -8,7 +8,7 @@ export const KPICard = ({
   value,
   change,
   changeType = 'positive', // 'positive' | 'negative' | 'neutral'
-  changePeriod = 'vs last 7 days',
+  changePeriod = '',
   icon: Icon,
   iconBg = 'rgba(22, 163, 74, 0.1)',
   iconColor = '#16a34a',
@@ -36,8 +36,8 @@ export const KPICard = ({
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',
         borderRadius: '14px',
-        padding: '1.25rem',
-        height: '132px',
+        padding: '0.9rem 1rem',
+        minHeight: '122px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -48,6 +48,7 @@ export const KPICard = ({
         boxSizing: 'border-box',
         minWidth: 0,
         width: '100%',
+        gap: '0.35rem',
       }}
       onMouseEnter={(e) => {
         if (onClick) {
@@ -65,7 +66,7 @@ export const KPICard = ({
       }}
     >
       {/* Header Row: Title on Left, Icon on Right */}
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2 min-w-0">
         <span
           className="truncate"
           style={{
@@ -73,7 +74,7 @@ export const KPICard = ({
             fontWeight: 700,
             color: 'var(--text-secondary)',
             textTransform: 'uppercase',
-            letterSpacing: '0.05em',
+            letterSpacing: '0.04em',
           }}
         >
           {title}
@@ -82,9 +83,9 @@ export const KPICard = ({
         {Icon && (
           <div
             style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '9px',
+              width: '30px',
+              height: '30px',
+              borderRadius: '8px',
               backgroundColor: iconBg,
               color: iconColor,
               display: 'flex',
@@ -93,20 +94,22 @@ export const KPICard = ({
               flexShrink: 0,
             }}
           >
-            <Icon size={18} />
+            <Icon size={15} />
           </div>
         )}
       </div>
 
       {/* Value */}
       <div
+        className="truncate kpi-value"
         style={{
-          fontSize: '1.75rem',
+          fontSize: '1.35rem',
           fontWeight: 800,
           color: 'var(--text-primary)',
           fontFamily: 'var(--font-display)',
-          lineHeight: 1,
+          lineHeight: 1.2,
           letterSpacing: '-0.02em',
+          margin: '2px 0',
         }}
       >
         {value}
@@ -114,13 +117,13 @@ export const KPICard = ({
 
       {/* Contextual Growth Pill Line */}
       {(change || changePeriod) && (
-        <div className="flex items-center gap-1.5 text-xs">
+        <div className="flex items-center gap-1.5 text-xs flex-wrap min-w-0">
           {change && (
             <span
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '2px',
+                gap: '3px',
                 padding: '2px 7px',
                 borderRadius: '9999px',
                 backgroundColor: changeType === 'negative' ? 'rgba(220, 38, 38, 0.1)' : 'rgba(22, 163, 74, 0.1)',
@@ -130,12 +133,12 @@ export const KPICard = ({
                 whiteSpace: 'nowrap',
               }}
             >
-              <TrendIcon size={12} />
+              <TrendIcon size={11} />
               {change}
             </span>
           )}
           {changePeriod && (
-            <span className="truncate" style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+            <span className="truncate" style={{ fontSize: '10.5px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
               {changePeriod}
             </span>
           )}

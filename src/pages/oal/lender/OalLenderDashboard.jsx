@@ -22,15 +22,24 @@ export const OalLenderDashboard = () => {
           </p>
         </div>
 
-        <Button
-          variant="primary"
-          size="sm"
-          icon={ArrowRight}
-          onClick={() => navigate('/oal/lender/leads')}
-          style={{ backgroundColor: 'var(--accent)', borderColor: 'var(--accent)', fontSize: '12px', flexShrink: 0 }}
-        >
-          View Qualified Leads Pool
-        </Button>
+        <div className="flex justify-end w-full sm:w-auto">
+          <Button
+            variant="primary"
+            size="sm"
+            icon={ArrowRight}
+            onClick={() => navigate('/oal/lender/leads')}
+            style={{
+              backgroundColor: 'var(--accent)',
+              borderColor: 'var(--accent)',
+              fontSize: '12px',
+              padding: '6px 14px',
+              width: 'auto',
+              flexShrink: 0,
+            }}
+          >
+            View Qualified Leads Pool
+          </Button>
+        </div>
       </div>
 
       {/* KPI Cards - Compact Sized 5-in-1 Line on Desktop, Responsive on Mobile */}
@@ -38,9 +47,9 @@ export const OalLenderDashboard = () => {
         <div onClick={() => navigate('/oal/lender/leads')} className="cursor-pointer">
           <KPICard
             className="kpi-compact"
-            title="New Qualified Leads"
+            title="Qualified Leads"
             value={lenderLeads.length}
-            change="Pre-Scored Grade A+"
+            change="Grade A+ Match"
             changeType="positive"
             icon={Users}
           />
@@ -49,7 +58,7 @@ export const OalLenderDashboard = () => {
           <KPICard
             className="kpi-compact"
             title="Applications"
-            value="8 Underwriting"
+            value="8 Active"
             change="KYC Verified"
             changeType="positive"
             icon={FileText}
@@ -69,8 +78,8 @@ export const OalLenderDashboard = () => {
           <KPICard
             className="kpi-compact"
             title="Accepted Offers"
-            value="3 Deals Executed"
-            change="100% Rate Match"
+            value="3 Deals"
+            change="100% Match"
             changeType="positive"
             icon={CheckCircle2}
           />

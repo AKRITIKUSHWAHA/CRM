@@ -231,37 +231,251 @@ export const OalBorrowerKyc = () => {
   const handleDownloadCertificate = () => {
     setIsCertModalOpen(false);
 
-    const certText = `================================================================================
-           OAL LENDING NETWORK - OFFICIAL KYC COMPLIANCE CERTIFICATE
-================================================================================
-Certificate ID  : OAL-KYC-9482-INST
-Issuance Date   : ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-Entity Name     : ${companyName}
-EIN / Tax ID    : ${ein}
-State of Inc.   : ${incState}
-DUNS Number     : ${duns}
-Auth. Officer   : ${signatoryName} (${signatoryRole})
-Compliance Lvl  : Level 3 Institutional Verified (FinCEN CDD Rule 31 CFR 1010.230)
-Security Seal   : SHA-256 AES-256 Cryptographically Sealed
+    const printWindow = window.open('', '_blank', 'width=900,height=850');
+    if (!printWindow) {
+      addToast({
+        title: 'Popup Blocked',
+        message: 'Please allow popups to download/print the PDF certificate.',
+        type: 'warning'
+      });
+      return;
+    }
 
-This document certifies that ${companyName} has successfully satisfied all
-beneficial ownership, corporate standing, and AML/KYC background checks required
-for debt facilities up to $10,000,000 on the OAL Lending Marketplace.
-================================================================================`;
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
 
-    const blob = new Blob([certText], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `OAL_KYC_Certificate_${companyName.replace(/\s+/g, '_')}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>KYC_Certificate_${companyName.replace(/\\s+/g, '_')}</title>
+          <style>
+            @page { size: A4 portrait; margin: 15mm; }
+            * { box-sizing: border-box; }
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+              color: #0f172a;
+              background-color: #f8fafc;
+              margin: 0;
+              padding: 20px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            .cert-frame {
+              width: 100%;
+              max-width: 780px;
+              border: 10px solid #0f172a;
+              padding: 6px;
+              background: #ffffff;
+              box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+            .cert-inner-border {
+              border: 2px solid #2563eb;
+              padding: 36px 40px;
+              text-align: center;
+              position: relative;
+              background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fbfcfe 100%);
+            }
+            .cert-header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              border-bottom: 2px solid #e2e8f0;
+              padding-bottom: 16px;
+              margin-bottom: 20px;
+            }
+            .cert-logo {
+              font-size: 20px;
+              font-weight: 900;
+              color: #0f172a;
+              letter-spacing: -0.02em;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            }
+            .cert-badge {
+              background: #ecfdf5;
+              color: #059669;
+              padding: 5px 12px;
+              border-radius: 9999px;
+              font-weight: 800;
+              font-size: 11px;
+              border: 1px solid #a7f3d0;
+              letter-spacing: 0.05em;
+            }
+            .cert-title {
+              font-size: 24px;
+              font-weight: 900;
+              color: #0f172a;
+              text-transform: uppercase;
+              letter-spacing: 0.06em;
+              margin: 12px 0 4px;
+            }
+            .cert-subtitle {
+              font-size: 12px;
+              color: #64748b;
+              text-transform: uppercase;
+              letter-spacing: 0.12em;
+              font-weight: 700;
+              margin-bottom: 24px;
+            }
+            .cert-body {
+              font-size: 13.5px;
+              line-height: 1.6;
+              color: #334155;
+              margin-bottom: 24px;
+              text-align: center;
+              max-width: 620px;
+              margin-left: auto;
+              margin-right: auto;
+            }
+            .cert-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 14px;
+              background: #f8fafc;
+              border: 1px solid #e2e8f0;
+              border-radius: 8px;
+              padding: 18px 20px;
+              text-align: left;
+              margin-bottom: 28px;
+            }
+            .cert-field-label {
+              font-size: 10.5px;
+              color: #64748b;
+              text-transform: uppercase;
+              font-weight: 700;
+              letter-spacing: 0.03em;
+            }
+            .cert-field-value {
+              font-size: 13.5px;
+              font-weight: 700;
+              color: #0f172a;
+              margin-top: 2px;
+            }
+            .cert-footer {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-end;
+              padding-top: 18px;
+              border-top: 1px solid #e2e8f0;
+            }
+            .cert-sign {
+              text-align: left;
+            }
+            .sign-line {
+              width: 180px;
+              border-bottom: 1.5px solid #64748b;
+              margin-bottom: 6px;
+              font-family: 'Brush Script MT', cursive, sans-serif;
+              font-size: 20px;
+              color: #1e40af;
+            }
+            .cert-seal {
+              border: 3px double #2563eb;
+              border-radius: 50%;
+              width: 80px;
+              height: 80px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              font-size: 8.5px;
+              font-weight: 900;
+              color: #1e40af;
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+              line-height: 1.25;
+              background: #eff6ff;
+            }
+            @media print {
+              body { padding: 0; background: none; }
+              .cert-frame { box-shadow: none; border-color: #0f172a; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="cert-frame">
+            <div class="cert-inner-border">
+              <div class="cert-header">
+                <div class="cert-logo">⚡ OAL LENDING NETWORK</div>
+                <div class="cert-badge">● FINCEN CDD LEVEL 3 VERIFIED</div>
+              </div>
+
+              <div class="cert-title">Certificate of Corporate KYC Compliance</div>
+              <div class="cert-subtitle">Official Institutional Borrowing Authorization</div>
+
+              <div class="cert-body">
+                This official compliance certificate attests that <strong>${companyName}</strong> has satisfied 100% of corporate identity, Beneficial Ownership (FinCEN 31 CFR § 1010.230), and Delaware State corporate charter validation for debt facilities up to $10,000,000.
+              </div>
+
+              <div class="cert-grid">
+                <div>
+                  <div class="cert-field-label">Legal Entity Name</div>
+                  <div class="cert-field-value">${companyName}</div>
+                </div>
+                <div>
+                  <div class="cert-field-label">Taxpayer ID (EIN)</div>
+                  <div class="cert-field-value">${ein}</div>
+                </div>
+                <div>
+                  <div class="cert-field-label">Jurisdiction & Entity</div>
+                  <div class="cert-field-value">${incState}</div>
+                </div>
+                <div>
+                  <div class="cert-field-label">D-U-N-S Number</div>
+                  <div class="cert-field-value">${duns}</div>
+                </div>
+                <div>
+                  <div class="cert-field-label">Authorized Signatory</div>
+                  <div class="cert-field-value">${signatoryName} (${signatoryRole})</div>
+                </div>
+                <div>
+                  <div class="cert-field-label">Immutable Security Hash</div>
+                  <div class="cert-field-value" style="font-family: monospace; font-size: 11px;">SHA256-OAL-9482-CDD</div>
+                </div>
+              </div>
+
+              <div class="cert-footer">
+                <div class="cert-sign">
+                  <div class="sign-line">${signatoryName}</div>
+                  <div style="font-size: 11.5px; font-weight: 700; color: #0f172a;">Authorized Officer</div>
+                  <div style="font-size: 10.5px; color: #64748b;">Issued on ${currentDate}</div>
+                </div>
+
+                <div class="cert-seal">
+                  <span>★ OAL ★</span>
+                  <span>COMPLIANCE</span>
+                  <span>SEAL</span>
+                </div>
+
+                <div class="cert-sign" style="text-align: right;">
+                  <div class="sign-line" style="text-align: right; width: 100%;">Marcus Sterling</div>
+                  <div style="font-size: 11.5px; font-weight: 700; color: #0f172a;">Chief Risk & Compliance Officer</div>
+                  <div style="font-size: 10.5px; color: #64748b;">OAL Network Vault</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+              }, 400);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
 
     addToast({
-      title: 'Certificate Downloaded',
-      message: `KYC Compliance Certificate exported for ${companyName}.`,
+      title: 'PDF Certificate Generated',
+      message: `Official KYC Compliance Certificate ready for ${companyName}.`,
       type: 'success',
     });
   };

@@ -313,17 +313,16 @@ export const OalBorrowerOffers = () => {
               }}
               className="flex flex-col gap-4"
             >
-              {/* Card Header Row: Lender, Badge & Loan ID */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-subtle">
+              {/* Card Header Row: Lender, Badge & Status */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <div
                     style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '10px',
-                      backgroundColor: 'var(--surface-secondary)',
-                      border: '1px solid var(--border)',
-                      color: 'var(--accent)',
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+                      color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -336,8 +335,8 @@ export const OalBorrowerOffers = () => {
                   </div>
 
                   <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 style={{ fontSize: '17px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                         {offer.lender}
                       </h3>
                       <span
@@ -361,7 +360,7 @@ export const OalBorrowerOffers = () => {
                   </div>
                 </div>
 
-                <Badge variant={isThisAccepted ? 'success' : 'neutral'}>
+                <Badge variant={isThisAccepted ? 'success' : 'neutral'} style={{ padding: '4px 10px', fontSize: '12px', flexShrink: 0 }}>
                   {isThisAccepted ? '● Accepted Facility' : '● Available for Execution'}
                 </Badge>
               </div>

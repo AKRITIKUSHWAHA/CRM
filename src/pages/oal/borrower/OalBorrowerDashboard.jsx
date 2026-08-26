@@ -107,28 +107,29 @@ export const OalBorrowerDashboard = () => {
       </div>
 
       {/* 2. 11-Stage Application Lifecycle Stepper */}
-      <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
-        <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-          <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
+      <div className="flex flex-col gap-2.5">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
             11-Stage Marketplace Application Status
-          </span>
-          <Badge variant="success" icon={Sparkles}>
+          </h2>
+          <Badge variant="success" icon={Sparkles} style={{ display: 'inline-flex', width: 'auto' }}>
             Current Stage: {currentStageName}
           </Badge>
         </div>
 
-        {/* Stepper Horizontal Scroll Container */}
-        <div
-          style={{
-            overflowX: 'auto',
-            paddingBottom: '0.25rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '0.5rem',
-            WebkitOverflowScrolling: 'touch',
-          }}
-        >
+        <Card style={{ padding: '1.5rem 1.75rem', borderRadius: '12px' }}>
+          {/* Stepper Horizontal Scroll Container */}
+          <div
+            style={{
+              overflowX: 'auto',
+              padding: '0.5rem 0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '0.75rem',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
           {stageNames.map((name, idx) => {
             const isCompleted = idx < applicationStage;
             const isActive = idx === applicationStage;
@@ -192,6 +193,7 @@ export const OalBorrowerDashboard = () => {
           })}
         </div>
       </Card>
+    </div>
 
       {/* 3. Core 4 Clean Metric Cards */}
       <div className="grid-responsive-kpi">

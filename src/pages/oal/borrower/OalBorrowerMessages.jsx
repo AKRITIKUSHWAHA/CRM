@@ -137,34 +137,38 @@ export const OalBorrowerMessages = () => {
         </div>
       </div>
 
-      {/* 2. Compliance Notice */}
-      <Card style={{ padding: '0.85rem 1.25rem', borderRadius: '10px' }} className="surface-secondary border-subtle flex items-center gap-3 text-xs text-secondary">
-        <Lock size={18} className="text-accent flex-shrink-0" />
-        <div>
-          <strong>Marketplace Security Policy:</strong> All term negotiations and rate matching are verified by your assigned Underwriting Advocate (Sarah Jenkins) to protect sensitive corporate financials.
-        </div>
-      </Card>
-
-      {/* 3. Two-Panel Systematic Messaging Layout */}
-      <div className="chat-master-grid">
+      {/* 2. Unified Two-Panel Systematic Messaging Portal */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '320px minmax(0, 1fr)',
+          border: '1px solid var(--border)',
+          borderRadius: '16px',
+          backgroundColor: 'var(--surface)',
+          minHeight: '660px',
+          overflow: 'hidden',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+        className="chat-master-grid"
+      >
         {/* LEFT PANEL: Contacts / Chat Participants */}
-        <Card
+        <div
           style={{
             padding: '1.25rem',
-            borderRadius: '12px',
             display: 'flex',
             flexDirection: 'column',
             gap: '1rem',
             height: '100%',
             overflow: 'hidden',
-            boxSizing: 'border-box',
+            borderRight: '1px solid var(--border)',
+            backgroundColor: 'var(--surface)',
           }}
           className={`${showMobileChat ? 'hidden md:flex' : 'flex'}`}
         >
           {/* Panel Header & Search */}
           <div className="flex flex-col gap-2.5" style={{ width: '100%', minWidth: 0 }}>
             <div className="flex items-center justify-between">
-              <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary)' }}>
+              <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)' }}>
                 Conversations ({contacts.length})
               </span>
               <Badge variant="neutral" style={{ fontSize: '11px' }}>
@@ -245,7 +249,7 @@ export const OalBorrowerMessages = () => {
                     )}
                   </div>
 
-                  {/* Name & Preview - strictly constrained inside card */}
+                  {/* Name & Preview */}
                   <div style={{ minWidth: 0, flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4px', minWidth: 0, width: '100%' }}>
                       <span
@@ -303,186 +307,204 @@ export const OalBorrowerMessages = () => {
               );
             })}
           </div>
-        </Card>
+        </div>
 
         {/* RIGHT PANEL: Live Active Chat Window */}
-        <Card
+        <div
           style={{
-            padding: '1.25rem',
-            borderRadius: '12px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             height: '100%',
+            backgroundColor: 'var(--surface)',
           }}
           className={`${!showMobileChat ? 'hidden md:flex' : 'flex'}`}
         >
-          <div>
-            {/* Active Contact Header Bar */}
-            <div className="flex items-center justify-between pb-3.5 border-b border-subtle mb-3">
-              <div className="flex items-center gap-3 min-w-0">
-                {/* Mobile Back Button */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon={ArrowLeft}
-                  onClick={() => setShowMobileChat(false)}
-                  className="md:hidden"
-                  style={{ padding: '0 6px', height: '32px' }}
-                />
+          {/* Active Contact Seamless Header Bar */}
+          <div
+            style={{
+              padding: '1rem 1.5rem',
+              borderBottom: '1px solid var(--border)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1rem',
+              backgroundColor: 'var(--surface)',
+            }}
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              {/* Mobile Back Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                icon={ArrowLeft}
+                onClick={() => setShowMobileChat(false)}
+                className="md:hidden"
+                style={{ padding: '0 6px', height: '32px' }}
+              />
 
-                <div style={{ position: 'relative', flexShrink: 0 }}>
-                  <div
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: activeContact.avatarBg,
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 800,
+                    fontSize: '13px',
+                  }}
+                >
+                  {activeContact.avatarText}
+                </div>
+                {activeContact.status === 'Online' && (
+                  <span
                     style={{
-                      width: '42px',
-                      height: '42px',
+                      position: 'absolute',
+                      bottom: '0',
+                      right: '0',
+                      width: '10px',
+                      height: '10px',
+                      backgroundColor: '#16a34a',
+                      border: '2px solid var(--surface)',
                       borderRadius: '50%',
-                      background: activeContact.avatarBg,
-                      color: '#ffffff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 800,
-                      fontSize: '14px',
                     }}
-                  >
-                    {activeContact.avatarText}
-                  </div>
-                  {activeContact.status === 'Online' && (
-                    <span
-                      style={{
-                        position: 'absolute',
-                        bottom: '0',
-                        right: '0',
-                        width: '10px',
-                        height: '10px',
-                        backgroundColor: '#16a34a',
-                        border: '2px solid var(--surface)',
-                        borderRadius: '50%',
-                      }}
-                    />
-                  )}
-                </div>
-
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-sm text-primary">
-                      {activeContact.name}
-                    </span>
-                    <Badge variant="success" style={{ fontSize: '10px', padding: '1px 6px' }}>
-                      {activeContact.status}
-                    </Badge>
-                  </div>
-                  <div className="text-xs text-secondary truncate">
-                    {activeContact.role} &bull; {activeContact.organization}
-                  </div>
-                </div>
+                  />
+                )}
               </div>
 
-              {/* Fast Action Links */}
-              <div className="flex items-center gap-2 flex-wrap">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  icon={FileText}
-                  onClick={() => navigate('/oal/borrower/offers')}
-                  style={{ fontSize: '11px', height: '32px' }}
-                >
-                  View Offers
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  icon={Sparkles}
-                  onClick={() => navigate('/oal/borrower/score')}
-                  style={{ fontSize: '11px', height: '32px' }}
-                >
-                  AI Risk Score
-                </Button>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-sm text-primary">
+                    {activeContact.name}
+                  </span>
+                  <Badge variant="success" style={{ fontSize: '10px', padding: '1px 6px' }}>
+                    {activeContact.status}
+                  </Badge>
+                </div>
+                <div className="text-xs text-secondary truncate">
+                  {activeContact.role} &bull; {activeContact.organization}
+                </div>
               </div>
             </div>
 
-            {/* Chat Stream with Authentic Speech Bubbles */}
-            <div
-              className="flex flex-col gap-3.5 pr-2 overflow-y-auto"
-              style={{
-                height: '360px',
-                padding: '0.5rem 0',
-              }}
-            >
-              {/* System Session Banner */}
-              <div className="flex items-center justify-center my-2">
-                <span
-                  style={{
-                    fontSize: '11px',
-                    color: 'var(--text-tertiary)',
-                    backgroundColor: 'var(--surface-secondary)',
-                    padding: '3px 12px',
-                    borderRadius: '9999px',
-                    border: '1px solid var(--border)',
-                  }}
-                >
-                  Authenticated Session with {activeContact.name} &bull; 256-bit TLS
-                </span>
-              </div>
-
-              {messages.map((m) => {
-                const isBorrower = m.sender.includes('Borrower') || m.sender.includes('Aris');
-
-                return (
-                  <div
-                    key={m.id}
-                    className={`flex flex-col ${isBorrower ? 'items-end' : 'items-start'}`}
-                  >
-                    {/* Sender Name */}
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        color: 'var(--text-tertiary)',
-                        marginBottom: '3px',
-                        padding: '0 4px',
-                      }}
-                    >
-                      {m.sender}
-                    </span>
-
-                    {/* Speech Bubble */}
-                    <div
-                      style={{
-                        maxWidth: '75%',
-                        padding: '0.75rem 1rem',
-                        borderRadius: isBorrower ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
-                        backgroundColor: isBorrower ? 'var(--accent)' : 'var(--surface-secondary)',
-                        color: isBorrower ? '#ffffff' : 'var(--text-primary)',
-                        border: isBorrower ? 'none' : '1px solid var(--border)',
-                        fontSize: '13px',
-                        lineHeight: '1.45',
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                      }}
-                    >
-                      {m.text}
-                    </div>
-
-                    {/* Timestamp & Status */}
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        color: 'var(--text-tertiary)',
-                        marginTop: '3px',
-                        padding: '0 4px',
-                      }}
-                    >
-                      {m.time || 'Just now'} &bull; {isBorrower ? 'Delivered' : 'Verified'}
-                    </span>
-                  </div>
-                );
-              })}
-              <div ref={messagesEndRef} />
+            {/* Fast Action Links */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <Button
+                variant="outline"
+                size="sm"
+                icon={FileText}
+                onClick={() => navigate('/oal/borrower/offers')}
+                style={{ fontSize: '11px', height: '32px' }}
+              >
+                View Offers
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                icon={Sparkles}
+                onClick={() => navigate('/oal/borrower/score')}
+                style={{ fontSize: '11px', height: '32px' }}
+              >
+                AI Risk Score
+              </Button>
             </div>
           </div>
 
+          {/* Chat Stream with Authentic Speech Bubbles */}
+          <div
+            className="flex flex-col gap-3.5 pr-2 overflow-y-auto"
+            style={{
+              padding: '1.25rem 1.5rem',
+              flex: 1,
+              maxHeight: '440px',
+              minHeight: '340px',
+            }}
+          >
+            {/* System Session Banner */}
+            <div className="flex items-center justify-center my-1">
+              <span
+                style={{
+                  fontSize: '11px',
+                  color: 'var(--text-tertiary)',
+                  backgroundColor: 'var(--surface-secondary)',
+                  padding: '3px 12px',
+                  borderRadius: '9999px',
+                  border: '1px solid var(--border)',
+                }}
+              >
+                Authenticated Session with {activeContact.name} &bull; 256-bit TLS
+              </span>
+            </div>
+
+            {messages.map((m) => {
+              const isBorrower = m.sender.includes('Borrower') || m.sender.includes('Aris');
+
+              return (
+                <div
+                  key={m.id}
+                  className={`flex flex-col ${isBorrower ? 'items-end' : 'items-start'}`}
+                >
+                  {/* Sender Name */}
+                  <span
+                    style={{
+                      fontSize: '10px',
+                      color: 'var(--text-tertiary)',
+                      marginBottom: '3px',
+                      padding: '0 4px',
+                    }}
+                  >
+                    {m.sender}
+                  </span>
+
+                  {/* Speech Bubble */}
+                  <div
+                    style={{
+                      maxWidth: '75%',
+                      padding: '0.75rem 1rem',
+                      borderRadius: isBorrower ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
+                      backgroundColor: isBorrower ? 'var(--accent)' : 'var(--surface-secondary)',
+                      color: isBorrower ? '#ffffff' : 'var(--text-primary)',
+                      border: isBorrower ? 'none' : '1px solid var(--border)',
+                      fontSize: '13px',
+                      lineHeight: '1.45',
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                    }}
+                  >
+                    {m.text}
+                  </div>
+
+                  {/* Timestamp & Status */}
+                  <span
+                    style={{
+                      fontSize: '10px',
+                      color: 'var(--text-tertiary)',
+                      marginTop: '3px',
+                      padding: '0 4px',
+                    }}
+                  >
+                    {m.time || 'Just now'} &bull; {isBorrower ? 'Delivered' : 'Verified'}
+                  </span>
+                </div>
+              );
+            })}
+            <div ref={messagesEndRef} />
+          </div>
+
           {/* Quick Negotiation Chips + Composer */}
-          <div className="flex flex-col gap-2.5 pt-3 border-t border-subtle mt-2">
+          <div
+            style={{
+              padding: '1rem 1.5rem',
+              borderTop: '1px solid var(--border)',
+              backgroundColor: 'var(--surface)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.65rem',
+            }}
+          >
             {/* Quick Action Suggestion Chips */}
             <div className="flex items-center gap-2 overflow-x-auto pb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
               <span className="text-tertiary text-xs whitespace-nowrap" style={{ fontSize: '11px' }}>Quick Prompts:</span>
@@ -558,7 +580,7 @@ export const OalBorrowerMessages = () => {
               </Button>
             </form>
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );

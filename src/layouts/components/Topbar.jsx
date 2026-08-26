@@ -127,34 +127,29 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
           </div>
 
           <div className="flex flex-col min-w-0">
-            <div className="flex items-center gap-2">
-              <span
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 800,
-                  fontSize: '15px',
-                  lineHeight: 1.1,
-                  color: 'var(--text-primary)',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                {product === 'crm' ? 'CRM nErgy' : 'OAL Network'}
-              </span>
-              <span
-                className="hidden-mobile"
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  backgroundColor: 'rgba(29, 78, 216, 0.1)',
-                  color: '#1d4ed8',
-                  padding: '1px 6px',
-                  borderRadius: '4px',
-                }}
-              >
-                {product === 'crm' ? 'v2.0 SaaS' : 'Marketplace'}
-              </span>
-            </div>
-            <span className="hidden-mobile" style={{ fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: 600, marginTop: '1px' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 800,
+                fontSize: '15px',
+                lineHeight: 1.1,
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.02em',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {product === 'crm' ? 'CRM nErgy' : 'OAL Network'}
+            </span>
+            <span
+              className="hidden-mobile"
+              style={{
+                fontSize: '10px',
+                color: 'var(--text-tertiary)',
+                fontWeight: 600,
+                marginTop: '2px',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {product === 'crm' ? 'Executive Platform' : 'Lending Marketplace'}
             </span>
           </div>

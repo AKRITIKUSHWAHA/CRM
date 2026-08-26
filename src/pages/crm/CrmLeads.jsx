@@ -158,24 +158,48 @@ export const CrmLeads = () => {
       </Card>
 
       {/* Mobile Card List View */}
-      <div className="visible-mobile flex flex-col gap-3">
+      <div className="visible-mobile flex flex-col gap-3.5" style={{ width: '100%', boxSizing: 'border-box' }}>
         {filteredLeads.map((lead) => (
-          <Card key={lead.id} className="p-4 flex flex-col gap-3">
-            <div className="flex items-center justify-between border-b border-subtle pb-2">
-              <span className="font-mono text-xs text-tertiary">{lead.id}</span>
+          <Card
+            key={lead.id}
+            style={{
+              padding: '1rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem',
+              borderRadius: '14px',
+              border: '1px solid var(--border)',
+              backgroundColor: 'var(--surface)',
+              boxShadow: 'var(--shadow-sm)',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}
+          >
+            <div
+              className="flex items-center justify-between pb-2.5 border-b"
+              style={{ borderColor: 'var(--border)' }}
+            >
+              <span className="font-mono text-xs text-tertiary font-semibold">{lead.id}</span>
               <Badge variant="primary">{lead.status}</Badge>
             </div>
             
-            <div>
-              <div className="font-bold text-base text-primary mb-1">{lead.name}</div>
-              <div className="text-xs text-secondary mb-2">{lead.company}</div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-success text-sm">{lead.value}</span>
-                <Badge variant="success" style={{ fontSize: '10px' }}>Score: {lead.score}</Badge>
-              </div>
+            <div className="flex flex-col gap-0.5">
+              <div className="font-bold text-base text-primary">{lead.name}</div>
+              <div className="text-xs text-secondary font-medium">{lead.company}</div>
             </div>
 
-            <div className="pt-3 border-t border-subtle mt-1">
+            <div
+              className="flex items-center justify-between p-2.5 rounded-lg"
+              style={{
+                backgroundColor: 'var(--surface-secondary)',
+                borderRadius: '8px',
+              }}
+            >
+              <span className="font-bold text-success" style={{ fontSize: '14px' }}>{lead.value}</span>
+              <Badge variant="success" style={{ fontSize: '11px', padding: '2px 8px' }}>Score: {lead.score} / 100</Badge>
+            </div>
+
+            <div className="pt-1 mt-0.5">
               <Button
                 variant="outline"
                 size="sm"

@@ -152,6 +152,9 @@ export const CrmTasks = () => {
       return;
     }
     addTask(formData);
+    if (formData.dueDate) {
+      setSelectedDate(formData.dueDate);
+    }
     addToast({ title: 'Task Scheduled', message: `Added "${formData.title}" for ${formData.dueDate}`, type: 'success' });
     setIsAddModalOpen(false);
   };
@@ -165,12 +168,7 @@ export const CrmTasks = () => {
       <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Tasks & Reminders' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>
-            Tasks & Calendar Reminders
-          </h1>
-          <p className="text-xs text-secondary margin-0">
-            Schedule follow-up meetings, deal proposals, and team action items
-          </p>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Tasks & Calendar Reminders</h1>
         </div>
 
         <div className="header-actions-right">
@@ -301,12 +299,12 @@ export const CrmTasks = () => {
 
       {/* 4. CALENDAR VIEW */}
       {viewMode === 'calendar' ? (
-        <div className="flex flex-col gap-5">
-          <Card style={{ padding: '1.25rem' }}>
+        <div className="flex flex-col gap-5" style={{ width: '100%', boxSizing: 'border-box' }}>
+          <Card style={{ padding: '1rem', borderRadius: '16px', border: '1px solid var(--border)', overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
             {/* Calendar Month Header */}
             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
               <div className="flex items-center gap-3">
-                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+                <h2 style={{ fontSize: '17px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
                   {monthYearLabel}
                 </h2>
                 <Button variant="outline" size="sm" onClick={handleToday} style={{ fontSize: '11px', padding: '2px 8px' }}>
@@ -320,21 +318,22 @@ export const CrmTasks = () => {
               </div>
             </div>
 
-            {/* Weekday Columns */}
+            {/* Weekday Columns (7 minmax columns) */}
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(7, 1fr)',
+                gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
                 textAlign: 'center',
                 fontWeight: 700,
                 fontSize: '11px',
                 color: 'var(--text-tertiary)',
                 paddingBottom: '0.5rem',
                 borderBottom: '1px solid var(--border)',
+                width: '100%',
               }}
             >
               {DAYS_OF_WEEK.map((day) => (
-                <div key={day} style={{ padding: '4px' }}>{day}</div>
+                <div key={day} style={{ padding: '2px' }}>{day}</div>
               ))}
             </div>
 
@@ -342,9 +341,10 @@ export const CrmTasks = () => {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(7, 1fr)',
-                gap: '4px',
+                gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+                gap: '3px',
                 marginTop: '4px',
+                width: '100%',
               }}
             >
               {allCalendarGridCells.map((cell, idx) => {
@@ -356,9 +356,9 @@ export const CrmTasks = () => {
                     key={idx}
                     onClick={() => setSelectedDate(cell.dateStr)}
                     style={{
-                      minHeight: '75px',
-                      padding: '6px',
-                      borderRadius: '8px',
+                      minHeight: '46px',
+                      padding: '3px 4px',
+                      borderRadius: '6px',
                       backgroundColor: isSelected
                         ? 'rgba(37, 99, 235, 0.08)'
                         : cell.isCurrentMonth
@@ -373,12 +373,15 @@ export const CrmTasks = () => {
                       flexDirection: 'column',
                       justifyContent: 'space-between',
                       transition: 'all 0.15s ease',
+                      minWidth: 0,
+                      boxSizing: 'border-box',
+                      overflow: 'hidden',
                     }}
                   >
                     <div className="flex items-center justify-between">
                       <span
                         style={{
-                          fontSize: '12px',
+                          fontSize: '11px',
                           fontWeight: isSelected ? 800 : cell.isCurrentMonth ? 600 : 400,
                           color: isSelected ? 'var(--accent)' : 'var(--text-primary)',
                         }}
@@ -388,12 +391,13 @@ export const CrmTasks = () => {
                       {cellTasks.length > 0 && (
                         <span
                           style={{
-                            fontSize: '10px',
+                            fontSize: '9px',
                             fontWeight: 700,
-                            padding: '1px 5px',
+                            padding: '0 4px',
                             borderRadius: '10px',
                             backgroundColor: 'var(--accent)',
                             color: '#ffffff',
+                            lineHeight: '14px',
                           }}
                         >
                           {cellTasks.length}
@@ -402,14 +406,14 @@ export const CrmTasks = () => {
                     </div>
 
                     {/* Task Pills in Date Cell */}
-                    <div className="flex flex-col gap-1 mt-1 overflow-hidden">
+                    <div className="flex flex-col gap-0.5 mt-0.5 overflow-hidden">
                       {cellTasks.slice(0, 2).map((t) => (
                         <div
                           key={t.id}
                           style={{
-                            fontSize: '10px',
-                            padding: '2px 4px',
-                            borderRadius: '4px',
+                            fontSize: '9px',
+                            padding: '1px 2px',
+                            borderRadius: '3px',
                             backgroundColor: t.status === 'Completed'
                               ? 'rgba(34, 197, 94, 0.15)'
                               : t.priority === 'High'
@@ -430,8 +434,8 @@ export const CrmTasks = () => {
                         </div>
                       ))}
                       {cellTasks.length > 2 && (
-                        <span style={{ fontSize: '9px', color: 'var(--text-tertiary)', fontWeight: 600 }}>
-                          +{cellTasks.length - 2} more
+                        <span style={{ fontSize: '8px', color: 'var(--text-tertiary)', fontWeight: 600 }}>
+                          +{cellTasks.length - 2}
                         </span>
                       )}
                     </div>
@@ -441,80 +445,93 @@ export const CrmTasks = () => {
             </div>
           </Card>
 
-          {/* Selected Date Detail Drawer */}
-          <Card style={{ padding: '1.25rem' }}>
-            <div className="flex items-center justify-between mb-3 border-b border-subtle pb-3">
-              <div>
-                <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
-                  Tasks Scheduled for {selectedDate}
-                </h3>
-                <span className="text-xs text-secondary">{selectedDateTasks.length} action items on this date</span>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                icon={Plus}
-                onClick={() => handleOpenAddModalForDate(selectedDate)}
-              >
-                Add Task for Date
-              </Button>
+          {/* Selected Date Detail Section */}
+          <div className="flex flex-col gap-3 mt-2" style={{ width: '100%', boxSizing: 'border-box' }}>
+            <div className="flex flex-col gap-0.5">
+              <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+                Tasks Scheduled for {selectedDate}
+              </h3>
+              <span className="text-xs text-tertiary font-medium">{selectedDateTasks.length} action items on this date</span>
             </div>
 
             {selectedDateTasks.length === 0 ? (
-              <div className="text-center py-6 text-xs text-tertiary">
-                No tasks scheduled for {selectedDate}. Click "+ Add Task for Date" to schedule.
+              <div className="py-4 text-xs text-tertiary font-medium">
+                No tasks scheduled for {selectedDate}. Use "+ Create Task" button above to schedule a task.
               </div>
             ) : (
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-2.5" style={{ width: '100%', maxWidth: '100%', minWidth: 0, boxSizing: 'border-box' }}>
                 {selectedDateTasks.map((t) => (
                   <div
                     key={t.id}
-                    className="p-3 surface-secondary rounded-md border-subtle flex items-center justify-between gap-3"
+                    className="p-3 surface-secondary rounded-lg flex items-center justify-between gap-2"
+                    style={{
+                      backgroundColor: 'var(--surface-secondary)',
+                      borderRadius: '12px',
+                      border: '1px solid var(--border)',
+                      width: '100%',
+                      maxWidth: '100%',
+                      minWidth: 0,
+                      boxSizing: 'border-box',
+                      overflow: 'hidden',
+                    }}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <button
-                        type="button"
-                        onClick={() => toggleTaskCompletion(t.id)}
-                        className="text-secondary hover:text-primary cursor-pointer p-0 bg-transparent border-0"
+                    <button
+                      type="button"
+                      onClick={() => toggleTaskCompletion(t.id)}
+                      className="text-secondary hover:text-primary cursor-pointer p-0 bg-transparent border-0 flex-shrink-0"
+                    >
+                      {t.status === 'Completed' ? (
+                        <CheckSquare size={18} className="text-success" />
+                      ) : (
+                        <Square size={18} />
+                      )}
+                    </button>
+
+                    <div className="flex flex-col min-w-0 flex-1" style={{ gap: '2px', minWidth: 0, overflow: 'hidden' }}>
+                      <span
+                        className="font-bold text-xs text-primary truncate"
+                        style={{
+                          textDecoration: t.status === 'Completed' ? 'line-through' : 'none',
+                          fontSize: '13px',
+                          display: 'block',
+                          maxWidth: '100%',
+                          minWidth: 0,
+                        }}
                       >
-                        {t.status === 'Completed' ? (
-                          <CheckSquare size={18} className="text-success" />
-                        ) : (
-                          <Square size={18} />
-                        )}
-                      </button>
-                      <div className="flex flex-col gap-0.5 min-w-0">
-                        <span
-                          className="font-bold text-xs text-primary truncate"
-                          style={{ textDecoration: t.status === 'Completed' ? 'line-through' : 'none' }}
-                        >
-                          {t.title}
-                        </span>
-                        <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
-                          {t.contact && <span>Contact: <strong>{t.contact}</strong></span>}
-                          {t.reminder && <span>• At {t.reminder}</span>}
-                          {t.assignedTo && <span>• Owner: {t.assignedTo}</span>}
-                        </div>
+                        {t.title}
+                      </span>
+                      <div
+                        className="text-xs text-tertiary truncate"
+                        style={{ fontSize: '11px', display: 'block', maxWidth: '100%', minWidth: 0 }}
+                      >
+                        {t.contact && <span>Contact: <strong className="text-secondary">{t.contact}</strong></span>}
+                        {t.reminder && <span> · At {t.reminder}</span>}
+                        {t.assignedTo && <span> · Owner: {t.assignedTo}</span>}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <Badge variant={t.priority === 'High' ? 'error' : t.priority === 'Medium' ? 'warning' : 'primary'}>
+                    <div className="flex items-center gap-1.5 flex-shrink-0" style={{ flexShrink: 0 }}>
+                      <Badge
+                        variant={t.priority === 'High' ? 'error' : t.priority === 'Medium' ? 'warning' : 'primary'}
+                        style={{ fontSize: '10px', padding: '1px 6px', whiteSpace: 'nowrap', flexShrink: 0 }}
+                      >
                         {t.priority}
                       </Badge>
                       <Button
                         variant="ghost"
                         size="sm"
+                        isIconOnly
                         icon={Trash2}
                         onClick={() => deleteTask(t.id)}
                         className="text-error"
+                        style={{ height: '26px', width: '26px', padding: 0, flexShrink: 0 }}
                       />
                     </div>
                   </div>
                 ))}
               </div>
             )}
-          </Card>
+          </div>
         </div>
       ) : (
         /* 5. LIST VIEW */

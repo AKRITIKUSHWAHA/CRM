@@ -32,6 +32,20 @@ html, body, #root, .app-layout, .main-content {
 }
 
 @media (max-width: 640px) {
+  .page-header-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  .header-actions-right {
+    width: 100% !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    margin-left: 0 !important;
+    gap: 0.5rem !important;
+  }
+
   .header-actions-right button {
     font-size: 11px !important;
     padding: 0.35rem 0.65rem !important;
@@ -42,45 +56,49 @@ html, body, #root, .app-layout, .main-content {
 /* Grid Responsive Breakpoints — Responsive Grid Layout */
 .grid-responsive-kpi {
   display: grid !important;
-  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-  gap: 16px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
   box-sizing: border-box !important;
 }
 
-@media (min-width: 640px) {
+@media (max-width: 440px) {
   .grid-responsive-kpi {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
   }
 }
 
 @media (min-width: 1024px) {
   .grid-responsive-kpi {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
   }
 }
 
 .grid-responsive-health {
   display: grid !important;
-  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-  gap: 16px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
   box-sizing: border-box !important;
 }
 
-@media (min-width: 640px) {
+@media (max-width: 440px) {
   .grid-responsive-health {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
   }
 }
 
 @media (min-width: 1024px) {
   .grid-responsive-health {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
   }
 }
 
@@ -131,20 +149,37 @@ html, body, #root, .app-layout, .main-content {
   }
 
   .dashboard-btn-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
-    width: 100%;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    min-width: 0 !important;
   }
 
   .dashboard-btn-group > * {
     width: 100% !important;
+    min-width: 0 !important;
   }
 
   .dashboard-btn-group button {
     width: 100% !important;
-    justify-content: center !important;
+    min-width: 0 !important;
+    font-size: 11px !important;
+    padding: 0.35rem 0.5rem !important;
+    overflow: hidden !important;
   }
+}
+
+/* Card and Grid Items Containment */
+.grid-responsive-2col > *,
+.grid-responsive-kpi > *,
+.grid-responsive-6kpi > *,
+.surface-card,
+.kpi-card {
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .grid-responsive-6kpi {
@@ -193,6 +228,132 @@ html, body, #root, .app-layout, .main-content {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-2col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Dashboard Task, Activity, Stage, and Channel Items Mobile Responsiveness */
+.dashboard-task-item {
+  padding: 10px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.dashboard-activity-item {
+  padding: 10px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.dashboard-stage-item {
+  padding: 12px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.dashboard-channel-item {
+  padding: 12px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 480px) {
+  .dashboard-task-item {
+    padding: 10px 10px !important;
+  }
+  .dashboard-activity-item {
+    padding: 10px 10px !important;
+  }
+  .dashboard-stage-item {
+    padding: 10px 10px !important;
+  }
+  .dashboard-channel-item {
+    padding: 10px 10px !important;
+  }
+}
+
+/* ERP Sub-Modules Grid Responsiveness (4 per line on Desktop, 2 on Tablet, 1 on Mobile) */
+.erp-submodules-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.875rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 960px) {
+  .erp-submodules-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .erp-submodules-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
+/* AI Toolset Suite Grid Responsiveness (4 per line on Desktop, 2 on Tablet, 1 on Mobile) */
+.ai-tools-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 1024px) {
+  .ai-tools-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .ai-tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .ai-tools-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Support Sub-Modules Grid Responsiveness (2 per line on Desktop & Tablet, 1 on Mobile) */
+.support-submodules-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .support-submodules-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
 }
 
 /* Mobile Login Gateway Responsiveness */
@@ -306,44 +467,80 @@ html, body, #root, .app-layout, .main-content {
 
 /* Table Toolbar Single-Row Responsive Layout */
 .table-toolbar {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 1rem;
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  padding: 0.875rem !important;
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-sm) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .table-toolbar-search {
-  width: 100%;
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
 .table-toolbar-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  width: 100%;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.table-toolbar-actions .form-group {
+  flex: 1 1 140px !important;
+  min-width: 130px !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.table-toolbar-actions > * {
+  flex: 1 1 auto !important;
+  min-width: 120px !important;
 }
 
 @media (min-width: 768px) {
   .table-toolbar {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
   }
   
   .table-toolbar-search {
-    max-width: 320px;
-    width: 320px;
+    max-width: 320px !important;
+    width: 320px !important;
+    flex-shrink: 0 !important;
   }
   
   .table-toolbar-actions {
-    flex-direction: row;
-    align-items: center;
-    width: auto;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.625rem !important;
+    width: auto !important;
+    flex: 1 !important;
+  }
+
+  .table-toolbar-actions .form-group {
+    width: auto !important;
+    min-width: 155px !important;
+    flex: initial !important;
+    margin: 0 !important;
+  }
+
+  .table-toolbar-actions > * {
+    flex: initial !important;
+    min-width: auto !important;
   }
 }
 
@@ -370,14 +567,31 @@ html, body, #root, .app-layout, .main-content {
 /* Mobile KPI Card Compact Sizing */
 @media (max-width: 640px) {
   .kpi-card {
-    padding: 0.875rem 0.75rem !important;
-    gap: 0.5rem !important;
-    border-radius: 10px !important;
+    padding: 0.75rem 0.65rem !important;
+    height: auto !important;
+    min-height: 105px !important;
+    border-radius: 12px !important;
+    gap: 0.35rem !important;
   }
   
   .kpi-card [style*="font-size: 1.75rem"],
   .kpi-card .text-2xl {
     font-size: 1.25rem !important;
+  }
+
+  .kpi-card [style*="text-transform: uppercase"] {
+    font-size: 9.5px !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .kpi-card [style*="width: 34px"] {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .kpi-card [style*="width: 34px"] svg {
+    width: 14px !important;
+    height: 14px !important;
   }
 }
 
@@ -435,6 +649,44 @@ html, body, #root, .app-layout, .main-content {
 @media (min-width: 1400px) {
   .grid-kpi-6balanced {
     grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* HR Employee Detail Fields Grid (2-Col on Desktop and Mobile) */
+.grid-employee-fields {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1.25rem 2rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 640px) {
+  .grid-employee-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.15rem 0.75rem !important;
+  }
+}
+
+/* Kanban Board Responsive Column Alignment */
+.kanban-column {
+  width: 285px;
+  min-width: 285px;
+  max-width: 285px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+@media (max-width: 640px) {
+  .kanban-board-scroll {
+    scroll-snap-type: x mandatory;
+    gap: 0.75rem !important;
+  }
+  
+  .kanban-column {
+    width: calc(100vw - 2.5rem) !important;
+    min-width: calc(100vw - 2.5rem) !important;
+    max-width: calc(100vw - 2.5rem) !important;
+    scroll-snap-align: center;
   }
 }
 

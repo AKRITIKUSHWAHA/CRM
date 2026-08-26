@@ -108,22 +108,8 @@ export const CrmPipeline = () => {
       {/* 1. Header */}
       <div className="page-header-row">
         <div>
-          <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Sales Pipeline Kanban' }]} />
-          <h1
-            style={{
-              fontSize: '24px',
-              fontWeight: 800,
-              color: 'var(--text-primary)',
-              margin: '2px 0 0 0',
-              fontFamily: 'var(--font-display)',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            Sales Pipeline Kanban
-          </h1>
-          <p className="text-xs text-secondary margin-0" style={{ marginTop: '2px' }}>
-            Track deal stages, probability ratings, and revenue projections across 8 pipeline stages
-          </p>
+          <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Sales Pipeline' }]} />
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Commercial Sales Pipeline</h1>
         </div>
 
         <div className="header-actions-right">
@@ -218,13 +204,14 @@ export const CrmPipeline = () => {
       {/* 4. 8-Column Responsive Kanban Board Grid with Full Horizontal Scroll & Swipe */}
       <div
         ref={kanbanScrollRef}
+        className="kanban-board-scroll"
         style={{
           display: 'flex',
           gap: '1rem',
           overflowX: 'auto',
           overflowY: 'hidden',
           paddingBottom: '1.25rem',
-          minHeight: '560px',
+          minHeight: '540px',
           width: '100%',
           maxWidth: '100%',
           WebkitOverflowScrolling: 'touch',
@@ -244,12 +231,8 @@ export const CrmPipeline = () => {
             <div
               key={col}
               ref={(el) => { columnRefs.current[col] = el; }}
+              className="kanban-column"
               style={{
-                width: '285px',
-                minWidth: '285px',
-                maxWidth: '285px',
-                flexShrink: 0,
-                flexGrow: 0,
                 backgroundColor: 'var(--surface-secondary)',
                 borderRadius: '12px',
                 border: selectedMobileStage === col ? '2px solid var(--primary)' : '1px solid var(--border)',

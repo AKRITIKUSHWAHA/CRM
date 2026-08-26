@@ -85,22 +85,19 @@ export const ErpDashboard = () => {
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* 1. Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'ERP & Operations' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>ERP Operations Suite</h1>
-          <p className="text-xs text-secondary margin-0">
-            Enterprise resource planning, procurement, project milestones, and supply chain control
-          </p>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>ERP & Operations Management</h1>
         </div>
 
-        <div className="dashboard-actions-grid w-full md:w-auto">
+        <div className="header-actions-right">
           <Button
             variant="primary"
             size="sm"
             icon={Plus}
-            className="w-full md:w-auto justify-center"
             onClick={() => setIsAddModalOpen(true)}
+            style={{ borderRadius: '8px', padding: '0.6rem 1.25rem' }}
           >
             New ERP Project
           </Button>
@@ -123,7 +120,7 @@ export const ErpDashboard = () => {
         </div>
       </div>
 
-      {/* 3. ERP Enterprise Sub-Modules (Systematic 4-Column Card Grid) */}
+      {/* 3. ERP Enterprise Sub-Modules (Equal 4-Column Grid & Equal Height Cards) */}
       <Card className="p-4 sm:p-5">
         <div className="flex items-center justify-between mb-3.5">
           <h3 style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
@@ -132,7 +129,16 @@ export const ErpDashboard = () => {
           <span className="text-xs text-tertiary font-medium">8 Integrated Suites</span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '0.75rem' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+            gap: '0.875rem',
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+          className="erp-submodules-grid"
+        >
           {subModules.map((mod) => {
             const ModIcon = mod.icon;
             return (
@@ -141,6 +147,8 @@ export const ErpDashboard = () => {
                 onClick={() => navigate(mod.path)}
                 className="surface-secondary border-subtle rounded-md p-3.5 flex items-center justify-between cursor-pointer transition-all hover:border-primary"
                 style={{
+                  height: '68px',
+                  boxSizing: 'border-box',
                   boxShadow: '0 1px 2px rgba(0,0,0,0.02)',
                   transition: 'all 0.15s ease',
                 }}
@@ -177,7 +185,7 @@ export const ErpDashboard = () => {
                   </div>
                 </div>
 
-                <Badge variant="default" style={{ fontSize: '10px', flexShrink: 0 }}>
+                <Badge variant="default" style={{ fontSize: '10px', flexShrink: 0, marginLeft: '4px' }}>
                   {mod.badge}
                 </Badge>
               </div>
@@ -215,32 +223,35 @@ export const ErpDashboard = () => {
               className="p-4 surface-secondary rounded-md border-subtle flex flex-col gap-3 transition-all hover:border-primary"
               style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}
             >
-              {/* Top Row: Title, Client, Manager, Status Badge */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-bold text-sm text-primary">{p.name}</span>
-                  <Badge variant="default" style={{ fontSize: '11px' }}>
-                    <Building2 size={11} className="mr-1 inline" />
-                    {p.client}
-                  </Badge>
-                </div>
+              {/* Top Row: Title & Status Badge */}
+              <div className="flex items-center justify-between gap-2 min-w-0">
+                <span className="font-bold text-sm text-primary truncate flex-1 min-w-0" style={{ fontSize: '14px' }}>
+                  {p.name}
+                </span>
+                <Badge
+                  variant={
+                    p.status === 'Completed'
+                      ? 'success'
+                      : p.status === 'Review'
+                      ? 'warning'
+                      : 'primary'
+                  }
+                  style={{ flexShrink: 0 }}
+                >
+                  {p.status}
+                </Badge>
+              </div>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-tertiary flex items-center gap-1">
-                    <User size={13} /> {p.manager}
-                  </span>
-                  <Badge
-                    variant={
-                      p.status === 'Completed'
-                        ? 'success'
-                        : p.status === 'Review'
-                        ? 'warning'
-                        : 'primary'
-                    }
-                  >
-                    {p.status}
-                  </Badge>
-                </div>
+              {/* Sub-row: Client Badge & Manager */}
+              <div className="flex items-center justify-between gap-2 text-xs flex-wrap" style={{ marginTop: '-4px' }}>
+                <Badge variant="default" style={{ fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <Building2 size={12} className="text-secondary flex-shrink-0" />
+                  <span>{p.client}</span>
+                </Badge>
+
+                <span className="text-xs text-tertiary flex items-center gap-1 flex-shrink-0">
+                  <User size={13} /> {p.manager}
+                </span>
               </div>
 
               {/* Progress Bar */}
@@ -249,7 +260,7 @@ export const ErpDashboard = () => {
               </div>
 
               {/* Bottom Row: Financial Metrics, Deadline & Quick Action */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-2 border-t border-subtle text-xs text-secondary gap-2">
+              <div className="flex items-center justify-between pt-2 text-xs text-secondary gap-2 flex-wrap sm:flex-nowrap">
                 <div className="flex items-center gap-3 flex-wrap">
                   <span>Budget: <strong className="text-primary">{p.budget}</strong></span>
                   <span>Spent: <strong className="text-secondary">{p.spent}</strong></span>
@@ -262,7 +273,19 @@ export const ErpDashboard = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => navigate(`/crm/erp/projects/${p.id}`)}
-                  style={{ fontSize: '11px', padding: '0.2rem 0.6rem' }}
+                  style={{
+                    fontSize: '11px',
+                    padding: '0.25rem 0.65rem',
+                    height: '28px',
+                    width: 'auto',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    borderRadius: '6px',
+                    whiteSpace: 'nowrap',
+                  }}
+                  className="w-auto flex-shrink-0"
                 >
                   Manage Milestones
                 </Button>

@@ -175,13 +175,8 @@ export const CrmContacts = () => {
       {/* Top Header */}
       <div className="page-header-row">
         <div>
-          <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Contacts Directory' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, color: 'var(--text-primary)', margin: '0.25rem 0 0 0' }}>
-            Contacts & Accounts
-          </h1>
-          <p className="text-xs text-secondary margin-0" style={{ marginTop: '2px' }}>
-            Isolated multi-tenant contacts, accounts, and client relationships
-          </p>
+          <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Contacts' }]} />
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Contacts & Accounts Directory</h1>
         </div>
 
         <div className="header-actions-right">
@@ -446,14 +441,29 @@ export const CrmContacts = () => {
       </div>
 
       {/* Mobile Card List View (< 768px) */}
-      <div className="visible-mobile flex flex-col gap-3.5">
+      <div className="visible-mobile flex flex-col gap-3.5" style={{ width: '100%', boxSizing: 'border-box' }}>
         <div className="flex items-center justify-between px-1 text-xs text-secondary font-medium">
           <span>{filteredContacts.length} Contact(s) Found</span>
           <span>Sorted by {sortField}</span>
         </div>
 
         {paginatedContacts.map((contact) => (
-          <Card key={contact.id} className="p-4 flex flex-col gap-3 shadow-sm border-subtle">
+          <Card
+            key={contact.id}
+            style={{
+              padding: '1rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem',
+              borderRadius: '14px',
+              border: '1px solid var(--border)',
+              backgroundColor: 'var(--surface)',
+              boxShadow: 'var(--shadow-sm)',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}
+          >
+            {/* Top row: Avatar + ID & Status Badge */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Avatar name={contact.name} size="sm" />
@@ -465,6 +475,8 @@ export const CrmContacts = () => {
                     ? 'success'
                     : contact.status === 'Pending KYC'
                     ? 'warning'
+                    : contact.status === 'Qualified'
+                    ? 'primary'
                     : 'info'
                 }
               >
@@ -472,33 +484,58 @@ export const CrmContacts = () => {
               </Badge>
             </div>
 
-            <div>
+            {/* Middle: Full Name & Company */}
+            <div className="flex flex-col gap-0.5">
               <Link to={`/crm/contacts/${contact.id}`} className="font-bold text-base text-primary hover:underline">
                 {contact.name}
               </Link>
               <div className="text-xs text-secondary font-medium">{contact.company}</div>
             </div>
 
-            <div className="flex flex-col gap-1.5 text-xs text-tertiary border-t border-subtle pt-2.5">
-              <div className="flex items-center gap-2"><Mail size={14} className="text-secondary" /> {contact.email}</div>
-              <div className="flex items-center gap-2"><Phone size={14} className="text-secondary" /> {contact.phone || '+1 (555) 019-2834'}</div>
+            {/* Email, Phone & Owner Details Box */}
+            <div
+              className="flex flex-col gap-1.5 text-xs text-tertiary"
+              style={{
+                backgroundColor: 'var(--surface-secondary)',
+                padding: '0.625rem 0.75rem',
+                borderRadius: '8px',
+                border: '1px solid var(--border)',
+              }}
+            >
+              <div className="flex items-center gap-2 truncate">
+                <Mail size={13} className="text-secondary flex-shrink-0" />
+                <span className="truncate">{contact.email}</span>
+              </div>
+              <div className="flex items-center gap-2 truncate">
+                <Phone size={13} className="text-secondary flex-shrink-0" />
+                <span className="truncate">{contact.phone || '+1 (555) 019-2834'}</span>
+              </div>
+              {contact.owner && (
+                <div className="flex items-center gap-2 truncate text-tertiary" style={{ fontSize: '11px' }}>
+                  <span>Owner: <strong className="text-secondary">{contact.owner}</strong></span>
+                </div>
+              )}
             </div>
 
-            <div className="flex items-center justify-between border-t border-subtle pt-3">
+            {/* Bottom Row: Type Badge & Action Buttons (Line-Free) */}
+            <div className="flex items-center justify-between pt-1">
               <Badge variant="default">{contact.type}</Badge>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 flex-shrink-0">
                 <Button variant="outline" size="sm" icon={Eye} onClick={() => navigate(`/crm/contacts/${contact.id}`)}>
                   View
                 </Button>
-                <Button variant="ghost" size="sm" isIconOnly icon={Edit} onClick={() => handleOpenEdit(contact)} />
-                <Button variant="ghost" size="sm" isIconOnly icon={Trash2} onClick={() => handleOpenDelete(contact)} />
+                <Button variant="ghost" size="sm" isIconOnly icon={Edit} onClick={() => handleOpenEdit(contact)} title="Edit" />
+                <Button variant="ghost" size="sm" isIconOnly icon={Trash2} onClick={() => handleOpenDelete(contact)} title="Delete" />
               </div>
             </div>
           </Card>
         ))}
 
         {/* Mobile Pagination Footer */}
-        <div className="p-3 surface-card rounded-lg border-subtle flex flex-col gap-2 items-center text-center">
+        <div
+          className="p-3 surface-card rounded-lg border-subtle flex flex-col gap-2 items-center text-center"
+          style={{ width: '100%', boxSizing: 'border-box' }}
+        >
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

@@ -76,7 +76,7 @@ export const HrEmployeeDetail = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" style={{ maxWidth: '860px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* Top Navigation & Action Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
@@ -115,32 +115,32 @@ export const HrEmployeeDetail = () => {
         </div>
       </div>
 
-      {/* Main Single Clean Profile Card (No Box-in-Box Clutter & No Row Border Lines) */}
-      <Card style={{ borderRadius: '16px', boxShadow: 'var(--shadow-sm)', backgroundColor: 'var(--surface)', padding: '2rem' }}>
-        <div className="flex flex-col gap-8">
+      {/* Main Profile Card (Box-Free & 2 Fields Per Line Layout) */}
+      <Card style={{ borderRadius: '16px', boxShadow: 'var(--shadow-sm)', backgroundColor: 'var(--surface)', padding: '2rem 1.75rem' }}>
+        <div className="flex flex-col gap-6">
           
           {/* Top Hero Section */}
           <div
-            className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
-            style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1.75rem' }}
+            className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 pb-6 border-b"
+            style={{ borderColor: 'var(--border)' }}
           >
             <div className="flex items-center gap-4">
               <Avatar name={emp.name} size="lg" status="online" />
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
                     {emp.name}
                   </h2>
                   <Badge variant="success">Active</Badge>
                   <Badge variant="info">{emp.dept}</Badge>
                 </div>
-                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                   {emp.role}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5" style={{ marginBottom: '4px' }}>
+            <div className="flex items-center gap-2.5">
               <span className="text-xs text-tertiary font-bold uppercase tracking-wider">Employee ID:</span>
               <span className="font-mono text-xs font-bold text-primary px-3 py-1.5 surface-secondary rounded-lg border-subtle">
                 {emp.id}
@@ -148,86 +148,95 @@ export const HrEmployeeDetail = () => {
             </div>
           </div>
 
-          {/* Clean 2-Column Key Value Profile Information (No Inner Box Lines!) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+          {/* Box-Free 2-Fields-Per-Line Grid Layout */}
+          <div className="flex flex-col gap-6 pt-1">
             
-            {/* Left Column: Employment & Role Spec */}
-            <div className="flex flex-col gap-5">
-              <h3 style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>
+            {/* Section 1: Employment Details */}
+            <div className="flex flex-col gap-3">
+              <h3 style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0, marginBottom: '2px' }}>
                 Employment Details
               </h3>
 
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-tertiary font-medium flex items-center gap-2">
-                    <User size={15} className="text-tertiary" /> Full Name:
+              <div className="grid-employee-fields">
+                {/* Field 1: Full Name */}
+                <div className="flex flex-col gap-1 min-w-0">
+                  <span className="text-tertiary font-semibold flex items-center gap-1.5 uppercase tracking-wider" style={{ fontSize: '11px' }}>
+                    <User size={13} className="text-primary flex-shrink-0" /> Full Name
                   </span>
-                  <span className="text-sm font-bold text-primary">{emp.name}</span>
+                  <span className="font-bold text-primary" style={{ fontSize: '13px', wordBreak: 'break-word' }}>{emp.name}</span>
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-tertiary font-medium flex items-center gap-2">
-                    <Briefcase size={15} className="text-tertiary" /> Job Title / Role:
+                {/* Field 2: Job Title / Role */}
+                <div className="flex flex-col gap-1 min-w-0">
+                  <span className="text-tertiary font-semibold flex items-center gap-1.5 uppercase tracking-wider" style={{ fontSize: '11px' }}>
+                    <Briefcase size={13} className="text-primary flex-shrink-0" /> Job Title / Role
                   </span>
-                  <span className="text-sm font-semibold text-primary">{emp.role}</span>
+                  <span className="font-semibold text-primary" style={{ fontSize: '13px', wordBreak: 'break-word' }}>{emp.role}</span>
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-tertiary font-medium flex items-center gap-2">
-                    <Building2 size={15} className="text-tertiary" /> Department Division:
+                {/* Field 3: Department Division */}
+                <div className="flex flex-col gap-1 min-w-0">
+                  <span className="text-tertiary font-semibold flex items-center gap-1.5 uppercase tracking-wider" style={{ fontSize: '11px' }}>
+                    <Building2 size={13} className="text-primary flex-shrink-0" /> Department Division
                   </span>
-                  <span className="text-sm font-semibold text-secondary">{emp.dept}</span>
+                  <span className="font-semibold text-secondary" style={{ fontSize: '13px', wordBreak: 'break-word' }}>{emp.dept}</span>
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-tertiary font-medium flex items-center gap-2">
-                    <ShieldCheck size={15} className="text-tertiary" /> Governance Role:
+                {/* Field 4: Governance Role */}
+                <div className="flex flex-col gap-1 min-w-0">
+                  <span className="text-tertiary font-semibold flex items-center gap-1.5 uppercase tracking-wider" style={{ fontSize: '11px' }}>
+                    <ShieldCheck size={13} className="text-primary flex-shrink-0" /> Governance Role
                   </span>
-                  <span className="text-xs font-bold text-primary">Enterprise Super Admin</span>
+                  <span className="font-bold text-primary" style={{ fontSize: '13px', wordBreak: 'break-word' }}>Enterprise Super Admin</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Contact & Payroll Spec */}
-            <div className="flex flex-col gap-5">
-              <h3 style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>
+            {/* Section 2: Contact & Payroll Information */}
+            <div className="flex flex-col gap-3 pt-5 border-t" style={{ borderColor: 'var(--border)' }}>
+              <h3 style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0, marginBottom: '2px' }}>
                 Contact & Payroll Information
               </h3>
 
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-tertiary font-medium flex items-center gap-2">
-                    <Mail size={15} className="text-tertiary" /> Corporate Email:
+              <div className="grid-employee-fields">
+                {/* Field 5: Corporate Email */}
+                <div className="flex flex-col gap-1 min-w-0">
+                  <span className="text-tertiary font-semibold flex items-center gap-1.5 uppercase tracking-wider" style={{ fontSize: '11px' }}>
+                    <Mail size={13} className="text-primary flex-shrink-0" /> Corporate Email
                   </span>
-                  <span className="text-sm font-mono font-bold text-primary">{emp.email}</span>
+                  <span className="font-mono font-bold text-primary" style={{ fontSize: '12.5px', wordBreak: 'break-all' }}>{emp.email}</span>
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-tertiary font-medium flex items-center gap-2">
-                    <DollarSign size={15} className="text-success" /> Base Salary:
+                {/* Field 6: Base Salary */}
+                <div className="flex flex-col gap-1 min-w-0">
+                  <span className="text-tertiary font-semibold flex items-center gap-1.5 uppercase tracking-wider" style={{ fontSize: '11px' }}>
+                    <DollarSign size={13} className="text-success flex-shrink-0" /> Base Salary
                   </span>
-                  <span className="text-sm font-extrabold text-success">{emp.salary || '$130,000'}</span>
+                  <span className="font-extrabold text-success" style={{ fontSize: '13px', wordBreak: 'break-word' }}>{emp.salary || '$130,000'}</span>
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-tertiary font-medium flex items-center gap-2">
-                    <MapPin size={15} className="text-tertiary" /> Office Location:
+                {/* Field 7: Office Location */}
+                <div className="flex flex-col gap-1 min-w-0">
+                  <span className="text-tertiary font-semibold flex items-center gap-1.5 uppercase tracking-wider" style={{ fontSize: '11px' }}>
+                    <MapPin size={13} className="text-primary flex-shrink-0" /> Office Location
                   </span>
-                  <span className="text-sm font-medium text-secondary">San Francisco HQ (Hybrid)</span>
+                  <span className="font-medium text-secondary" style={{ fontSize: '13px', wordBreak: 'break-word' }}>San Francisco HQ (Hybrid)</span>
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-tertiary font-medium flex items-center gap-2">
-                    <Calendar size={15} className="text-tertiary" /> Date Joined:
+                {/* Field 8: Date Joined */}
+                <div className="flex flex-col gap-1 min-w-0">
+                  <span className="text-tertiary font-semibold flex items-center gap-1.5 uppercase tracking-wider" style={{ fontSize: '11px' }}>
+                    <Calendar size={13} className="text-primary flex-shrink-0" /> Date Joined
                   </span>
-                  <span className="text-sm font-medium text-secondary">Jan 15, 2022</span>
+                  <span className="font-medium text-secondary" style={{ fontSize: '13px', wordBreak: 'break-word' }}>Jan 15, 2022</span>
                 </div>
               </div>
             </div>
+
           </div>
 
           {/* Audit Verification Footer Bar */}
-          <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-tertiary" style={{ borderTop: '1px solid var(--border)' }}>
+          <div className="pt-6 mt-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-tertiary border-t" style={{ borderColor: 'var(--border)' }}>
             <span className="flex items-center gap-1.5 font-medium">
               <CheckCircle2 size={15} className="text-success" /> Security & background payroll credentials verified.
             </span>

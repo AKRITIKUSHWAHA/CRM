@@ -161,26 +161,47 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
         </div>
       </div>
 
-      {/* Middle: Pill Global Search Input */}
-      <div className="hidden-mobile flex-1" style={{ maxWidth: '420px', margin: '0 1.5rem' }}>
+      {/* Middle: Crisp Global Search Input */}
+      <div className="hidden-mobile flex-1" style={{ maxWidth: '440px', margin: '0 1.5rem 0 2rem' }}>
         <button
           type="button"
           onClick={() => setIsSearchOpen(true)}
-          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-full border-subtle surface-secondary text-xs text-tertiary"
-          style={{ height: '36px', cursor: 'pointer', backgroundColor: 'var(--surface-secondary)' }}
+          className="w-full flex items-center justify-between px-3.5 py-2 transition-all"
+          style={{
+            height: '38px',
+            cursor: 'pointer',
+            backgroundColor: 'var(--surface-secondary)',
+            border: '1px solid var(--border)',
+            borderRadius: '8px',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+            boxSizing: 'border-box',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'var(--primary-border)';
+            e.currentTarget.style.backgroundColor = 'var(--surface)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'var(--border)';
+            e.currentTarget.style.backgroundColor = 'var(--surface-secondary)';
+          }}
         >
-          <div className="flex items-center gap-2">
-            <Search size={15} style={{ color: 'var(--text-tertiary)' }} />
-            <span style={{ fontSize: '12px' }}>Search contacts, deals, tasks, apps...</span>
+          <div className="flex items-center gap-2.5">
+            <Search size={16} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
+            <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 500 }}>
+              Search contacts, deals, tasks, apps...
+            </span>
           </div>
           <span
             style={{
-              fontSize: '10px',
+              fontSize: '11px',
+              fontWeight: 600,
+              color: 'var(--text-tertiary)',
               backgroundColor: 'var(--surface)',
-              padding: '1px 6px',
-              borderRadius: '4px',
+              padding: '2px 6px',
+              borderRadius: '5px',
               border: '1px solid var(--border)',
               fontFamily: 'var(--font-mono)',
+              lineHeight: 1,
             }}
           >
             ⌘K
@@ -245,26 +266,6 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
             Mark all as read
           </DropdownItem>
         </Dropdown>
-
-        {/* Help Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          isIconOnly
-          icon={HelpCircle}
-          onClick={() => setIsHelpOpen(true)}
-          title="Help & Documentation"
-        />
-
-        {/* Settings Gear Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          isIconOnly
-          icon={Settings}
-          onClick={() => navigate(product === 'crm' ? '/crm/settings' : '/oal/borrower/settings')}
-          title="Settings"
-        />
 
         {/* User Profile Dropdown with Role Switcher */}
         <Dropdown

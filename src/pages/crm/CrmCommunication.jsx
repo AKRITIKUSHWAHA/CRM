@@ -304,21 +304,7 @@ export const CrmCommunication = () => {
       <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Communication Hub' }]} />
-          <h1
-            style={{
-              fontSize: '24px',
-              fontWeight: 800,
-              color: 'var(--text-primary)',
-              margin: '2px 0 0 0',
-              fontFamily: 'var(--font-display)',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            Omnichannel Communication Hub
-          </h1>
-          <p className="text-xs text-secondary margin-0" style={{ marginTop: '2px' }}>
-            Unified inbox for Corporate Email, SMS Gateway Alerts, and Internal Team Chat.
-          </p>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Omnichannel Communication Hub</h1>
         </div>
         <div className="header-actions-right">
           <Button
@@ -376,42 +362,40 @@ export const CrmCommunication = () => {
         />
       </div>
 
-      {/* 3. Channel Switcher Tabs */}
-      <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)', overflowX: 'auto' }}>
-        <CardBody className="p-2">
-          <Tabs
-            tabs={[
-              {
-                id: 'email',
-                label: 'Corporate Email Inbox',
-                icon: Mail,
-                badge: messageList.filter((m) => m.type === 'email').length,
-              },
-              {
-                id: 'sms',
-                label: 'SMS Messaging Gateway',
-                icon: MessageSquare,
-                badge: messageList.filter((m) => m.type === 'sms').length,
-              },
-              {
-                id: 'chat',
-                label: 'Internal Team Chat',
-                icon: Sparkles,
-                badge: messageList.filter((m) => m.type === 'chat').length,
-              },
-            ]}
-            activeTab={activeChannel}
-            onChange={(ch) => {
-              setActiveChannel(ch);
-              const firstMsg = messageList.find((m) => m.type === ch);
-              if (firstMsg) setActiveThreadId(firstMsg.id);
-            }}
-          />
-        </CardBody>
-      </Card>
+      {/* 3. Channel Switcher Tabs (Box-Free Container) */}
+      <div className="flex items-center gap-2 overflow-x-auto">
+        <Tabs
+          tabs={[
+            {
+              id: 'email',
+              label: 'Corporate Email Inbox',
+              icon: Mail,
+              badge: messageList.filter((m) => m.type === 'email').length,
+            },
+            {
+              id: 'sms',
+              label: 'SMS Messaging Gateway',
+              icon: MessageSquare,
+              badge: messageList.filter((m) => m.type === 'sms').length,
+            },
+            {
+              id: 'chat',
+              label: 'Internal Team Chat',
+              icon: Sparkles,
+              badge: messageList.filter((m) => m.type === 'chat').length,
+            },
+          ]}
+          activeTab={activeChannel}
+          onChange={(ch) => {
+            setActiveChannel(ch);
+            const firstMsg = messageList.find((m) => m.type === ch);
+            if (firstMsg) setActiveThreadId(firstMsg.id);
+          }}
+        />
+      </div>
 
       {/* 4. Communication Workspace (Responsive Grid) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5" style={{ minHeight: '560px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5" style={{ minHeight: '560px', width: '100%', boxSizing: 'border-box' }}>
         {/* Left Column: Message Threads List (1 Column) */}
         <Card
           style={{
@@ -420,6 +404,8 @@ export const CrmCommunication = () => {
             display: 'flex',
             flexDirection: 'column',
             height: '100%',
+            width: '100%',
+            boxSizing: 'border-box',
           }}
           className="lg:col-span-1"
         >
@@ -429,11 +415,11 @@ export const CrmCommunication = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search conversations..."
               startIcon={Search}
-              style={{ height: '34px', fontSize: '12px' }}
+              style={{ height: '36px', fontSize: '12px' }}
             />
           </div>
 
-          <div className="p-2 flex flex-col gap-1.5 overflow-y-auto flex-1" style={{ maxHeight: '520px' }}>
+          <div className="p-2 flex flex-col gap-1.5 overflow-y-auto flex-1" style={{ maxHeight: '480px' }}>
             <div className="text-xs font-bold text-tertiary uppercase tracking-wider px-2 py-1 flex items-center justify-between">
               <span>{activeChannel.toUpperCase()} THREADS</span>
               <span>{filteredMessages.length} Conversations</span>
@@ -454,12 +440,16 @@ export const CrmCommunication = () => {
                       backgroundColor: isSelected ? 'var(--primary-light)' : 'var(--surface)',
                       border: isSelected ? '1px solid var(--primary-border)' : '1px solid var(--border)',
                       borderRadius: '10px',
-                      padding: '0.875rem 1rem',
+                      padding: '0.75rem 0.875rem',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.875rem',
+                      gap: '0.75rem',
                       cursor: 'pointer',
                       transition: 'all 0.15s ease',
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      minWidth: 0,
+                      overflow: 'hidden',
                     }}
                   >
                     {/* Avatar Badge */}
@@ -481,19 +471,19 @@ export const CrmCommunication = () => {
                       {msg.senderInitials}
                     </div>
 
-                    <div className="flex flex-col gap-0.5 flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-0.5 flex-1 min-w-0" style={{ overflow: 'hidden' }}>
+                      <div className="flex items-center justify-between gap-1">
                         <span className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
                           {msg.sender}
                         </span>
-                        <span className="text-tertiary font-medium ml-2 flex-shrink-0" style={{ fontSize: '11px' }}>
+                        <span className="text-tertiary font-medium flex-shrink-0" style={{ fontSize: '11px' }}>
                           {msg.timestamp}
                         </span>
                       </div>
-                      <span className="font-semibold text-xs text-secondary truncate" style={{ fontSize: '11px' }}>
+                      <span className="font-semibold text-xs text-secondary truncate" style={{ fontSize: '11.5px' }}>
                         {msg.subject}
                       </span>
-                      <p className="text-tertiary margin-0 truncate" style={{ fontSize: '11px' }}>
+                      <p className="text-tertiary truncate" style={{ fontSize: '11px', margin: 0 }}>
                         {msg.history[msg.history.length - 1]?.text}
                       </p>
                     </div>
@@ -507,23 +497,26 @@ export const CrmCommunication = () => {
         {/* Right Column: Message Thread Details & Chat Bubbles (2 Columns) */}
         <Card
           style={{
-            borderRadius: '12px',
-            boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)',
+            borderRadius: '16px',
+            boxShadow: 'var(--shadow-sm)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             height: '100%',
+            width: '100%',
+            boxSizing: 'border-box',
+            padding: '1.25rem',
           }}
-          className="lg:col-span-2 p-6"
+          className="lg:col-span-2"
         >
           {activeMessage ? (
-            <div className="flex flex-col justify-between flex-1 gap-5">
-              {/* Thread Header Info — Ample Spacing & Clear Layout */}
+            <div className="flex flex-col justify-between flex-1 gap-4">
+              {/* Thread Header Info */}
               <div
-                className="border-b border-subtle pb-4 flex flex-col gap-3"
+                className="flex flex-col gap-3 pb-2"
                 style={{ width: '100%', boxSizing: 'border-box' }}
               >
-                <div className="flex items-start justify-between gap-3 flex-wrap">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
                   <h2
                     style={{
                       fontSize: '17px',
@@ -537,17 +530,17 @@ export const CrmCommunication = () => {
                   >
                     {activeMessage.subject}
                   </h2>
-                  <Badge variant="primary" icon={CheckCheck} style={{ flexShrink: 0 }}>
+                  <Badge variant="primary" icon={CheckCheck} style={{ flexShrink: 0, fontSize: '11px' }}>
                     {activeMessage.type.toUpperCase()} Gateway Active
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between gap-4 text-xs flex-wrap">
-                  <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center justify-between gap-2 text-xs pt-1">
+                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
                     <div
                       style={{
-                        width: '32px',
-                        height: '32px',
+                        width: '34px',
+                        height: '34px',
                         borderRadius: '50%',
                         backgroundColor: activeMessage.senderBg || '#1d4ed8',
                         color: '#ffffff',
@@ -561,16 +554,26 @@ export const CrmCommunication = () => {
                     >
                       {activeMessage.senderInitials}
                     </div>
-                    <div className="flex items-center gap-2 flex-wrap text-xs">
-                      <span className="text-secondary font-medium">From:</span>
-                      <strong className="text-primary font-bold">{activeMessage.sender}</strong>
-                      <span className="text-tertiary font-normal">({activeMessage.senderEmail})</span>
+                    <div className="flex flex-col min-w-0 flex-1" style={{ gap: '1px' }}>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="text-secondary font-medium">From:</span>
+                        <strong className="text-primary font-bold truncate">{activeMessage.sender}</strong>
+                      </div>
+                      <span className="text-tertiary font-normal truncate" style={{ fontSize: '11px' }}>
+                        {activeMessage.senderEmail}
+                      </span>
                     </div>
                   </div>
 
                   <span
                     className="text-tertiary font-medium flex-shrink-0"
-                    style={{ fontSize: '11px', backgroundColor: 'var(--surface-secondary)', padding: '3px 10px', borderRadius: '6px' }}
+                    style={{
+                      fontSize: '11px',
+                      backgroundColor: 'var(--surface-secondary)',
+                      padding: '3px 9px',
+                      borderRadius: '6px',
+                      border: '1px solid var(--border)',
+                    }}
                   >
                     {activeMessage.timestamp}
                   </span>
@@ -580,8 +583,14 @@ export const CrmCommunication = () => {
               {/* Chat Message History Flow */}
               <div
                 ref={chatScrollRef}
-                className="flex flex-col gap-3 p-4 surface-secondary rounded-lg border-subtle overflow-y-auto flex-1"
-                style={{ minHeight: '260px', maxHeight: '380px' }}
+                className="flex flex-col gap-3 p-4 rounded-xl overflow-y-auto flex-1 my-1"
+                style={{
+                  backgroundColor: 'var(--surface-secondary)',
+                  border: '1px solid var(--border)',
+                  minHeight: '240px',
+                  maxHeight: '380px',
+                  boxSizing: 'border-box',
+                }}
               >
                 {activeMessage.history.map((h, i) => (
                   <div
@@ -590,19 +599,20 @@ export const CrmCommunication = () => {
                   >
                     <div
                       style={{
-                        maxWidth: '85%',
+                        maxWidth: '88%',
                         backgroundColor: h.isMe ? '#1d4ed8' : 'var(--surface)',
                         color: h.isMe ? '#ffffff' : 'var(--text-primary)',
                         border: h.isMe ? 'none' : '1px solid var(--border)',
                         borderRadius: h.isMe ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
                         padding: '0.875rem 1.125rem',
                         fontSize: '13px',
-                        lineHeight: 1.6,
+                        lineHeight: 1.5,
                         boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
                         whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
                       }}
                     >
-                      <div className="font-bold text-xs mb-1" style={{ opacity: 0.85, fontSize: '11px' }}>
+                      <div className="font-bold text-xs mb-1.5" style={{ opacity: 0.85, fontSize: '11px' }}>
                         {h.sender} &bull; {h.time}
                       </div>
                       <div>{h.text}</div>
@@ -636,7 +646,7 @@ export const CrmCommunication = () => {
               )}
 
               {/* Reply Form Composer & Interactive Buttons */}
-              <form onSubmit={handleSendReply} className="flex flex-col gap-3 pt-3 border-t border-subtle">
+              <form onSubmit={handleSendReply} className="flex flex-col gap-3 pt-2">
                 <Input
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
@@ -644,7 +654,7 @@ export const CrmCommunication = () => {
                   style={{ height: '42px', fontSize: '13px' }}
                 />
 
-                <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+                <div className="flex items-center justify-between gap-3 pt-1">
                   {/* Attach File Action Button */}
                   <Button
                     type="button"
@@ -652,7 +662,7 @@ export const CrmCommunication = () => {
                     size="sm"
                     icon={Paperclip}
                     onClick={() => fileInputRef.current?.click()}
-                    style={{ width: 'auto' }}
+                    style={{ borderRadius: '8px', padding: '0.5rem 1rem', fontSize: '12px' }}
                   >
                     {attachedFile ? 'Change File' : 'Attach File'}
                   </Button>
@@ -663,7 +673,7 @@ export const CrmCommunication = () => {
                     variant="primary"
                     size="sm"
                     icon={Send}
-                    style={{ width: 'auto' }}
+                    style={{ borderRadius: '8px', padding: '0.5rem 1.25rem', fontSize: '12px' }}
                   >
                     Send Message
                   </Button>

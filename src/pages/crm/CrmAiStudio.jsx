@@ -148,21 +148,7 @@ export const CrmAiStudio = () => {
       <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'AI Content Studio' }]} />
-          <h1
-            style={{
-              fontSize: '24px',
-              fontWeight: 800,
-              color: 'var(--text-primary)',
-              margin: '2px 0 0 0',
-              fontFamily: 'var(--font-display)',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            AI Content & Media Studio
-          </h1>
-          <p className="text-xs text-secondary margin-0" style={{ marginTop: '2px' }}>
-            Generative AI engine for enterprise branding, video production, and synthetic voice models.
-          </p>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>AI Content Generation Studio</h1>
         </div>
 
         <div className="header-actions-right">
@@ -217,59 +203,71 @@ export const CrmAiStudio = () => {
       </div>
 
       {/* 3. Main Studio Responsive Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6" style={{ minHeight: '620px' }}>
-        {/* Left Sidebar: 12 AI Tools (1 Column) */}
-        <Card
-          style={{
-            borderRadius: '12px',
-            boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)',
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-          }}
-          className="lg:col-span-1 p-3"
-        >
-          <div className="text-xs font-bold text-tertiary uppercase tracking-wider p-2 mb-1 border-b border-subtle">
+      {/* 3. AI Toolset Suite (4 Cards Per Line Grid) */}
+      <Card className="p-4 sm:p-5">
+        <div className="flex items-center justify-between mb-3.5">
+          <h3
+            style={{
+              fontSize: '13px',
+              fontWeight: 800,
+              color: 'var(--text-tertiary)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              margin: 0,
+            }}
+          >
             AI Toolset Suite (12)
-          </div>
+          </h3>
+          <span className="text-xs text-tertiary font-medium">Select Model & Generator Tool</span>
+        </div>
 
-          <div className="flex flex-col gap-1.5 overflow-y-auto flex-1 p-1" style={{ maxHeight: '580px' }}>
-            {aiTools.map((tool) => {
-              const Icon = tool.icon;
-              const isActive = activeTool === tool.id;
-              return (
-                <button
-                  key={tool.id}
-                  type="button"
-                  onClick={() => setActiveTool(tool.id)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    padding: '0.75rem 0.875rem',
-                    borderRadius: '8px',
-                    fontSize: '13px',
-                    fontWeight: isActive ? 700 : 500,
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                    backgroundColor: isActive ? 'rgba(29, 78, 216, 0.1)' : 'transparent',
-                    color: isActive ? '#1d4ed8' : 'var(--text-secondary)',
-                    border: isActive ? '1px solid var(--primary-border)' : '1px solid transparent',
-                    textAlign: 'left',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <Icon size={16} className="flex-shrink-0" style={{ color: isActive ? '#1d4ed8' : 'var(--text-tertiary)' }} />
-                  <span className="truncate">{tool.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </Card>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+            gap: '0.75rem',
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+          className="ai-tools-grid"
+        >
+          {aiTools.map((tool) => {
+            const Icon = tool.icon;
+            const isActive = activeTool === tool.id;
+            return (
+              <button
+                key={tool.id}
+                type="button"
+                onClick={() => setActiveTool(tool.id)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '10px',
+                  fontSize: '13px',
+                  fontWeight: isActive ? 700 : 500,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  backgroundColor: isActive ? 'rgba(29, 78, 216, 0.1)' : 'var(--surface-secondary)',
+                  color: isActive ? '#1d4ed8' : 'var(--text-primary)',
+                  border: isActive ? '1.5px solid var(--primary)' : '1px solid var(--border)',
+                  textAlign: 'left',
+                  width: '100%',
+                  height: '46px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <Icon size={18} className="flex-shrink-0" style={{ color: isActive ? '#1d4ed8' : 'var(--text-tertiary)' }} />
+                <span className="truncate">{tool.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </Card>
 
-        {/* Right Canvas: Controls, Prompt Input, Generation & Preview (3 Columns) */}
-        <div className="lg:col-span-3 flex flex-col gap-6">
+      {/* 4. Canvas Generator & Workspace View */}
+      <div className="flex flex-col gap-6" style={{ width: '100%', boxSizing: 'border-box' }}>
           {/* TOOL = LIBRARY VIEW */}
           {activeTool === 'library' ? (
             <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }} className="p-6 flex flex-col gap-4">
@@ -295,8 +293,8 @@ export const CrmAiStudio = () => {
           ) : (
             /* CANVAS GENERATOR VIEW */
             <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }} className="p-6 flex flex-col gap-6">
-              {/* Controls Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-subtle pb-4">
+              {/* Controls Bar (Box-Free Header) */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2">
                 <div className="flex items-center gap-2.5">
                   <div
                     style={{
@@ -456,6 +454,5 @@ export const CrmAiStudio = () => {
           )}
         </div>
       </div>
-    </div>
   );
 };

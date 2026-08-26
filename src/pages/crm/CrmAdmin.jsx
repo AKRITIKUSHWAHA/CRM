@@ -16,9 +16,6 @@ import {
 import {
   Breadcrumb,
   Button,
-  Card,
-  CardHeader,
-  CardBody,
   Tabs,
   Badge,
   Table,
@@ -55,85 +52,157 @@ export const CrmAdmin = () => {
     addToast({ title: 'Integration Status Changed', message: 'Updated gateway connections.', type: 'info' });
   };
 
+  // Branding state
+  const [branding, setBranding] = useState({
+    workspaceTitle: companyData?.companyName || 'nErgy Enterprise Logistics',
+    customDomain: 'crm.nergy-logistics.io',
+    accentColor: '#1d4ed8',
+    securityPolicy: 'Enterprise AES-256 Strict',
+  });
+
+  const handleSaveBranding = (e) => {
+    e?.preventDefault();
+    addToast({ title: 'Branding Saved', message: 'Workspace identity and custom domain updated.', type: 'success' });
+  };
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Administration' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>System Administration & Governance</h1>
-          <p className="text-xs text-secondary margin-0">
-            Tenant security policies, branding, API integrations, subscription tier, and audit logs
-          </p>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>
+            System Administration & Governance
+          </h1>
         </div>
 
-        <Badge variant="success" icon={ShieldCheck}>
-          Tenant Vault Encrypted ({user.tenantId || 'TNT-99201'})
-        </Badge>
+        <div className="header-actions-right">
+          <Badge variant="success" icon={ShieldCheck}>
+            Tenant Vault Encrypted ({user?.tenantId || 'TNT-99201'})
+          </Badge>
+        </div>
       </div>
 
-      {/* Admin Sub-Tabs */}
-      <Card>
-        <CardBody className="p-2 overflow-x-auto">
-          <Tabs
-            tabs={[
-              { id: 'integrations', label: 'Integrations', icon: Plug },
-              { id: 'branding', label: 'Company & Branding', icon: Building2 },
-              { id: 'security', label: 'Security & Audit Logs', icon: History },
-              { id: 'subscription', label: 'Subscription & Billing', icon: CreditCard },
-            ]}
-            activeTab={activeAdminTab}
-            onChange={setActiveAdminTab}
-          />
-        </CardBody>
-      </Card>
+      {/* Admin Sub-Tabs (Horizontally Scrollable Container) */}
+      <div className="flex items-center gap-2 overflow-x-auto w-full" style={{ width: '100%', minWidth: 0 }}>
+        <Tabs
+          tabs={[
+            { id: 'integrations', label: 'Integrations', icon: Plug },
+            { id: 'branding', label: 'Company & Branding', icon: Building2 },
+            { id: 'security', label: 'Security & Audit Logs', icon: History },
+            { id: 'subscription', label: 'Subscription & Billing', icon: CreditCard },
+          ]}
+          activeTab={activeAdminTab}
+          onChange={setActiveAdminTab}
+        />
+      </div>
 
       {/* TAB 1: INTEGRATIONS */}
       {activeAdminTab === 'integrations' && (
-        <Card className="p-6 flex flex-col gap-4">
-          <CardHeader title="API Gateway & Software Integrations" subtitle="Connect external services to CRM nErgy tenant vault" />
-          <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+          <div className="flex flex-col gap-0.5">
+            <h2 style={{ fontSize: '17px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+              API Gateway & Software Integrations
+            </h2>
+            <span className="text-xs text-tertiary font-medium">
+              Connect external services to CRM nErgy tenant vault
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-3 mt-1" style={{ width: '100%', boxSizing: 'border-box' }}>
             {integrations.map((item) => (
-              <div key={item.id} className="p-4 surface-secondary rounded-md border-subtle flex items-center justify-between gap-4">
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
+              <div
+                key={item.id}
+                className="p-4 surface-secondary rounded-xl border-subtle flex items-center justify-between gap-3"
+                style={{
+                  backgroundColor: 'var(--surface-secondary)',
+                  borderRadius: '12px',
+                  border: '1px solid var(--border)',
+                  width: '100%',
+                  minWidth: 0,
+                  boxSizing: 'border-box',
+                }}
+              >
+                <div className="flex flex-col gap-1 min-w-0 flex-1">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-bold text-sm text-primary">{item.name}</span>
-                    <Badge variant={item.connected ? 'success' : 'default'}>
+                    <Badge variant={item.connected ? 'success' : 'default'} style={{ fontSize: '11px', padding: '1px 7px' }}>
                       {item.connected ? 'Connected' : 'Disconnected'}
                     </Badge>
                   </div>
                   <span className="text-xs text-secondary">{item.desc}</span>
                 </div>
-                <Switch
-                  checked={item.connected}
-                  onChange={() => toggleIntegration(item.id)}
-                  label={item.connected ? 'Enabled' : 'Disabled'}
-                />
+                <div className="flex-shrink-0">
+                  <Switch
+                    checked={item.connected}
+                    onChange={() => toggleIntegration(item.id)}
+                    label={item.connected ? 'Enabled' : 'Disabled'}
+                  />
+                </div>
               </div>
             ))}
           </div>
-        </Card>
+        </div>
       )}
 
       {/* TAB 2: BRANDING */}
       {activeAdminTab === 'branding' && (
-        <Card className="p-6 flex flex-col gap-4">
-          <CardHeader title="Workspace Custom Branding & Domain" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input label="Workspace Title" value={companyData.companyName || 'nErgy Enterprise Logistics'} readOnly />
-            <Input label="Custom Domain Alias" value="crm.nergy-logistics.io" readOnly />
-            <Input label="Primary Accent Color" value="#1d4ed8" readOnly />
-            <Input label="Security Policy Level" value="Enterprise AES-256 Strict" readOnly />
+        <div className="flex flex-col gap-4" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+          <div className="flex flex-col gap-0.5">
+            <h2 style={{ fontSize: '17px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+              Workspace Custom Branding & Domain
+            </h2>
+            <span className="text-xs text-tertiary font-medium">
+              Enterprise workspace identity and custom domain configuration
+            </span>
           </div>
-        </Card>
+
+          <form onSubmit={handleSaveBranding} className="flex flex-col gap-4 mt-1" style={{ maxWidth: '720px', width: '100%' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="Workspace Title"
+                value={branding.workspaceTitle}
+                onChange={(e) => setBranding({ ...branding, workspaceTitle: e.target.value })}
+              />
+              <Input
+                label="Custom Domain Alias"
+                value={branding.customDomain}
+                onChange={(e) => setBranding({ ...branding, customDomain: e.target.value })}
+              />
+              <Input
+                label="Primary Accent Color"
+                value={branding.accentColor}
+                onChange={(e) => setBranding({ ...branding, accentColor: e.target.value })}
+              />
+              <Input
+                label="Security Policy Level"
+                value={branding.securityPolicy}
+                onChange={(e) => setBranding({ ...branding, securityPolicy: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-start pt-2">
+              <Button variant="primary" size="sm" type="submit" style={{ borderRadius: '8px' }}>
+                Save Branding Settings
+              </Button>
+            </div>
+          </form>
+        </div>
       )}
 
       {/* TAB 3: SECURITY & AUDIT LOGS */}
       {activeAdminTab === 'security' && (
-        <Card>
-          <CardHeader title="Immutable Security Audit Log Feed" subtitle="Tracking administrative & system access events" />
-          <CardBody className="p-0">
-            <Table>
+        <div className="flex flex-col gap-4" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+          <div className="flex flex-col gap-0.5">
+            <h2 style={{ fontSize: '17px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+              Immutable Security Audit Log Feed
+            </h2>
+            <span className="text-xs text-tertiary font-medium">
+              Tracking administrative & system access events
+            </span>
+          </div>
+
+          <div className="rounded-xl border-subtle overflow-x-auto mt-1" style={{ backgroundColor: 'var(--surface)', width: '100%' }}>
+            <Table style={{ minWidth: '600px' }}>
               <TableHeader>
                 <TableRow>
                   <TableCell isHeader>Timestamp</TableCell>
@@ -146,41 +215,55 @@ export const CrmAdmin = () => {
               <TableBody>
                 <TableRow>
                   <TableCell><span className="font-mono text-xs">Today at 10:55 AM</span></TableCell>
-                  <TableCell><span className="font-semibold">MFA Policy Enforced</span></TableCell>
-                  <TableCell>Alexander Wright</TableCell>
-                  <TableCell><span className="font-mono text-xs">192.168.1.104</span></TableCell>
+                  <TableCell><span className="font-semibold text-xs text-primary">MFA Policy Enforced</span></TableCell>
+                  <TableCell><span className="text-xs text-secondary">Alexander Wright</span></TableCell>
+                  <TableCell><span className="font-mono text-xs text-tertiary">192.168.1.104</span></TableCell>
                   <TableCell><Badge variant="success">Success</Badge></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell><span className="font-mono text-xs">Today at 09:30 AM</span></TableCell>
-                  <TableCell><span className="font-semibold">Company Profile Updated</span></TableCell>
-                  <TableCell>Alexander Wright</TableCell>
-                  <TableCell><span className="font-mono text-xs">192.168.1.104</span></TableCell>
+                  <TableCell><span className="font-semibold text-xs text-primary">Company Profile Updated</span></TableCell>
+                  <TableCell><span className="text-xs text-secondary">Alexander Wright</span></TableCell>
+                  <TableCell><span className="font-mono text-xs text-tertiary">192.168.1.104</span></TableCell>
                   <TableCell><Badge variant="success">Success</Badge></TableCell>
                 </TableRow>
               </TableBody>
             </Table>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* TAB 4: SUBSCRIPTION & BILLING */}
       {activeAdminTab === 'subscription' && (
-        <div className="grid-responsive-2col">
-          <Card className="p-6 flex flex-col gap-4">
-            <h3 className="text-base font-semibold">Active Plan: Enterprise v2.6 SaaS</h3>
+        <div className="flex flex-col gap-4" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+          <div className="flex flex-col gap-0.5">
+            <h2 style={{ fontSize: '17px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+              Active Plan & SaaS Subscription
+            </h2>
+            <span className="text-xs text-tertiary font-medium">
+              Enterprise seat quota and recurring billing details
+            </span>
+          </div>
+
+          <div className="p-5 surface-secondary rounded-xl border-subtle flex flex-col gap-4 max-w-lg mt-1" style={{ backgroundColor: 'var(--surface-secondary)', border: '1px solid var(--border)', borderRadius: '14px' }}>
+            <h3 className="text-base font-bold text-primary margin-0">Enterprise v2.6 SaaS Plan</h3>
             <div className="flex items-center justify-between text-xs">
-              <span>Billing Cycle:</span>
+              <span className="text-secondary">Billing Cycle:</span>
               <span className="font-bold text-primary">Annual ($499/mo billed annually)</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span>Seat Allocation:</span>
+              <span className="text-secondary">Seat Allocation:</span>
               <span className="font-bold text-success">Unlimited Seats Active</span>
             </div>
-            <Button variant="primary" size="sm" onClick={() => addToast({ title: 'Plan Management', message: 'Current plan is fully active with high-tier quota.', type: 'info' })}>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => addToast({ title: 'Plan Management', message: 'Current plan is fully active with high-tier quota.', type: 'info' })}
+              style={{ borderRadius: '8px' }}
+            >
               Manage Subscription Plan
             </Button>
-          </Card>
+          </div>
         </div>
       )}
     </div>

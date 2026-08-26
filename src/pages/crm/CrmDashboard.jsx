@@ -356,17 +356,8 @@ export const CrmDashboard = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3 flex-wrap">
-              <h1
-                style={{
-                  fontSize: '24px',
-                  fontWeight: 800,
-                  color: 'var(--text-primary)',
-                  margin: 0,
-                  fontFamily: 'var(--font-display)',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                CRM Executive Dashboard
+              <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>
+                Executive CRM Dashboard
               </h1>
               <button
                 type="button"
@@ -378,9 +369,6 @@ export const CrmDashboard = () => {
                 </Badge>
               </button>
             </div>
-            <p className="text-xs text-secondary margin-0" style={{ marginTop: '3px' }}>
-              Real-time pipeline performance, lead acquisition channels, and team operations.
-            </p>
           </div>
 
           {/* Right Header Action Controls */}
@@ -460,16 +448,22 @@ export const CrmDashboard = () => {
                 trigger={
                   <button
                     type="button"
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-sm text-xs border-subtle surface cursor-pointer font-medium text-primary hover:bg-hover transition-colors"
+                    className="flex items-center justify-between gap-1 px-2.5 py-1.5 rounded-sm text-xs border-subtle surface cursor-pointer font-medium text-primary hover:bg-hover transition-colors"
                     style={{
                       backgroundColor: 'var(--surface)',
                       border: '1px solid var(--border)',
                       height: '34px',
+                      width: '100%',
+                      minWidth: 0,
+                      overflow: 'hidden',
+                      boxSizing: 'border-box',
                     }}
                   >
-                    <Calendar size={14} className="text-secondary" />
-                    <span>{selectedDateLabel}</span>
-                    <ChevronDown size={14} className="text-tertiary" />
+                    <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                      <Calendar size={13} className="text-secondary flex-shrink-0" />
+                      <span className="truncate" style={{ fontSize: '11px' }}>{selectedDateLabel}</span>
+                    </div>
+                    <ChevronDown size={13} className="text-tertiary flex-shrink-0" />
                   </button>
                 }
               >
@@ -808,15 +802,12 @@ export const CrmDashboard = () => {
       <div className="grid-responsive-2col">
         {/* Left Card: Sales Pipeline Distribution */}
         <Card style={{ borderRadius: '16px', boxShadow: 'var(--shadow-sm)' }}>
-          <div className="p-6 flex flex-col" style={{ gap: '20px' }}>
+          <div className="p-4 sm:p-6 flex flex-col" style={{ gap: '16px' }}>
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
                 <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Sales Pipeline Distribution
                 </h3>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                  Deal progression across active stages.
-                </span>
               </div>
 
               <button
@@ -831,7 +822,7 @@ export const CrmDashboard = () => {
             </div>
 
             {/* Stages Progress List (14px Gap Between Items) */}
-            <div className="flex flex-col" style={{ gap: '14px' }}>
+            <div className="flex flex-col" style={{ gap: '12px' }}>
               {pipelineStages.map((stage) => (
                 <div
                   key={stage.id}
@@ -839,19 +830,15 @@ export const CrmDashboard = () => {
                     addToast({ title: 'Stage Details', message: `${stage.name}: ${stage.value} (${stage.dealsCount})`, type: 'info' });
                     navigate('/crm/pipeline');
                   }}
-                  className="cursor-pointer hover:border-strong transition-all"
+                  className="dashboard-stage-item cursor-pointer hover:border-strong transition-all"
                   style={{
-                    padding: '14px 16px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px',
                     backgroundColor: 'var(--surface-secondary)',
                     borderRadius: '12px',
                     border: '1px solid var(--border)',
                   }}
                 >
                   <div className="flex items-center justify-between" style={{ fontSize: '13px' }}>
-                    <div className="flex items-center" style={{ gap: '12px' }}>
+                    <div className="flex items-center min-w-0" style={{ gap: '10px' }}>
                       <span
                         style={{
                           width: '10px',
@@ -861,16 +848,16 @@ export const CrmDashboard = () => {
                           flexShrink: 0,
                         }}
                       />
-                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', marginRight: '8px' }}>
+                      <span className="truncate" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
                         {stage.name}
                       </span>
-                      <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+                      <span className="hidden-mobile" style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
                         ({stage.value})
                       </span>
                     </div>
-                    <div className="flex items-center" style={{ gap: '16px' }}>
-                      <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>{stage.dealsCount}</span>
-                      <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>{stage.pct}%</strong>
+                    <div className="flex items-center" style={{ gap: '12px', flexShrink: 0 }}>
+                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: 500 }}>{stage.dealsCount}</span>
+                      <strong style={{ fontSize: '13px', color: 'var(--text-primary)', fontWeight: 700 }}>{stage.pct}%</strong>
                     </div>
                   </div>
                   <ProgressBar value={stage.pct} variant={stage.variant} showLabel={false} />
@@ -880,26 +867,23 @@ export const CrmDashboard = () => {
 
             {/* Pipeline Summary Footer */}
             <div
-              className="flex items-center justify-between pt-4 text-xs"
-              style={{ borderTop: '1px solid var(--border)', color: 'var(--text-secondary)', marginTop: '4px' }}
+              className="flex items-center justify-between pt-3 text-xs"
+              style={{ borderTop: '1px solid var(--border)', color: 'var(--text-secondary)', marginTop: '2px' }}
             >
-              <span>Total Pipeline Value: <strong className="text-primary font-bold">$3.33M</strong></span>
-              <span>Weighted Value: <strong className="text-primary font-bold">$1.68M</strong></span>
+              <span>Total: <strong className="text-primary font-bold">$3.33M</strong></span>
+              <span>Weighted: <strong className="text-primary font-bold">$1.68M</strong></span>
             </div>
           </div>
         </Card>
 
         {/* Right Card: Lead Sources & Attribution */}
         <Card style={{ borderRadius: '16px', boxShadow: 'var(--shadow-sm)' }}>
-          <div className="p-6 flex flex-col" style={{ gap: '20px' }}>
+          <div className="p-4 sm:p-6 flex flex-col" style={{ gap: '16px' }}>
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
                 <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Lead Sources & Attribution
                 </h3>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                  Top channels driving qualified leads this cycle.
-                </span>
               </div>
               <button
                 type="button"
@@ -913,23 +897,19 @@ export const CrmDashboard = () => {
             </div>
 
             {/* Channels List (14px Gap Between Items) */}
-            <div className="flex flex-col" style={{ gap: '14px' }}>
+            <div className="flex flex-col" style={{ gap: '12px' }}>
               {leadChannels.map((channel) => (
                 <div
                   key={channel.id}
                   onClick={() => setSelectedChannel(channel)}
-                  className="cursor-pointer hover:border-strong transition-all"
+                  className="dashboard-channel-item cursor-pointer hover:border-strong transition-all"
                   style={{
-                    padding: '14px 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
                     backgroundColor: 'var(--surface-secondary)',
                     borderRadius: '12px',
                     border: '1px solid var(--border)',
                   }}
                 >
-                  <div className="flex items-center" style={{ gap: '14px' }}>
+                  <div className="flex items-center min-w-0" style={{ gap: '10px' }}>
                     <div
                       style={{
                         width: '10px',
@@ -939,15 +919,14 @@ export const CrmDashboard = () => {
                         flexShrink: 0,
                       }}
                     />
-                    <div className="flex flex-col" style={{ gap: '3px' }}>
-                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>{channel.name}</span>
-                      <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>{channel.conversion}</span>
+                    <div className="flex flex-col min-w-0">
+                      <span className="truncate" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>{channel.name}</span>
+                      <span className="truncate" style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{channel.volume} · {channel.cac}</span>
                     </div>
                   </div>
-                  <div className="flex items-center" style={{ gap: '16px' }}>
-                    <Badge variant={channel.badgeVariant}>{channel.pct}% Share</Badge>
-                    <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>{channel.volume}</span>
-                  </div>
+                  <Badge variant={channel.badgeVariant} style={{ fontSize: '11px', padding: '2px 8px', flexShrink: 0 }}>
+                    {channel.pct}%
+                  </Badge>
                 </div>
               ))}
             </div>
@@ -981,9 +960,6 @@ export const CrmDashboard = () => {
                 <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Live CRM Activity Audit
                 </h3>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                  Real-time system & team event feed.
-                </span>
               </div>
               <button
                 type="button"
@@ -1013,40 +989,83 @@ export const CrmDashboard = () => {
               ))}
             </div>
 
-            {/* Activity List (14px Gap Between Items) */}
-            <div className="flex flex-col" style={{ gap: '14px' }}>
+            {/* Activity List (12px Gap Between Items) */}
+            <div className="flex flex-col" style={{ gap: '12px', width: '100%', boxSizing: 'border-box' }}>
               {filteredActivities.map((act) => (
                 <div
                   key={act.id}
                   onClick={() => setSelectedActivity(act)}
-                  className="cursor-pointer hover:border-strong transition-all"
+                  className="dashboard-activity-item cursor-pointer hover:border-strong transition-all"
                   style={{
-                    padding: '14px 16px',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
                     backgroundColor: 'var(--surface-secondary)',
                     borderRadius: '12px',
                     border: '1px solid var(--border)',
+                    boxSizing: 'border-box',
+                    overflow: 'hidden',
+                    width: '100%',
+                    maxWidth: '100%',
+                    minWidth: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '8px',
+                    padding: '10px 12px',
                   }}
                 >
-                  <div className="flex items-start" style={{ gap: '14px' }}>
+                  <div className="flex items-center min-w-0 flex-1" style={{ gap: '10px', minWidth: 0, overflow: 'hidden' }}>
                     <div
                       style={{
                         width: '10px',
                         height: '10px',
                         borderRadius: '50%',
                         backgroundColor: act.color,
-                        marginTop: '5px',
                         flexShrink: 0,
                       }}
                     />
-                    <div className="flex flex-col" style={{ gap: '3px' }}>
-                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>{act.title}</span>
-                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{act.description}</span>
+                    <div className="flex flex-col min-w-0 flex-1" style={{ gap: '2px', minWidth: 0, overflow: 'hidden' }}>
+                      <span
+                        className="truncate"
+                        style={{
+                          fontSize: '13px',
+                          fontWeight: 700,
+                          color: 'var(--text-primary)',
+                          display: 'block',
+                          minWidth: 0,
+                          maxWidth: '100%',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {act.title}
+                      </span>
+                      <span
+                        className="truncate"
+                        style={{
+                          fontSize: '11.5px',
+                          color: 'var(--text-secondary)',
+                          display: 'block',
+                          minWidth: 0,
+                          maxWidth: '100%',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {act.description}
+                      </span>
                     </div>
                   </div>
-                  <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginLeft: '16px', flexShrink: 0, fontWeight: 500 }}>
+                  <span
+                    style={{
+                      fontSize: '11px',
+                      color: 'var(--text-tertiary)',
+                      flexShrink: 0,
+                      fontWeight: 500,
+                      whiteSpace: 'nowrap',
+                      marginLeft: 'auto',
+                    }}
+                  >
                     {act.time}
                   </span>
                 </div>
@@ -1057,15 +1076,12 @@ export const CrmDashboard = () => {
 
         {/* Right Card: Upcoming Priority Tasks */}
         <Card style={{ borderRadius: '16px', boxShadow: 'var(--shadow-sm)' }}>
-          <div className="p-6 flex flex-col" style={{ gap: '20px' }}>
+          <div className="p-4 sm:p-6 flex flex-col" style={{ gap: '16px', width: '100%', boxSizing: 'border-box' }}>
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
                 <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Upcoming Priority Tasks
                 </h3>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                  Actions scheduled for today ({tasks.length} total).
-                </span>
               </div>
               <button
                 type="button"
@@ -1080,7 +1096,7 @@ export const CrmDashboard = () => {
 
             {/* Task Filters */}
             <div className="flex items-center justify-between flex-wrap" style={{ gap: '10px' }}>
-              <div className="flex items-center" style={{ gap: '8px' }}>
+              <div className="flex items-center flex-wrap" style={{ gap: '6px' }}>
                 {[
                   { id: 'all', label: `All (${tasks.length})` },
                   { id: 'pending', label: `Pending (${tasks.filter((t) => t.status !== 'Completed').length})` },
@@ -1090,7 +1106,7 @@ export const CrmDashboard = () => {
                     key={f.id}
                     type="button"
                     onClick={() => setTaskFilter(f.id)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-colors ${
+                    className={`px-2.5 py-1 rounded-md text-xs font-medium cursor-pointer transition-colors ${
                       taskFilter === f.id ? 'bg-primary text-white font-semibold' : 'surface-secondary text-secondary hover:bg-hover'
                     }`}
                     style={{ border: '1px solid var(--border)' }}
@@ -1110,8 +1126,8 @@ export const CrmDashboard = () => {
               </button>
             </div>
 
-            {/* Task Items Checklist (14px Gap Between Items) */}
-            <div className="flex flex-col" style={{ gap: '14px' }}>
+            {/* Task Items Checklist */}
+            <div className="flex flex-col" style={{ gap: '12px', width: '100%', boxSizing: 'border-box' }}>
               {filteredTasks.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-6 text-center text-tertiary">
                   <CheckSquare size={28} className="mb-2 text-secondary" />
@@ -1125,19 +1141,26 @@ export const CrmDashboard = () => {
                   return (
                     <div
                       key={task.id}
-                      className="cursor-pointer hover:border-strong transition-all"
+                      className="dashboard-task-item cursor-pointer hover:border-strong transition-all"
                       style={{
-                        padding: '14px 16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
                         backgroundColor: 'var(--surface-secondary)',
                         borderRadius: '12px',
                         border: '1px solid var(--border)',
+                        boxSizing: 'border-box',
+                        overflow: 'hidden',
+                        width: '100%',
+                        maxWidth: '100%',
+                        minWidth: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '8px',
+                        padding: '10px 12px',
                         opacity: isCompleted ? 0.6 : 1,
                       }}
                     >
-                      <div className="flex items-center min-w-0" style={{ gap: '14px', flex: 1, marginRight: '16px' }}>
+                      {/* Left & Middle: Checkbox + Title / Subtitle */}
+                      <div className="flex items-center min-w-0 flex-1" style={{ gap: '10px', minWidth: 0, overflow: 'hidden' }}>
                         {/* Interactive Task Checkbox */}
                         <button
                           type="button"
@@ -1166,29 +1189,48 @@ export const CrmDashboard = () => {
                         </button>
 
                         <div
-                          className="flex flex-col min-w-0"
-                          style={{ gap: '3px' }}
+                          className="flex flex-col min-w-0 flex-1"
+                          style={{ gap: '2px', minWidth: 0, overflow: 'hidden' }}
                           onClick={() => navigate('/crm/tasks')}
                         >
                           <span
                             className="truncate"
                             style={{
-                              fontSize: '14px',
+                              fontSize: '13px',
                               fontWeight: 700,
                               color: 'var(--text-primary)',
                               textDecoration: isCompleted ? 'line-through' : 'none',
+                              display: 'block',
+                              minWidth: 0,
+                              maxWidth: '100%',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
                             }}
                           >
                             {task.title}
                           </span>
-                          <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
+                          <span
+                            className="truncate"
+                            style={{
+                              fontSize: '11px',
+                              color: 'var(--text-tertiary)',
+                              display: 'block',
+                              minWidth: 0,
+                              maxWidth: '100%',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
                             Related to: <strong className="text-secondary">{task.contact}</strong>
                             {task.dueDate && ` · Due ${task.dueDate}`}
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center" style={{ gap: '14px', flexShrink: 0 }}>
+                      {/* Right: Priority Badge + Delete Action */}
+                      <div className="flex items-center" style={{ gap: '6px', flexShrink: 0, marginLeft: 'auto' }} onClick={(e) => e.stopPropagation()}>
                         <Badge
                           variant={
                             isCompleted
@@ -1199,8 +1241,9 @@ export const CrmDashboard = () => {
                               ? 'warning'
                               : 'info'
                           }
+                          style={{ fontSize: '10px', padding: '1px 6px', whiteSpace: 'nowrap', flexShrink: 0 }}
                         >
-                          {isCompleted ? 'Completed' : `${task.priority} Priority`}
+                          {isCompleted ? 'Done' : task.priority}
                         </Badge>
 
                         <Button
@@ -1218,6 +1261,7 @@ export const CrmDashboard = () => {
                             });
                           }}
                           title="Delete task"
+                          style={{ height: '22px', width: '22px', padding: 0, flexShrink: 0 }}
                         />
                       </div>
                     </div>

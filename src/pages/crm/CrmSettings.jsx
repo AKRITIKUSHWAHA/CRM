@@ -167,29 +167,24 @@ export const CrmSettings = () => {
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Settings' }]} />
           <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Account & Workspace Settings</h1>
-          <p className="text-xs text-secondary margin-0">
-            Manage your personal profile, enterprise organization parameters, security, and interface preferences
-          </p>
         </div>
       </div>
 
-      {/* 2. Settings Navigation Tabs */}
-      <Card className="p-0 overflow-hidden">
-        <div className="p-2 overflow-x-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
-          <Tabs
-            tabs={[
-              { id: 'profile', label: 'User Profile', icon: User },
-              { id: 'company', label: 'Company Profile', icon: Building2 },
-              { id: 'security', label: 'Security & Password', icon: Lock },
-              { id: 'notifications', label: 'Notifications', icon: Bell },
-              { id: 'theme', label: 'Theme & Display', icon: Moon },
-              { id: 'preferences', label: 'Preferences', icon: SettingsIcon },
-            ]}
-            activeTab={activeTab}
-            onChange={setActiveTab}
-          />
-        </div>
-      </Card>
+      {/* 2. Settings Navigation Tabs (Box-Free Container) */}
+      <div className="flex items-center gap-2 overflow-x-auto">
+        <Tabs
+          tabs={[
+            { id: 'profile', label: 'User Profile', icon: User },
+            { id: 'company', label: 'Company Profile', icon: Building2 },
+            { id: 'security', label: 'Security & Password', icon: Lock },
+            { id: 'notifications', label: 'Notifications', icon: Bell },
+            { id: 'theme', label: 'Theme & Display', icon: Moon },
+            { id: 'preferences', label: 'Preferences', icon: SettingsIcon },
+          ]}
+          activeTab={activeTab}
+          onChange={setActiveTab}
+        />
+      </div>
 
       {/* TAB 1: USER PROFILE */}
       {activeTab === 'profile' && (
@@ -331,7 +326,7 @@ export const CrmSettings = () => {
               />
             </div>
 
-            <div className="flex justify-end pt-4 border-t border-subtle">
+            <div className="flex justify-end pt-3">
               <Button variant="primary" size="sm" type="submit" icon={Save}>
                 Save Profile Changes
               </Button>
@@ -343,13 +338,10 @@ export const CrmSettings = () => {
       {/* TAB 2: COMPANY PROFILE */}
       {activeTab === 'company' && (
         <Card style={{ padding: '1.5rem' }}>
-          <div className="border-b border-subtle pb-4 mb-4">
+          <div className="pb-3 mb-2">
             <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
               Enterprise Organization Details
             </h2>
-            <p className="text-xs text-secondary margin-0 mt-1">
-              Legal entity information, primary billing contacts, and corporate registry
-            </p>
           </div>
 
           <form onSubmit={handleSaveCompany} className="flex flex-col gap-4">
@@ -408,7 +400,7 @@ export const CrmSettings = () => {
               onChange={(e) => setCompanyForm({ ...companyForm, address: e.target.value })}
             />
 
-            <div className="flex justify-end pt-4 border-t border-subtle">
+            <div className="flex justify-end pt-3">
               <Button variant="primary" size="sm" type="submit" icon={Save}>
                 Save Company Changes
               </Button>
@@ -422,7 +414,7 @@ export const CrmSettings = () => {
         <div className="flex flex-col gap-6">
           {/* Password Change Card */}
           <Card style={{ padding: '1.5rem' }}>
-            <div className="border-b border-subtle pb-4 mb-4">
+            <div className="pb-3 mb-2">
               <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
                 Change Account Password
               </h2>
@@ -526,7 +518,7 @@ export const CrmSettings = () => {
       {/* TAB 4: NOTIFICATIONS */}
       {activeTab === 'notifications' && (
         <Card style={{ padding: '1.5rem' }}>
-          <div className="border-b border-subtle pb-4 mb-4">
+          <div className="pb-3 mb-2">
             <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
               Notification & Alert Deliverability
             </h2>
@@ -710,7 +702,7 @@ export const CrmSettings = () => {
       {/* TAB 5: THEME & DISPLAY */}
       {activeTab === 'theme' && (
         <Card style={{ padding: '1.5rem' }}>
-          <div className="border-b border-subtle pb-4 mb-4">
+          <div className="pb-3 mb-2">
             <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
               Appearance & Workspace Theme
             </h2>
@@ -789,7 +781,7 @@ export const CrmSettings = () => {
       {/* TAB 6: PREFERENCES & LOCALIZATION */}
       {activeTab === 'preferences' && (
         <Card style={{ padding: '1.5rem' }}>
-          <div className="border-b border-subtle pb-4 mb-4">
+          <div className="pb-3 mb-2">
             <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
               System Localization & Formatting
             </h2>
@@ -862,7 +854,7 @@ export const CrmSettings = () => {
               />
             </div>
 
-            <div className="flex justify-end pt-4 border-t border-subtle">
+            <div className="flex justify-end pt-3">
               <Button variant="primary" size="sm" type="submit" icon={Save}>
                 Save System Preferences
               </Button>

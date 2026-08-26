@@ -124,22 +124,22 @@ export const CrmContactDetail = () => {
         <div className="grid-responsive-2col">
           <Card>
             <CardHeader title="Contact Metadata & Ownership" />
-            <CardBody className="flex flex-col gap-3 text-xs">
-              <div className="flex justify-between border-b border-subtle pb-2">
-                <span className="text-tertiary">Record ID:</span>
-                <code className="font-mono text-primary">{contact.id}</code>
+            <CardBody className="flex flex-col gap-0 text-xs">
+              <div className="flex items-center justify-between py-2.5 border-b" style={{ borderColor: 'var(--border)' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Record ID:</span>
+                <span className="font-mono text-primary font-semibold" style={{ fontSize: '13px' }}>{contact.id}</span>
               </div>
-              <div className="flex justify-between border-b border-subtle pb-2">
-                <span className="text-tertiary">Account Owner:</span>
-                <span className="font-semibold text-primary">{contact.owner}</span>
+              <div className="flex items-center justify-between py-2.5 border-b" style={{ borderColor: 'var(--border)' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Account Owner:</span>
+                <span className="font-semibold text-primary" style={{ fontSize: '13px' }}>{contact.owner}</span>
               </div>
-              <div className="flex justify-between border-b border-subtle pb-2">
-                <span className="text-tertiary">Total Deal Value:</span>
-                <span className="font-bold text-success">{contact.totalValue}</span>
+              <div className="flex items-center justify-between py-2.5 border-b" style={{ borderColor: 'var(--border)' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Total Deal Value:</span>
+                <span className="font-bold text-success" style={{ fontSize: '13px' }}>{contact.totalValue}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-tertiary">Created Date:</span>
-                <span>{contact.createdDate}</span>
+              <div className="flex items-center justify-between py-2.5">
+                <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Created Date:</span>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>{contact.createdDate}</span>
               </div>
             </CardBody>
           </Card>
@@ -281,29 +281,58 @@ export const CrmContactDetail = () => {
       {activeTab === 'notes' && (
         <Card className="p-6 flex flex-col gap-4">
           <h3 className="text-base font-semibold">Account Notes</h3>
-          <form onSubmit={handleAddNote} className="flex flex-col gap-2">
-            <Input
+          <div className="flex flex-col gap-2.5">
+            <textarea
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
               placeholder="Add a new internal note..."
+              rows={2}
+              style={{
+                width: '100%',
+                padding: '0.625rem 0.875rem',
+                borderRadius: '8px',
+                border: '1px solid var(--border)',
+                backgroundColor: 'var(--surface)',
+                color: 'var(--text-primary)',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '13px',
+                resize: 'vertical',
+                boxSizing: 'border-box',
+                outline: 'none',
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                  handleAddNote(e);
+                }
+              }}
             />
             <div className="flex justify-end">
-              <Button variant="primary" size="sm" type="submit" icon={Plus}>
+              <Button
+                variant="primary"
+                size="sm"
+                type="button"
+                icon={Plus}
+                onClick={handleAddNote}
+              >
                 Add Note
               </Button>
             </div>
-          </form>
+          </div>
 
           <div className="flex flex-col gap-3 border-t border-subtle pt-4">
-            {notes.map((n) => (
-              <div key={n.id} className="p-3 surface-secondary rounded-sm flex flex-col gap-1 text-xs">
-                <div className="flex justify-between font-semibold text-primary">
-                  <span>{n.author}</span>
-                  <span className="text-tertiary font-normal">{n.date}</span>
+            {notes.length === 0 ? (
+              <p className="text-xs text-tertiary">No notes added yet.</p>
+            ) : (
+              notes.map((n) => (
+                <div key={n.id} className="p-3 surface-secondary rounded-sm flex flex-col gap-1 text-xs">
+                  <div className="flex justify-between font-semibold text-primary">
+                    <span>{n.author}</span>
+                    <span className="text-tertiary font-normal">{n.date}</span>
+                  </div>
+                  <p className="margin-0 text-secondary">{n.text}</p>
                 </div>
-                <p className="margin-0 text-secondary">{n.text}</p>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </Card>
       )}

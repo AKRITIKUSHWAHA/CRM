@@ -112,21 +112,7 @@ export const CrmReports = () => {
       <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Reports Hub' }]} />
-          <h1
-            style={{
-              fontSize: '24px',
-              fontWeight: 800,
-              color: 'var(--text-primary)',
-              margin: '2px 0 0 0',
-              fontFamily: 'var(--font-display)',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            Enterprise Reports Repository
-          </h1>
-          <p className="text-xs text-secondary margin-0" style={{ marginTop: '2px' }}>
-            Generate, filter, and export system audit reports in PDF formats.
-          </p>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Enterprise Analytics & Reports</h1>
         </div>
 
         <div className="header-actions-right">
@@ -287,7 +273,7 @@ export const CrmReports = () => {
               <div className="flex items-center gap-2"><Calendar size={14} className="text-tertiary" /> {rep.date}</div>
             </div>
 
-            <div className="pt-3 border-t border-subtle mt-1">
+            <div className="pt-2 mt-0.5">
               <Button
                 variant="outline"
                 size="sm"

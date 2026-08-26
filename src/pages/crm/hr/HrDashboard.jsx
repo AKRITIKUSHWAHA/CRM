@@ -75,12 +75,7 @@ export const HrDashboard = () => {
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex flex-col gap-1">
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'HR & Recruiting' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-            Human Resources & Recruiting
-          </h1>
-          <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-            Manage workforce payroll, active applicant candidates, and job requisitions.
-          </span>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>HR & Recruiting Platform</h1>
         </div>
 
         <Button

@@ -62,25 +62,6 @@ export const Sidebar = ({
     >
       {/* Navigation Scrollable Body */}
       <div className="flex flex-col gap-4 p-3" style={{ overflowY: 'auto', flex: 1 }}>
-        {!isCollapsed && (
-          <div
-            className="p-2.5 surface-secondary rounded-sm border-subtle flex items-center justify-between gap-2"
-            style={{ marginBottom: '0.125rem' }}
-          >
-            <div className="flex items-center gap-2 min-w-0">
-              <Shield size={14} className="text-primary flex-shrink-0" />
-              <div className="flex flex-col min-w-0">
-                <span className="text-xs font-bold text-primary truncate leading-tight">
-                  {roleConfig.title}
-                </span>
-                <span className="text-tertiary truncate" style={{ fontSize: '10px' }}>
-                  {roleConfig.badge}
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-
         {Object.entries(groupedSections).map(([sectionTitle, items]) => (
           <div key={sectionTitle} className="flex flex-col gap-1">
             {!isCollapsed && (

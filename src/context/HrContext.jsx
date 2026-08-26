@@ -38,8 +38,14 @@ export const HrProvider = ({ children }) => {
     setEmployees([newEmp, ...employees]);
   };
 
+  const updateEmployee = (updatedItem) => {
+    setEmployees((prev) =>
+      prev.map((emp) => (emp.id === updatedItem.id ? { ...emp, ...updatedItem } : emp))
+    );
+  };
+
   return (
-    <HrContext.Provider value={{ employees, addEmployee, candidates }}>
+    <HrContext.Provider value={{ employees, addEmployee, updateEmployee, candidates }}>
       {children}
     </HrContext.Provider>
   );

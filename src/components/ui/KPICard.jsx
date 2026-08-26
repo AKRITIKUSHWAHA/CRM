@@ -35,14 +35,14 @@ export const KPICard = ({
       style={{
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: '10px',
-        padding: '0.75rem 0.875rem',
+        borderRadius: '14px',
+        padding: '1.25rem',
+        height: '132px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        gap: '0.375rem',
-        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.02)',
-        transition: 'all 0.15s ease',
+        boxShadow: 'var(--shadow-sm)',
+        transition: 'all 0.2s ease',
         cursor: onClick ? 'pointer' : 'default',
         position: 'relative',
         boxSizing: 'border-box',
@@ -51,24 +51,39 @@ export const KPICard = ({
       onMouseEnter={(e) => {
         if (onClick) {
           e.currentTarget.style.borderColor = 'var(--primary-border)';
-          e.currentTarget.style.boxShadow = '0 3px 8px 0 rgba(0, 0, 0, 0.04)';
+          e.currentTarget.style.transform = 'translateY(-2px)';
+          e.currentTarget.style.boxShadow = 'var(--shadow-md)';
         }
       }}
       onMouseLeave={(e) => {
         if (onClick) {
           e.currentTarget.style.borderColor = 'var(--border)';
-          e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.02)';
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
         }
       }}
     >
-      {/* Top Header: Custom Color Icon & 3 Vertical Dots */}
-      <div className="flex items-center justify-between">
-        {Icon ? (
+      {/* Header Row: Title on Left, Icon on Right */}
+      <div className="flex items-center justify-between gap-2">
+        <span
+          className="truncate"
+          style={{
+            fontSize: '11px',
+            fontWeight: 700,
+            color: 'var(--text-secondary)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+          }}
+        >
+          {title}
+        </span>
+
+        {Icon && (
           <div
             style={{
-              width: '28px',
-              height: '28px',
-              borderRadius: '7px',
+              width: '34px',
+              height: '34px',
+              borderRadius: '9px',
               backgroundColor: iconBg,
               color: iconColor,
               display: 'flex',
@@ -77,80 +92,49 @@ export const KPICard = ({
               flexShrink: 0,
             }}
           >
-            <Icon size={14} />
+            <Icon size={18} />
           </div>
-        ) : <div />}
-
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); }}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-tertiary)',
-            cursor: 'pointer',
-            padding: '2px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <MoreVertical size={14} />
-        </button>
+        )}
       </div>
 
-      {/* Label & Value */}
-      <div className="flex flex-col gap-0.5">
-        <span
-          className="truncate"
-          style={{
-            fontSize: '10px',
-            fontWeight: 700,
-            color: 'var(--text-tertiary)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.04em',
-          }}
-        >
-          {title}
-        </span>
-        <div
-          style={{
-            fontSize: '1.25rem',
-            fontWeight: 800,
-            color: 'var(--text-primary)',
-            fontFamily: 'var(--font-display)',
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-          }}
-        >
-          {value}
-        </div>
+      {/* Value */}
+      <div
+        style={{
+          fontSize: '1.75rem',
+          fontWeight: 800,
+          color: 'var(--text-primary)',
+          fontFamily: 'var(--font-display)',
+          lineHeight: 1,
+          letterSpacing: '-0.02em',
+        }}
+      >
+        {value}
       </div>
 
       {/* Contextual Growth Pill Line */}
       {(change || changePeriod) && (
-        <div className="flex items-center gap-1.5 text-xs flex-wrap">
+        <div className="flex items-center gap-1.5 text-xs">
           {change && (
             <span
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '1px',
-                padding: '1px 5px',
+                gap: '2px',
+                padding: '2px 7px',
                 borderRadius: '9999px',
-                backgroundColor: 'rgba(22, 163, 74, 0.1)',
-                color: '#16a34a',
-                fontSize: '10px',
+                backgroundColor: changeType === 'negative' ? 'rgba(220, 38, 38, 0.1)' : 'rgba(22, 163, 74, 0.1)',
+                color: changeType === 'negative' ? 'var(--error)' : '#16a34a',
+                fontSize: '11px',
                 fontWeight: 700,
                 whiteSpace: 'nowrap',
               }}
             >
-              <TrendIcon size={11} />
+              <TrendIcon size={12} />
               {change}
             </span>
           )}
           {changePeriod && (
-            <span className="truncate" style={{ fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+            <span className="truncate" style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
               {changePeriod}
             </span>
           )}

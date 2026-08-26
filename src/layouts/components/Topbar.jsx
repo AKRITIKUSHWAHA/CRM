@@ -299,49 +299,6 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
 
           <DropdownDivider />
 
-          {/* Role Switcher Menu */}
-          <div className="px-3 py-1.5 text-xs font-bold text-tertiary uppercase tracking-wider flex items-center gap-1.5" style={{ fontSize: '10px' }}>
-            <UserCheck size={12} />
-            <span>Switch Role / Persona</span>
-          </div>
-
-          {availableRoles.map((r) => {
-            const isSelected = currentUser?.email === r.email;
-            return (
-              <DropdownItem
-                key={r.id}
-                onClick={() => handleSwitchRole(r)}
-                className={isSelected ? 'bg-primary-light font-semibold' : ''}
-              >
-                <div className="flex items-center justify-between w-full gap-2">
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-semibold text-primary">{r.name}</span>
-                    <span className="text-tertiary" style={{ fontSize: '10px' }}>{r.title}</span>
-                  </div>
-                  {isSelected && <Check size={14} className="text-primary flex-shrink-0" />}
-                </div>
-              </DropdownItem>
-            );
-          })}
-
-          <DropdownDivider />
-
-          {product === 'crm' ? (
-            <DropdownItem icon={Sparkles} onClick={() => navigate('/oal/dashboard')}>
-              Switch to OAL Network Marketplace
-            </DropdownItem>
-          ) : (
-            <DropdownItem icon={Building2} onClick={() => navigate('/crm/dashboard')}>
-              Switch to CRM nErgy Enterprise
-            </DropdownItem>
-          )}
-
-          <DropdownItem icon={ExternalLink} onClick={() => navigate('/showcase')}>
-            Component Gallery Showcase
-          </DropdownItem>
-
-          <DropdownDivider />
-
           <DropdownItem icon={LogOut} danger onClick={handleLogout}>
             Log Out ({product.toUpperCase()})
           </DropdownItem>

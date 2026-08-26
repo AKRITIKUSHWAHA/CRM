@@ -36,37 +36,79 @@ html, body, #root, .app-layout, .main-content {
   }
 }
 
-/* Grid Responsive Breakpoints — ALWAYS 4 CARDS IN A SINGLE ROW */
+/* Grid Responsive Breakpoints — Responsive Grid Layout */
 .grid-responsive-kpi {
   display: grid;
-  grid-template-columns: repeat(4, 1fr) !important;
-  gap: 0.625rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
   width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .grid-responsive-kpi {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.875rem !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .grid-responsive-kpi {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
 }
 
 .grid-responsive-health {
   display: grid;
-  grid-template-columns: repeat(4, 1fr) !important;
-  gap: 0.625rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
   width: 100%;
 }
 
 .health-col-bordered {
   border-left: 1px solid var(--border);
-  padding-left: 1rem;
+  padding-left: 1.25rem;
+}
+
+@media (max-width: 960px) {
+  .grid-responsive-health {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.25rem !important;
+  }
+  .health-col-bordered {
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .grid-responsive-health {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
 }
 
 .grid-responsive-6kpi {
   display: grid;
-  grid-template-columns: repeat(6, 1fr) !important;
-  gap: 0.625rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.75rem;
   width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
 .grid-responsive-2col {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  gap: 1.25rem;
+  gap: 1.5rem;
   width: 100%;
 }
 

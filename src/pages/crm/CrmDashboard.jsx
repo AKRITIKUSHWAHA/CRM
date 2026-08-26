@@ -568,112 +568,247 @@ export const CrmDashboard = () => {
         />
       </div>
 
-      {/* 3. Row 2: Business Health Horizontal 4-Column Card */}
-      <div
-        style={{
-          backgroundColor: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: '12px',
-          padding: '1.25rem 1.5rem',
-          boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)',
-        }}
-      >
-        <div className="grid-responsive-health">
-          {/* Col 1 */}
-          <div
-            onClick={() => addToast({ title: 'Conversion Telemetry', message: 'Current Lead-to-Opportunity conversion rate is 26.6% (+2.3% vs target).', type: 'info' })}
-            className="flex flex-col gap-1 cursor-pointer"
-          >
-            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+      {/* 3. Row 2: Business Health Telemetry (4 Cards - Equal Height & Width to Row 1) */}
+      <div className="grid-responsive-kpi">
+        {/* Card 1 */}
+        <div
+          onClick={() => addToast({ title: 'Conversion Telemetry', message: 'Current Lead-to-Opportunity conversion rate is 26.6% (+2.3% vs target).', type: 'info' })}
+          className="kpi-card cursor-pointer hover:border-strong transition-all"
+          style={{
+            backgroundColor: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: '14px',
+            padding: '1.25rem',
+            height: '132px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            boxShadow: 'var(--shadow-sm)',
+            boxSizing: 'border-box',
+            minWidth: 0,
+          }}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               CONVERSION RATE
             </span>
-            <div className="flex items-baseline gap-2">
-              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
-                26.6%
-              </span>
-              <span className="flex items-center font-bold" style={{ fontSize: '12px', color: '#16a34a' }}>
-                <ArrowUpRight size={14} />
-                2.3%
-              </span>
-            </div>
-            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>Lead to Opportunity</span>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '2px',
+                padding: '2px 7px',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                color: '#16a34a',
+                fontSize: '11px',
+                fontWeight: 700,
+              }}
+            >
+              <ArrowUpRight size={12} />
+              2.3%
+            </span>
           </div>
 
-          {/* Col 2 */}
           <div
-            onClick={() => addToast({ title: 'Deal Velocity', message: 'Average deal closure speed is 14.2 days (2.5 days faster than Q4).', type: 'info' })}
-            className="flex flex-col gap-1 health-col-bordered cursor-pointer"
+            style={{
+              fontSize: '1.75rem',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-display)',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}
           >
-            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            26.6%
+          </div>
+
+          <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+            Lead to Opportunity
+          </span>
+        </div>
+
+        {/* Card 2 */}
+        <div
+          onClick={() => addToast({ title: 'Deal Velocity', message: 'Average deal closure speed is 14.2 days (2.5 days faster than Q4).', type: 'info' })}
+          className="kpi-card cursor-pointer hover:border-strong transition-all"
+          style={{
+            backgroundColor: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: '14px',
+            padding: '1.25rem',
+            height: '132px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            boxShadow: 'var(--shadow-sm)',
+            boxSizing: 'border-box',
+            minWidth: 0,
+          }}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               AVG DEAL CYCLE
             </span>
-            <div className="flex items-baseline gap-2">
-              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
-                14.2 Days
-              </span>
-              <span className="flex items-center font-bold" style={{ fontSize: '12px', color: '#16a34a' }}>
-                <ArrowDownRight size={14} />
-                2.5 days
-              </span>
-            </div>
-            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>From Lead to Close</span>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '2px',
+                padding: '2px 7px',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                color: '#16a34a',
+                fontSize: '11px',
+                fontWeight: 700,
+              }}
+            >
+              <ArrowDownRight size={12} />
+              2.5d
+            </span>
           </div>
 
-          {/* Col 3 */}
           <div
-            onClick={() => addToast({ title: 'SLA Health', message: 'Tenant SLA uptime is 99.98%. All clusters optimal.', type: 'success' })}
-            className="flex flex-col gap-1 health-col-bordered cursor-pointer"
+            style={{
+              fontSize: '1.75rem',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-display)',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}
           >
-            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            14.2 Days
+          </div>
+
+          <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+            From Lead to Close
+          </span>
+        </div>
+
+        {/* Card 3 */}
+        <div
+          onClick={() => addToast({ title: 'SLA Health', message: 'Tenant SLA uptime is 99.98%. All clusters optimal.', type: 'success' })}
+          className="kpi-card cursor-pointer hover:border-strong transition-all"
+          style={{
+            backgroundColor: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: '14px',
+            padding: '1.25rem',
+            height: '132px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            boxShadow: 'var(--shadow-sm)',
+            boxSizing: 'border-box',
+            minWidth: 0,
+          }}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               TENANT SLA LIFETIME
             </span>
-            <div className="flex items-center gap-2">
-              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
-                99.98%
-              </span>
-              <span
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  padding: '2px 7px',
-                  borderRadius: '9999px',
-                  backgroundColor: 'rgba(22, 163, 74, 0.1)',
-                  color: '#16a34a',
-                }}
-              >
-                Optimal
-              </span>
-            </div>
-            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>Platform Uptime</span>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '2px 7px',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                color: '#16a34a',
+                fontSize: '11px',
+                fontWeight: 700,
+              }}
+            >
+              Optimal
+            </span>
           </div>
 
-          {/* Col 4 */}
           <div
-            onClick={handleSyncData}
-            className="flex flex-col gap-1 health-col-bordered cursor-pointer"
+            style={{
+              fontSize: '1.75rem',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-display)',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}
           >
-            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            99.98%
+          </div>
+
+          <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+            Platform Uptime
+          </span>
+        </div>
+
+        {/* Card 4 */}
+        <div
+          onClick={handleSyncData}
+          className="kpi-card cursor-pointer hover:border-strong transition-all"
+          style={{
+            backgroundColor: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: '14px',
+            padding: '1.25rem',
+            height: '132px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            boxShadow: 'var(--shadow-sm)',
+            boxSizing: 'border-box',
+            minWidth: 0,
+          }}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               DATA SYNC STATUS
             </span>
-            <div className="flex items-center gap-2" style={{ marginTop: '2px' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#16a34a', display: 'inline-block' }} />
-              <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                Synced
-              </span>
-            </div>
-            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{lastSyncTime}</span>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '2px 7px',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                color: '#16a34a',
+                fontSize: '11px',
+                fontWeight: 700,
+              }}
+            >
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#16a34a' }} />
+              Live
+            </span>
           </div>
+
+          <div
+            style={{
+              fontSize: '1.75rem',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-display)',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Synced
+          </div>
+
+          <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+            {lastSyncTime}
+          </span>
         </div>
       </div>
 
       {/* 4. Row 3: Sales Pipeline Distribution (50%) & Lead Sources & Attribution (50%) */}
       <div className="grid-responsive-2col">
         {/* Left Card: Sales Pipeline Distribution */}
-        <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
-          <div className="p-5 flex flex-col gap-4">
+        <Card style={{ borderRadius: '16px', boxShadow: 'var(--shadow-sm)' }}>
+          <div className="p-6 flex flex-col" style={{ gap: '20px' }}>
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Sales Pipeline Distribution
                 </h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
@@ -681,55 +816,19 @@ export const CrmDashboard = () => {
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => navigate('/crm/pipeline')}
-                  className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline cursor-pointer"
-                  style={{ background: 'none', border: 'none', color: '#1d4ed8' }}
-                >
-                  <span>View Kanban</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/crm/pipeline')}
+                className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline cursor-pointer"
+                style={{ background: 'none', border: 'none', color: '#1d4ed8' }}
+              >
+                <span>View Kanban</span>
+                <ArrowRight size={14} />
+              </button>
             </div>
 
-            {/* Visual SVG Trend Graph Sparkline */}
-            <div className="p-3 surface-secondary rounded-lg border-subtle flex flex-col gap-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-secondary flex items-center gap-1.5">
-                  <TrendingUp size={14} className="text-primary" />
-                  Monthly Pipeline Velocity & Trend
-                </span>
-                <span className="font-bold text-success">+24.5% Conversion</span>
-              </div>
-
-              {/* Responsive SVG Area Curve Chart */}
-              <div style={{ height: '52px', width: '100%' }}>
-                <svg viewBox="0 0 500 60" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-                  <defs>
-                    <linearGradient id="pipelineGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#1d4ed8" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.0" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 0,45 Q 60,15 120,30 T 240,10 T 360,25 T 500,5 L 500,60 L 0,60 Z"
-                    fill="url(#pipelineGrad)"
-                  />
-                  <path
-                    d="M 0,45 Q 60,15 120,30 T 240,10 T 360,25 T 500,5"
-                    fill="none"
-                    stroke="#1d4ed8"
-                    strokeWidth="2.5"
-                  />
-                  <circle cx="500" cy="5" r="4" fill="#1d4ed8" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Stages Progress Bars */}
-            <div className="flex flex-col gap-3 pt-1">
+            {/* Stages Progress List (14px Gap Between Items) */}
+            <div className="flex flex-col" style={{ gap: '14px' }}>
               {pipelineStages.map((stage) => (
                 <div
                   key={stage.id}
@@ -737,24 +836,38 @@ export const CrmDashboard = () => {
                     addToast({ title: 'Stage Details', message: `${stage.name}: ${stage.value} (${stage.dealsCount})`, type: 'info' });
                     navigate('/crm/pipeline');
                   }}
-                  className="p-2.5 rounded-md surface-secondary border-subtle cursor-pointer hover:border-strong transition-all flex flex-col gap-1.5"
+                  className="cursor-pointer hover:border-strong transition-all"
+                  style={{
+                    padding: '14px 16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                    backgroundColor: 'var(--surface-secondary)',
+                    borderRadius: '12px',
+                    border: '1px solid var(--border)',
+                  }}
                 >
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between" style={{ fontSize: '13px' }}>
+                    <div className="flex items-center" style={{ gap: '12px' }}>
                       <span
                         style={{
-                          width: '8px',
-                          height: '8px',
+                          width: '10px',
+                          height: '10px',
                           borderRadius: '50%',
                           backgroundColor: stage.badgeColor,
+                          flexShrink: 0,
                         }}
                       />
-                      <span className="font-semibold text-primary">{stage.name}</span>
-                      <span className="text-tertiary">({stage.value})</span>
+                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', marginRight: '8px' }}>
+                        {stage.name}
+                      </span>
+                      <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+                        ({stage.value})
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-tertiary font-medium">{stage.dealsCount}</span>
-                      <strong className="text-primary">{stage.pct}%</strong>
+                    <div className="flex items-center" style={{ gap: '16px' }}>
+                      <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>{stage.dealsCount}</span>
+                      <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>{stage.pct}%</strong>
                     </div>
                   </div>
                   <ProgressBar value={stage.pct} variant={stage.variant} showLabel={false} />
@@ -764,21 +877,21 @@ export const CrmDashboard = () => {
 
             {/* Pipeline Summary Footer */}
             <div
-              className="flex items-center justify-between pt-3 text-xs"
-              style={{ borderTop: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+              className="flex items-center justify-between pt-4 text-xs"
+              style={{ borderTop: '1px solid var(--border)', color: 'var(--text-secondary)', marginTop: '4px' }}
             >
-              <span>Total Pipeline Value: <strong className="text-primary">$3.33M</strong></span>
-              <span>Weighted Value: <strong className="text-primary">$1.68M</strong></span>
+              <span>Total Pipeline Value: <strong className="text-primary font-bold">$3.33M</strong></span>
+              <span>Weighted Value: <strong className="text-primary font-bold">$1.68M</strong></span>
             </div>
           </div>
         </Card>
 
         {/* Right Card: Lead Sources & Attribution */}
-        <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
-          <div className="p-5 flex flex-col gap-4">
+        <Card style={{ borderRadius: '16px', boxShadow: 'var(--shadow-sm)' }}>
+          <div className="p-6 flex flex-col" style={{ gap: '20px' }}>
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Lead Sources & Attribution
                 </h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
@@ -796,32 +909,41 @@ export const CrmDashboard = () => {
               </button>
             </div>
 
-            {/* Channels List */}
-            <div className="flex flex-col gap-2.5 pt-1">
+            {/* Channels List (14px Gap Between Items) */}
+            <div className="flex flex-col" style={{ gap: '14px' }}>
               {leadChannels.map((channel) => (
                 <div
                   key={channel.id}
                   onClick={() => setSelectedChannel(channel)}
-                  className="flex items-center justify-between p-3 surface-secondary rounded-md border-subtle cursor-pointer hover:border-strong transition-all"
+                  className="cursor-pointer hover:border-strong transition-all"
+                  style={{
+                    padding: '14px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    backgroundColor: 'var(--surface-secondary)',
+                    borderRadius: '12px',
+                    border: '1px solid var(--border)',
+                  }}
                 >
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center" style={{ gap: '14px' }}>
                     <div
                       style={{
-                        width: '8px',
-                        height: '8px',
+                        width: '10px',
+                        height: '10px',
                         borderRadius: '50%',
                         backgroundColor: channel.color,
                         flexShrink: 0,
                       }}
                     />
-                    <div className="flex flex-col">
-                      <span className="font-semibold text-xs text-primary">{channel.name}</span>
-                      <span className="text-tertiary" style={{ fontSize: '11px' }}>{channel.conversion}</span>
+                    <div className="flex flex-col" style={{ gap: '3px' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>{channel.name}</span>
+                      <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>{channel.conversion}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center" style={{ gap: '16px' }}>
                     <Badge variant={channel.badgeVariant}>{channel.pct}% Share</Badge>
-                    <span className="font-bold text-xs text-primary">{channel.volume}</span>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>{channel.volume}</span>
                   </div>
                 </div>
               ))}
@@ -829,14 +951,14 @@ export const CrmDashboard = () => {
 
             {/* Lead Sources Footer */}
             <div
-              className="flex items-center justify-between pt-3 text-xs"
-              style={{ borderTop: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+              className="flex items-center justify-between pt-4 text-xs"
+              style={{ borderTop: '1px solid var(--border)', color: 'var(--text-secondary)', marginTop: '4px' }}
             >
-              <span>Total Leads: <strong className="text-primary">2,681</strong></span>
+              <span>Total Leads: <strong className="text-primary font-bold">2,681</strong></span>
               <button
                 type="button"
                 onClick={() => navigate('/crm/leads')}
-                className="px-3 py-1 rounded-sm border-subtle surface hover:bg-hover transition-colors font-medium text-primary cursor-pointer"
+                className="px-3 py-1.5 rounded-md border-subtle surface hover:bg-hover transition-colors font-medium text-primary cursor-pointer"
                 style={{ fontSize: '11px', backgroundColor: 'var(--surface-secondary)', border: '1px solid var(--border)' }}
               >
                 View All Sources
@@ -849,11 +971,11 @@ export const CrmDashboard = () => {
       {/* 5. Row 4: Live CRM Activity Audit (50%) & Upcoming Priority Tasks (50%) */}
       <div className="grid-responsive-2col">
         {/* Left Card: Live CRM Activity Audit */}
-        <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
-          <div className="p-5 flex flex-col gap-4">
+        <Card style={{ borderRadius: '16px', boxShadow: 'var(--shadow-sm)' }}>
+          <div className="p-6 flex flex-col" style={{ gap: '20px' }}>
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Live CRM Activity Audit
                 </h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
@@ -872,13 +994,13 @@ export const CrmDashboard = () => {
             </div>
 
             {/* Filter Pills */}
-            <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="flex items-center flex-wrap" style={{ gap: '10px' }}>
               {['all', 'deals', 'contacts', 'leads'].map((cat) => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => setActivityFilter(cat)}
-                  className={`px-2.5 py-1 rounded-xs text-xs font-medium cursor-pointer transition-colors ${
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-colors ${
                     activityFilter === cat ? 'bg-primary text-white font-semibold' : 'surface-secondary text-secondary hover:bg-hover'
                   }`}
                   style={{ border: '1px solid var(--border)' }}
@@ -888,31 +1010,42 @@ export const CrmDashboard = () => {
               ))}
             </div>
 
-            {/* Activity List */}
-            <div className="flex flex-col gap-2.5">
+            {/* Activity List (14px Gap Between Items) */}
+            <div className="flex flex-col" style={{ gap: '14px' }}>
               {filteredActivities.map((act) => (
                 <div
                   key={act.id}
                   onClick={() => setSelectedActivity(act)}
-                  className="flex items-start justify-between p-3 surface-secondary rounded-md border-subtle cursor-pointer hover:border-strong transition-all"
+                  className="cursor-pointer hover:border-strong transition-all"
+                  style={{
+                    padding: '14px 16px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    backgroundColor: 'var(--surface-secondary)',
+                    borderRadius: '12px',
+                    border: '1px solid var(--border)',
+                  }}
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start" style={{ gap: '14px' }}>
                     <div
                       style={{
-                        width: '8px',
-                        height: '8px',
+                        width: '10px',
+                        height: '10px',
                         borderRadius: '50%',
                         backgroundColor: act.color,
                         marginTop: '5px',
                         flexShrink: 0,
                       }}
                     />
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-semibold text-xs text-primary">{act.title}</span>
-                      <span className="text-secondary" style={{ fontSize: '11px' }}>{act.description}</span>
+                    <div className="flex flex-col" style={{ gap: '3px' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>{act.title}</span>
+                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{act.description}</span>
                     </div>
                   </div>
-                  <span className="text-tertiary text-xs flex-shrink-0 ml-2">{act.time}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginLeft: '16px', flexShrink: 0, fontWeight: 500 }}>
+                    {act.time}
+                  </span>
                 </div>
               ))}
             </div>
@@ -920,11 +1053,11 @@ export const CrmDashboard = () => {
         </Card>
 
         {/* Right Card: Upcoming Priority Tasks */}
-        <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
-          <div className="p-5 flex flex-col gap-4">
+        <Card style={{ borderRadius: '16px', boxShadow: 'var(--shadow-sm)' }}>
+          <div className="p-6 flex flex-col" style={{ gap: '20px' }}>
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Upcoming Priority Tasks
                 </h3>
                 <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
@@ -943,8 +1076,8 @@ export const CrmDashboard = () => {
             </div>
 
             {/* Task Filters */}
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <div className="flex items-center gap-1.5">
+            <div className="flex items-center justify-between flex-wrap" style={{ gap: '10px' }}>
+              <div className="flex items-center" style={{ gap: '8px' }}>
                 {[
                   { id: 'all', label: `All (${tasks.length})` },
                   { id: 'pending', label: `Pending (${tasks.filter((t) => t.status !== 'Completed').length})` },
@@ -954,7 +1087,7 @@ export const CrmDashboard = () => {
                     key={f.id}
                     type="button"
                     onClick={() => setTaskFilter(f.id)}
-                    className={`px-2.5 py-1 rounded-xs text-xs font-medium cursor-pointer transition-colors ${
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-colors ${
                       taskFilter === f.id ? 'bg-primary text-white font-semibold' : 'surface-secondary text-secondary hover:bg-hover'
                     }`}
                     style={{ border: '1px solid var(--border)' }}
@@ -974,8 +1107,8 @@ export const CrmDashboard = () => {
               </button>
             </div>
 
-            {/* Task Items Checklist */}
-            <div className="flex flex-col gap-2.5">
+            {/* Task Items Checklist (14px Gap Between Items) */}
+            <div className="flex flex-col" style={{ gap: '14px' }}>
               {filteredTasks.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-6 text-center text-tertiary">
                   <CheckSquare size={28} className="mb-2 text-secondary" />
@@ -989,13 +1122,19 @@ export const CrmDashboard = () => {
                   return (
                     <div
                       key={task.id}
-                      className="flex items-center justify-between p-3 surface-secondary rounded-md border-subtle cursor-pointer hover:border-strong transition-all"
+                      className="cursor-pointer hover:border-strong transition-all"
                       style={{
-                        backgroundColor: isCompleted ? 'var(--surface-hover)' : 'var(--surface-secondary)',
+                        padding: '14px 16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        backgroundColor: 'var(--surface-secondary)',
+                        borderRadius: '12px',
+                        border: '1px solid var(--border)',
                         opacity: isCompleted ? 0.6 : 1,
                       }}
                     >
-                      <div className="flex items-center gap-3 flex-1 min-w-0 mr-2">
+                      <div className="flex items-center min-w-0" style={{ gap: '14px', flex: 1, marginRight: '16px' }}>
                         {/* Interactive Task Checkbox */}
                         <button
                           type="button"
@@ -1024,23 +1163,29 @@ export const CrmDashboard = () => {
                         </button>
 
                         <div
-                          className="flex flex-col gap-0.5 min-w-0"
+                          className="flex flex-col min-w-0"
+                          style={{ gap: '3px' }}
                           onClick={() => navigate('/crm/tasks')}
                         >
                           <span
-                            className="font-semibold text-xs text-primary truncate"
-                            style={{ textDecoration: isCompleted ? 'line-through' : 'none' }}
+                            className="truncate"
+                            style={{
+                              fontSize: '14px',
+                              fontWeight: 700,
+                              color: 'var(--text-primary)',
+                              textDecoration: isCompleted ? 'line-through' : 'none',
+                            }}
                           >
                             {task.title}
                           </span>
-                          <span className="text-tertiary" style={{ fontSize: '11px' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
                             Related to: <strong className="text-secondary">{task.contact}</strong>
                             {task.dueDate && ` · Due ${task.dueDate}`}
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 flex-shrink-0">
+                      <div className="flex items-center" style={{ gap: '14px', flexShrink: 0 }}>
                         <Badge
                           variant={
                             isCompleted

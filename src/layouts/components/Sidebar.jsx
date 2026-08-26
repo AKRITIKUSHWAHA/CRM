@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, Shield } from 'lucide-react';
+import { LogOut, Shield, User } from 'lucide-react';
 import { crmNavigation, oalNavigation } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { getFilteredNavigation, getRoleConfig } from '../../utils/rbac';
+import { getFilteredNavigation, getRoleConfig, normalizeRoleId } from '../../utils/rbac';
 
 export const Sidebar = ({
   isCollapsed = false,
@@ -19,6 +19,15 @@ export const Sidebar = ({
   const currentUser = product === 'crm' ? crmUser : oalUser;
   const roleConfig = getRoleConfig(currentUser, product);
   const rawNavItems = product === 'crm' ? crmNavigation : oalNavigation;
+
+  const getProfilePath = () => {
+    if (product === 'crm') return '/crm/settings';
+    const roleId = normalizeRoleId(oalUser, 'oal');
+    if (roleId === 'rep') return '/oal/rep/profile';
+    if (roleId === 'lender') return '/oal/lender/profile';
+    if (roleId === 'admin') return '/oal/admin/profile';
+    return '/oal/borrower/profile';
+  };
 
   // Filter items permitted for the active role
   const permittedNavItems = getFilteredNavigation(rawNavItems, product, currentUser);
@@ -116,11 +125,36 @@ export const Sidebar = ({
         ))}
       </div>
 
-      {/* Sidebar Footer — CLEAN SIGN OUT */}
+      {/* Sidebar Footer — PROFILE & SIGN OUT */}
       <div
-        className="p-3 flex flex-col flex-shrink-0"
+        className="p-3 flex flex-col gap-1 flex-shrink-0"
         style={{ borderTop: '1px solid var(--border)', backgroundColor: 'var(--surface-secondary)' }}
       >
+        <button
+          type="button"
+          onClick={() => {
+            if (onCloseMobile) onCloseMobile();
+            navigate(getProfilePath());
+          }}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-xs font-semibold cursor-pointer transition-colors"
+          style={{
+            backgroundColor: (location.pathname.includes('/profile') || location.pathname.includes('/settings')) ? 'rgba(29, 78, 216, 0.1)' : 'transparent',
+            color: (location.pathname.includes('/profile') || location.pathname.includes('/settings')) ? '#1d4ed8' : 'var(--text-secondary)',
+            border: 'none',
+            textAlign: 'left',
+          }}
+          onMouseEnter={(e) => {
+            if (!location.pathname.includes('/profile') && !location.pathname.includes('/settings')) e.currentTarget.style.backgroundColor = 'var(--surface-hover)';
+          }}
+          onMouseLeave={(e) => {
+            if (!location.pathname.includes('/profile') && !location.pathname.includes('/settings')) e.currentTarget.style.backgroundColor = 'transparent';
+          }}
+          title={isCollapsed ? 'My Profile' : undefined}
+        >
+          <User size={16} className="flex-shrink-0" />
+          {!isCollapsed && <span>My Profile</span>}
+        </button>
+
         <button
           type="button"
           onClick={handleLogout}
@@ -129,10 +163,11 @@ export const Sidebar = ({
             backgroundColor: 'transparent',
             color: 'var(--error)',
             border: 'none',
+            textAlign: 'left',
           }}
           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--error-light)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-          title={`Log out of ${product === 'crm' ? 'CRM nErgy' : 'OAL Network'}`}
+          title={isCollapsed ? `Sign Out (${product.toUpperCase()})` : undefined}
         >
           <LogOut size={16} className="flex-shrink-0" />
           {!isCollapsed && <span>Sign Out ({product.toUpperCase()})</span>}

@@ -47,7 +47,7 @@ export const oalNavigation = [
   { id: 'borrower-app', label: 'Loan Application', icon: FileText, path: '/oal/borrower/application', section: 'Borrower Portal' },
   { id: 'borrower-offers', label: 'Lender Offers', icon: CreditCard, path: '/oal/borrower/offers', section: 'Borrower Portal' },
   { id: 'borrower-score', label: 'AI Risk Rating', icon: Sparkles, path: '/oal/borrower/score', section: 'Borrower Portal' },
-  { id: 'borrower-messages', label: 'Licensed Agent Chat', icon: MessageSquare, path: '/oal/borrower/messages', section: 'Borrower Portal' },
+  { id: 'borrower-messages', label: 'Messages & Agent Chat', icon: MessageSquare, path: '/oal/borrower/messages', section: 'Borrower Portal' },
 
   // Lender Persona Links
   { id: 'lender-dashboard', label: 'Lender Portal', icon: Landmark, path: '/oal/lender/dashboard', section: 'Institutional Lender' },

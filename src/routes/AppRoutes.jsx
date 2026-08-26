@@ -73,6 +73,7 @@ import { OalBorrowerDocuments } from '../pages/oal/borrower/OalBorrowerDocuments
 import { OalBorrowerScore } from '../pages/oal/borrower/OalBorrowerScore';
 import { OalBorrowerOffers } from '../pages/oal/borrower/OalBorrowerOffers';
 import { OalBorrowerMessages } from '../pages/oal/borrower/OalBorrowerMessages';
+import { OalBorrowerProfile } from '../pages/oal/borrower/OalBorrowerProfile';
 import { OalBorrowerReferrals, OalBorrowerSupport, OalBorrowerSettings } from '../pages/oal/borrower/OalBorrowerReferrals';
 
 // Phase 8 Lender Pages
@@ -184,6 +185,7 @@ export const AppRoutes = () => {
           <Route path="/crm/reports" element={<CrmReports />} />
           <Route path="/crm/admin" element={<CrmAdmin />} />
           <Route path="/crm/settings" element={<CrmSettings />} />
+          <Route path="/crm/profile" element={<CrmSettings />} />
 
           <Route path="/crm/*" element={<CrmDashboard />} />
         </Route>
@@ -213,7 +215,8 @@ export const AppRoutes = () => {
           <Route path="/oal/borrower/messages" element={<OalBorrowerMessages />} />
           <Route path="/oal/borrower/referrals" element={<OalBorrowerReferrals />} />
           <Route path="/oal/borrower/support" element={<OalBorrowerSupport />} />
-          <Route path="/oal/borrower/settings" element={<OalBorrowerSettings />} />
+          <Route path="/oal/borrower/profile" element={<OalBorrowerProfile />} />
+          <Route path="/oal/borrower/settings" element={<OalBorrowerProfile />} />
 
           {/* Lender Routes */}
           <Route path="/oal/lender/dashboard" element={<OalLenderDashboard />} />
@@ -223,6 +226,7 @@ export const AppRoutes = () => {
           <Route path="/oal/lender/offers" element={<OalLenderOffers />} />
           <Route path="/oal/lender/analytics" element={<OalLenderAnalytics />} />
           <Route path="/oal/lender/reports" element={<OalLenderReports />} />
+          <Route path="/oal/lender/profile" element={<OalBorrowerProfile />} />
           <Route path="/oal/lender/settings" element={<OalLenderSettings />} />
 
           {/* OAL Rep Routes */}
@@ -233,6 +237,7 @@ export const AppRoutes = () => {
           <Route path="/oal/rep/messages" element={<OalRepMessages />} />
           <Route path="/oal/rep/offers" element={<OalRepOffers />} />
           <Route path="/oal/rep/tasks" element={<OalRepTasks />} />
+          <Route path="/oal/rep/profile" element={<OalBorrowerProfile />} />
 
           {/* Phase 9 OAL Admin Routes */}
           <Route path="/oal/admin/dashboard" element={<OalAdminDashboard />} />
@@ -250,8 +255,10 @@ export const AppRoutes = () => {
           <Route path="/oal/admin/support" element={<OalAdminSupport />} />
           <Route path="/oal/admin/reports" element={<OalAdminAudit />} />
           <Route path="/oal/admin/audit" element={<OalAdminAudit />} />
+          <Route path="/oal/admin/profile" element={<OalBorrowerProfile />} />
           <Route path="/oal/admin/settings" element={<OalAdminDashboard />} />
 
+          <Route path="/oal/profile" element={<OalBorrowerProfile />} />
           <Route path="/oal/*" element={<OalDashboardDispatcher />} />
         </Route>
       </Route>

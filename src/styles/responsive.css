@@ -78,6 +78,137 @@ html, body, #root, .app-layout, .main-content {
   }
 }
 
+/* 4-in-a-row compact KPI Strip */
+.kpi-strip-4col {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+@media (max-width: 860px) {
+  .kpi-strip-4col {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .kpi-strip-4col {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
+/* 2x2 Form Fields Grid (2 fields per line, 2 lines total) */
+.form-grid-2x2 {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1rem 1.25rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 640px) {
+  .form-grid-2x2 {
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+  }
+}
+
+/* 2-Panel Chat Layout */
+.chat-master-grid {
+  display: grid !important;
+  grid-template-columns: 320px minmax(0, 1fr) !important;
+  gap: 0 !important;
+  height: calc(100vh - 190px) !important;
+  min-height: 540px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.chat-messages-stream {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.chat-back-btn {
+  display: none !important;
+}
+
+.chat-mobile-toggle-bar {
+  display: none !important;
+}
+
+@media (max-width: 860px) {
+  .chat-master-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: auto !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+  .chat-messages-stream {
+    max-height: 48vh !important;
+    min-height: 240px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 0.85rem 1rem !important;
+  }
+  .chat-back-btn {
+    display: inline-flex !important;
+  }
+  .chat-mobile-toggle-bar {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .chat-panel-left {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    border-right: none !important;
+    display: flex !important;
+  }
+  .chat-panel-left.mobile-hide {
+    display: none !important;
+  }
+  .chat-panel-right {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+  }
+  .chat-panel-right.mobile-hide {
+    display: none !important;
+  }
+}
+
+@media (min-width: 861px) {
+  .chat-mobile-toggle-bar {
+    display: none !important;
+  }
+  .chat-panel-left {
+    display: flex !important;
+  }
+  .chat-panel-right {
+    display: flex !important;
+  }
+}
+
 .grid-responsive-health {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -646,12 +777,6 @@ html, body, #root, .app-layout, .main-content {
   }
 }
 
-@media (min-width: 1400px) {
-  .grid-kpi-6balanced {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
 /* HR Employee Detail Fields Grid (2-Col on Desktop and Mobile) */
 .grid-employee-fields {
   display: grid !important;
@@ -690,3 +815,39 @@ html, body, #root, .app-layout, .main-content {
   }
 }
 
+/* 5-Card Balanced Lender Grid */
+.grid-lender-kpi-5 {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.85rem;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .grid-lender-kpi-5 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-lender-kpi-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-lender-kpi-5 {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+}
+
+.kpi-compact {
+  height: 110px !important;
+  padding: 0.85rem 1rem !important;
+}
+
+.kpi-compact [style*="font-size: 1.75rem"] {
+  font-size: 1.35rem !important;
+}

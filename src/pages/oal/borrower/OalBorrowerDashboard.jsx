@@ -108,15 +108,10 @@ export const OalBorrowerDashboard = () => {
 
       {/* 2. 11-Stage Application Lifecycle Stepper */}
       <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
-        <div className="flex items-center justify-between mb-3.5 flex-wrap gap-2">
-          <div>
-            <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
-              11-Stage Marketplace Application Status
-            </span>
-            <div className="text-xs text-secondary mt-0.5">
-              Interactive lifecycle from onboarding to loan wire execution
-            </div>
-          </div>
+        <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+          <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
+            11-Stage Marketplace Application Status
+          </span>
           <Badge variant="success" icon={Sparkles}>
             Current Stage: {currentStageName}
           </Badge>

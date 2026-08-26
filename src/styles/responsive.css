@@ -19,8 +19,8 @@ html, body, #root, .app-layout, .main-content {
 
 .grid-responsive-health {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
   width: 100%;
 }
 
@@ -30,9 +30,64 @@ html, body, #root, .app-layout, .main-content {
 }
 
 @media (min-width: 1024px) {
+  .grid-responsive-health {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
   .health-col-bordered {
     border-left: 1px solid var(--border);
     padding-left: 1.5rem;
+  }
+}
+
+/* Dashboard Executive Controls Layout */
+.dashboard-actions-grid {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}
+
+.dashboard-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .dashboard-actions-grid {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.625rem;
+  }
+  
+  .dashboard-timeframe-switcher {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .dashboard-timeframe-switcher button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .dashboard-btn-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .dashboard-btn-group > * {
+    width: 100% !important;
+  }
+
+  .dashboard-btn-group button {
+    width: 100% !important;
+    justify-content: center !important;
   }
 }
 

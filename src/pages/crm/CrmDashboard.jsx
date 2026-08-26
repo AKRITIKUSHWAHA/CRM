@@ -348,7 +348,6 @@ export const CrmDashboard = () => {
         <Breadcrumb
           homeHref="/crm/dashboard"
           items={[
-            { label: 'Enterprise SaaS Portal', onClick: () => addToast({ title: 'Workspace Portal', message: 'nErgy Enterprise Cloud Active', type: 'info' }) },
             { label: 'CRM nErgy', href: '/crm/dashboard' },
             { label: 'Executive Dashboard' },
           ]}
@@ -385,9 +384,10 @@ export const CrmDashboard = () => {
           </div>
 
           {/* Right Header Action Controls */}
-          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <div className="dashboard-actions-grid">
             {/* Segmented Control Switcher */}
             <div
+              className="dashboard-timeframe-switcher"
               style={{
                 display: 'inline-flex',
                 padding: '3px',
@@ -422,93 +422,96 @@ export const CrmDashboard = () => {
               ))}
             </div>
 
-            {/* Sync Data Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              icon={RefreshCw}
-              disabled={isSyncing}
-              onClick={handleSyncData}
-            >
-              {isSyncing ? 'Syncing...' : 'Sync Data'}
-            </Button>
+            {/* Action Buttons Group */}
+            <div className="dashboard-btn-group">
+              {/* Sync Data Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                icon={RefreshCw}
+                disabled={isSyncing}
+                onClick={handleSyncData}
+              >
+                {isSyncing ? 'Syncing...' : 'Sync Data'}
+              </Button>
 
-            {/* + Add Contact Primary Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              icon={Plus}
-              onClick={() => setIsContactModalOpen(true)}
-            >
-              Add Contact
-            </Button>
+              {/* + Add Contact Primary Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                icon={Plus}
+                onClick={() => setIsContactModalOpen(true)}
+              >
+                Add Contact
+              </Button>
 
-            {/* + Schedule Task Primary Button */}
-            <Button
-              variant="primary"
-              size="sm"
-              icon={Plus}
-              onClick={() => setIsTaskModalOpen(true)}
-            >
-              New Task
-            </Button>
+              {/* + Schedule Task Primary Button */}
+              <Button
+                variant="primary"
+                size="sm"
+                icon={Plus}
+                onClick={() => setIsTaskModalOpen(true)}
+              >
+                New Task
+              </Button>
 
-            {/* Date Range Selector Dropdown */}
-            <Dropdown
-              trigger={
-                <button
-                  type="button"
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-sm text-xs border-subtle surface cursor-pointer font-medium text-primary hover:bg-hover transition-colors"
-                  style={{
-                    backgroundColor: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    height: '34px',
+              {/* Date Range Selector Dropdown */}
+              <Dropdown
+                trigger={
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-sm text-xs border-subtle surface cursor-pointer font-medium text-primary hover:bg-hover transition-colors"
+                    style={{
+                      backgroundColor: 'var(--surface)',
+                      border: '1px solid var(--border)',
+                      height: '34px',
+                    }}
+                  >
+                    <Calendar size={14} className="text-secondary" />
+                    <span>{selectedDateLabel}</span>
+                    <ChevronDown size={14} className="text-tertiary" />
+                  </button>
+                }
+              >
+                <DropdownHeader>Reporting Cycle Interval</DropdownHeader>
+                <DropdownItem
+                  icon={Calendar}
+                  onClick={() => {
+                    setSelectedDateLabel('May 12 – May 18, 2025');
+                    addToast({ title: 'Date Range Updated', message: 'Set to May 12 – May 18, 2025 (Current Cycle)', type: 'info' });
                   }}
                 >
-                  <Calendar size={14} className="text-secondary" />
-                  <span>{selectedDateLabel}</span>
-                  <ChevronDown size={14} className="text-tertiary" />
-                </button>
-              }
-            >
-              <DropdownHeader>Reporting Cycle Interval</DropdownHeader>
-              <DropdownItem
-                icon={Calendar}
-                onClick={() => {
-                  setSelectedDateLabel('May 12 – May 18, 2025');
-                  addToast({ title: 'Date Range Updated', message: 'Set to May 12 – May 18, 2025 (Current Cycle)', type: 'info' });
-                }}
-              >
-                May 12 &ndash; May 18, 2025 (Current Cycle)
-              </DropdownItem>
-              <DropdownItem
-                icon={Calendar}
-                onClick={() => {
-                  setSelectedDateLabel('May 1 – May 31, 2025');
-                  addToast({ title: 'Date Range Updated', message: 'Set to May 1 – May 31, 2025 (Full Month)', type: 'info' });
-                }}
-              >
-                May 1 &ndash; May 31, 2025 (Full Month)
-              </DropdownItem>
-              <DropdownItem
-                icon={Calendar}
-                onClick={() => {
-                  setSelectedDateLabel('Apr 1 – Jun 30, 2025');
-                  addToast({ title: 'Date Range Updated', message: 'Set to Q2 2025 (Apr 1 – Jun 30, 2025)', type: 'info' });
-                }}
-              >
-                Apr 1 &ndash; Jun 30, 2025 (Fiscal Q2)
-              </DropdownItem>
-              <DropdownItem
-                icon={Calendar}
-                onClick={() => {
-                  setSelectedDateLabel('Jan 1 – Dec 31, 2025');
-                  addToast({ title: 'Date Range Updated', message: 'Set to Fiscal Year 2025', type: 'info' });
-                }}
-              >
-                Jan 1 &ndash; Dec 31, 2025 (Fiscal Year)
-              </DropdownItem>
-            </Dropdown>
+                  May 12 &ndash; May 18, 2025 (Current Cycle)
+                </DropdownItem>
+                <DropdownItem
+                  icon={Calendar}
+                  onClick={() => {
+                    setSelectedDateLabel('May 1 – May 31, 2025');
+                    addToast({ title: 'Date Range Updated', message: 'Set to May 1 – May 31, 2025 (Full Month)', type: 'info' });
+                  }}
+                >
+                  May 1 &ndash; May 31, 2025 (Full Month)
+                </DropdownItem>
+                <DropdownItem
+                  icon={Calendar}
+                  onClick={() => {
+                    setSelectedDateLabel('Apr 1 – Jun 30, 2025');
+                    addToast({ title: 'Date Range Updated', message: 'Set to Q2 2025 (Apr 1 – Jun 30, 2025)', type: 'info' });
+                  }}
+                >
+                  Apr 1 &ndash; Jun 30, 2025 (Fiscal Q2)
+                </DropdownItem>
+                <DropdownItem
+                  icon={Calendar}
+                  onClick={() => {
+                    setSelectedDateLabel('Jan 1 – Dec 31, 2025');
+                    addToast({ title: 'Date Range Updated', message: 'Set to Fiscal Year 2025', type: 'info' });
+                  }}
+                >
+                  Jan 1 &ndash; Dec 31, 2025 (Fiscal Year)
+                </DropdownItem>
+              </Dropdown>
+            </div>
           </div>
         </div>
       </div>

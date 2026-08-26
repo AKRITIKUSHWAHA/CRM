@@ -263,13 +263,13 @@ export const OalBorrowerDashboard = () => {
       {/* 4. Active Offers & Assigned Representative */}
       <div className="grid-responsive-2col">
         {/* Left Column: Active Marketplace Offers */}
-        <Card style={{ padding: '1.5rem', borderRadius: '12px' }}>
-          {/* Card Header */}
-          <div className="flex items-center justify-between border-b border-subtle pb-3 mb-4">
+        <div className="flex flex-col gap-3">
+          {/* Section Heading Outside the Card */}
+          <div className="flex items-center justify-between gap-2">
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                 Active Marketplace Offers
-              </h3>
+              </h2>
               <span className="text-xs text-secondary">3 Institutional lenders competing for your debt facility</span>
             </div>
             {!acceptedOffer && (
@@ -278,212 +278,217 @@ export const OalBorrowerDashboard = () => {
                 size="sm"
                 icon={ChevronRight}
                 onClick={() => navigate('/oal/borrower/offers')}
-                style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '12px' }}
+                style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '13px' }}
               >
                 Compare All
               </Button>
             )}
           </div>
 
-          {/* Offers List */}
-          {acceptedOffer ? (
-            <div className="p-4 surface-secondary rounded-lg border-subtle flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <Badge variant="success" icon={CheckCircle2}>Accepted Term Sheet</Badge>
-                <span className="font-mono text-xs text-tertiary">{acceptedOffer.id}</span>
+          {/* Offers Content Card */}
+          <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
+            {acceptedOffer ? (
+              <div className="p-4 surface-secondary rounded-lg border-subtle flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <Badge variant="success" icon={CheckCircle2}>Accepted Term Sheet</Badge>
+                  <span className="font-mono text-xs text-tertiary">{acceptedOffer.id}</span>
+                </div>
+                <div className="font-bold text-base text-primary">{acceptedOffer.lender}</div>
+                <div className="text-sm font-bold text-success">{acceptedOffer.amount} at {acceptedOffer.rate}</div>
+                <div className="flex justify-between text-xs text-secondary mt-1">
+                  <span>Monthly: <strong>{acceptedOffer.monthlyPayment}</strong></span>
+                  <span>Term: <strong>{acceptedOffer.term}</strong></span>
+                </div>
               </div>
-              <div className="font-bold text-base text-primary">{acceptedOffer.lender}</div>
-              <div className="text-sm font-bold text-success">{acceptedOffer.amount} at {acceptedOffer.rate}</div>
-              <div className="flex justify-between text-xs text-secondary mt-1">
-                <span>Monthly: <strong>{acceptedOffer.monthlyPayment}</strong></span>
-                <span>Term: <strong>{acceptedOffer.term}</strong></span>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-3">
-              {offers.map((off, idx) => {
-                const tagConfig = [
-                  { label: '⚡ Best Match', bg: 'rgba(37, 99, 235, 0.08)', color: 'var(--accent)' },
-                  { label: '🔥 Lowest APR', bg: 'rgba(22, 163, 74, 0.08)', color: 'var(--success)' },
-                  { label: '💎 Max Capital', bg: 'rgba(147, 51, 234, 0.08)', color: '#9333ea' },
-                ][idx % 3];
+            ) : (
+              <div className="flex flex-col gap-3">
+                {offers.map((off, idx) => {
+                  const tagConfig = [
+                    { label: '⚡ Best Match', bg: 'rgba(37, 99, 235, 0.08)', color: 'var(--accent)' },
+                    { label: '🔥 Lowest APR', bg: 'rgba(22, 163, 74, 0.08)', color: 'var(--success)' },
+                    { label: '💎 Max Capital', bg: 'rgba(147, 51, 234, 0.08)', color: '#9333ea' },
+                  ][idx % 3];
 
-                const initials = off.lender.split(' ').slice(0, 2).map((w) => w[0]).join('');
+                  const initials = off.lender.split(' ').slice(0, 2).map((w) => w[0]).join('');
 
-                return (
-                  <div
-                    key={off.id}
-                    className="p-3.5 surface-secondary rounded-lg border-subtle flex items-center justify-between gap-3 transition-all hover:border-primary"
-                    style={{ transition: 'all 0.15s ease' }}
-                  >
-                    {/* Left: Lender initials & details */}
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div
-                        style={{
-                          width: '36px',
-                          height: '36px',
-                          borderRadius: '8px',
-                          backgroundColor: 'var(--surface)',
-                          border: '1px solid var(--border)',
-                          color: 'var(--accent)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontWeight: 800,
-                          fontSize: '12px',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {initials}
-                      </div>
-
-                      <div className="flex flex-col gap-0.5 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
-                            {off.lender}
-                          </span>
-                          <span
-                            style={{
-                              fontSize: '10px',
-                              fontWeight: 700,
-                              padding: '1px 6px',
-                              borderRadius: '4px',
-                              backgroundColor: tagConfig.bg,
-                              color: tagConfig.color,
-                              whiteSpace: 'nowrap',
-                              flexShrink: 0,
-                            }}
-                          >
-                            {tagConfig.label}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
-                          <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '13px' }}>{off.amount}</span>
-                          <span>•</span>
-                          <span style={{ fontWeight: 700, color: 'var(--success)', fontSize: '12px' }}>{off.rate}</span>
-                          <span>•</span>
-                          <span className="text-tertiary">{off.term}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: Compact Inspect Button */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleInspectOffer(off)}
-                      style={{ fontSize: '11px', height: '32px', padding: '0 14px', fontWeight: 600, flexShrink: 0 }}
+                  return (
+                    <div
+                      key={off.id}
+                      className="p-3.5 surface-secondary rounded-lg border-subtle flex items-center justify-between gap-3 transition-all hover:border-primary"
+                      style={{ transition: 'all 0.15s ease' }}
                     >
-                      Inspect Terms
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </Card>
+                      {/* Left: Lender initials & details */}
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <div
+                          style={{
+                            width: '36px',
+                            height: '36px',
+                            borderRadius: '8px',
+                            backgroundColor: 'var(--surface)',
+                            border: '1px solid var(--border)',
+                            color: 'var(--accent)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: 800,
+                            fontSize: '12px',
+                            flexShrink: 0,
+                          }}
+                        >
+                          {initials}
+                        </div>
+
+                        <div className="flex flex-col gap-0.5 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
+                              {off.lender}
+                            </span>
+                            <span
+                              style={{
+                                fontSize: '10px',
+                                fontWeight: 700,
+                                padding: '1px 6px',
+                                borderRadius: '4px',
+                                backgroundColor: tagConfig.bg,
+                                color: tagConfig.color,
+                                whiteSpace: 'nowrap',
+                                flexShrink: 0,
+                              }}
+                            >
+                              {tagConfig.label}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
+                            <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '13px' }}>{off.amount}</span>
+                            <span>•</span>
+                            <span style={{ fontWeight: 700, color: 'var(--success)', fontSize: '12px' }}>{off.rate}</span>
+                            <span>•</span>
+                            <span className="text-tertiary">{off.term}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right: Compact Inspect Button */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleInspectOffer(off)}
+                        style={{ fontSize: '11px', height: '32px', padding: '0 14px', fontWeight: 600, flexShrink: 0 }}
+                      >
+                        Inspect Terms
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </Card>
+        </div>
 
         {/* Right Column: Assigned OAL Representative */}
-        <Card style={{ padding: '1.5rem', borderRadius: '12px' }} className="flex flex-col gap-4">
-          {/* Card Header */}
-          <div className="flex items-center justify-between border-b border-subtle pb-3 gap-2">
-            <div className="min-w-0">
-              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+        <div className="flex flex-col gap-3">
+          {/* Section Heading Outside the Card */}
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                 Assigned Representative
-              </h3>
-              <span className="text-xs text-secondary truncate block">Dedicated underwriting advocate</span>
+              </h2>
+              <span className="text-xs text-secondary">Dedicated underwriting advocate for your application</span>
             </div>
-            <Badge variant="success" style={{ padding: '3px 8px', fontSize: '11px', flexShrink: 0 }}>
+            <Badge variant="success" style={{ padding: '3px 8px', fontSize: '11px' }}>
               ● Online
             </Badge>
           </div>
 
-          {/* Representative Profile Box */}
-          <div className="p-3.5 surface-secondary rounded-lg border-subtle flex flex-col gap-3">
-            <div className="flex items-center gap-3">
+          {/* Representative Content Card */}
+          <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-3.5">
+            {/* Representative Profile Box */}
+            <div className="p-3.5 surface-secondary rounded-lg border-subtle flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <div
+                  style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 800,
+                    fontSize: '14px',
+                    flexShrink: 0,
+                    boxShadow: '0 2px 4px rgba(37, 99, 235, 0.2)',
+                  }}
+                >
+                  SJ
+                </div>
+                <div className="min-w-0">
+                  <div className="font-bold text-xs text-primary truncate" style={{ fontSize: '14px' }}>
+                    Sarah Jenkins
+                  </div>
+                  <div className="text-xs text-secondary truncate" style={{ fontSize: '11px' }}>
+                    Licensed Underwriting Officer &bull; NMLS #84920
+                  </div>
+                </div>
+              </div>
+
+              {/* Speech Bubble */}
               <div
                 style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                  color: '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 800,
-                  fontSize: '14px',
-                  flexShrink: 0,
-                  boxShadow: '0 2px 4px rgba(37, 99, 235, 0.2)',
+                  padding: '0.75rem 1rem',
+                  backgroundColor: 'var(--surface)',
+                  borderRadius: '8px',
+                  border: '1px solid var(--border)',
+                  borderLeft: '3px solid var(--accent)',
+                  fontSize: '12px',
+                  lineHeight: '1.5',
+                  color: 'var(--text-primary)',
                 }}
               >
-                SJ
-              </div>
-              <div className="min-w-0">
-                <div className="font-bold text-xs text-primary truncate" style={{ fontSize: '14px' }}>
-                  Sarah Jenkins
-                </div>
-                <div className="text-xs text-secondary truncate" style={{ fontSize: '11px' }}>
-                  Licensed Underwriting Officer &bull; NMLS #84920
+                <p className="margin-0 italic">
+                  "{messages[messages.length - 1]?.text || 'I am negotiating directly with Vanguard’s underwriting team. I will update your offers tab shortly.'}"
+                </p>
+                <div className="flex justify-end text-tertiary mt-1" style={{ fontSize: '10px' }}>
+                  {messages[messages.length - 1]?.time || '10:45 AM'} &bull; Delivered
                 </div>
               </div>
             </div>
 
-            {/* Speech Bubble */}
-            <div
-              style={{
-                padding: '0.75rem 1rem',
-                backgroundColor: 'var(--surface)',
-                borderRadius: '8px',
-                border: '1px solid var(--border)',
-                borderLeft: '3px solid var(--accent)',
-                fontSize: '12px',
-                lineHeight: '1.5',
-                color: 'var(--text-primary)',
-              }}
-            >
-              <p className="margin-0 italic">
-                "{messages[messages.length - 1]?.text || 'I am negotiating directly with Vanguard’s underwriting team. I will update your offers tab shortly.'}"
-              </p>
-              <div className="flex justify-end text-tertiary mt-1" style={{ fontSize: '10px' }}>
-                {messages[messages.length - 1]?.time || '10:45 AM'} &bull; Delivered
-              </div>
-            </div>
-          </div>
+            {/* Quick Reply Form */}
+            <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 w-full">
+              <Input
+                value={quickReplyText}
+                onChange={(e) => setQuickReplyText(e.target.value)}
+                placeholder="Type a quick message to Sarah..."
+                style={{ height: '38px', fontSize: '12px' }}
+                className="flex-1 min-w-0"
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                type="submit"
+                icon={Send}
+                style={{ height: '38px', minWidth: '70px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
+              >
+                Send
+              </Button>
+            </form>
 
-          {/* Quick Reply Form */}
-          <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 w-full">
-            <Input
-              value={quickReplyText}
-              onChange={(e) => setQuickReplyText(e.target.value)}
-              placeholder="Type a quick message to Sarah..."
-              style={{ height: '38px', fontSize: '12px' }}
-              className="flex-1 min-w-0"
-            />
+            {/* Dedicated Chat Portal CTA Button */}
             <Button
-              variant="primary"
+              variant="outline"
               size="sm"
-              type="submit"
-              icon={Send}
-              style={{ height: '38px', minWidth: '70px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
+              icon={MessageSquare}
+              className="w-full justify-center"
+              onClick={() => navigate('/oal/borrower/messages')}
+              style={{ height: '38px', fontWeight: 600 }}
             >
-              Send
+              Open Dedicated Chat Portal
             </Button>
-          </form>
-
-          {/* Dedicated Chat Portal CTA Button */}
-          <Button
-            variant="outline"
-            size="sm"
-            icon={MessageSquare}
-            className="w-full justify-center"
-            onClick={() => navigate('/oal/borrower/messages')}
-            style={{ height: '38px', fontWeight: 600 }}
-          >
-            Open Dedicated Chat Portal
-          </Button>
-        </Card>
+          </Card>
+        </div>
       </div>
 
       {/* 5. Modal: Inspect Offer Details */}

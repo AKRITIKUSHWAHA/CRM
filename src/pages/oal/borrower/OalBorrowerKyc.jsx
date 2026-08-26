@@ -334,25 +334,25 @@ export const OalBorrowerKyc = () => {
 
       {/* 4. TAB 1: Corporate Entity & Signatory Identity */}
       {activeTab === 'entity' && (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-5">
           {/* Section 1: Commercial Entity Legal Information */}
-          <div className="flex flex-col gap-2.5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-2.5 flex-wrap">
                 <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                   Commercial Entity Legal Information
                 </h2>
-                <span className="text-xs text-secondary">
-                  Registered corporation telemetry verified through Delaware Division of Corporations
-                </span>
+                <Badge variant="success" icon={CheckCircle2} style={{ display: 'inline-flex', width: 'auto' }}>
+                  Good Standing: Active
+                </Badge>
               </div>
-              <Badge variant="success" icon={CheckCircle2} style={{ flexShrink: 0 }}>
-                Entity Good Standing: Active
-              </Badge>
+              <span className="text-xs text-secondary">
+                Delaware Division of Corporations &bull; Entity File #7749201
+              </span>
             </div>
 
             <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
                 <div>
                   <label className="form-label mb-1 font-semibold text-secondary">Borrower Legal Name</label>
                   <Input
@@ -363,7 +363,7 @@ export const OalBorrowerKyc = () => {
                 </div>
 
                 <div>
-                  <label className="form-label mb-1 font-semibold text-secondary">Jurisdiction & Entity Structure</label>
+                  <label className="form-label mb-1 font-semibold text-secondary">Jurisdiction & Entity</label>
                   <Input
                     value={incState}
                     onChange={(e) => setIncState(e.target.value)}
@@ -373,14 +373,14 @@ export const OalBorrowerKyc = () => {
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="form-label mb-0 font-semibold text-secondary">Taxpayer ID (EIN / SSN)</label>
+                    <label className="form-label mb-0 font-semibold text-secondary">Taxpayer ID (EIN)</label>
                     <button
                       type="button"
                       onClick={() => setShowEin(!showEin)}
                       className="text-accent text-xs font-semibold"
                       style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                     >
-                      {showEin ? 'Hide EIN' : 'Show Full EIN'}
+                      {showEin ? 'Hide' : 'Show'}
                     </button>
                   </div>
                   <Input
@@ -391,7 +391,7 @@ export const OalBorrowerKyc = () => {
                 </div>
 
                 <div>
-                  <label className="form-label mb-1 font-semibold text-secondary">D-U-N-S Number (Dun & Bradstreet)</label>
+                  <label className="form-label mb-1 font-semibold text-secondary">D-U-N-S Number</label>
                   <Input
                     value={duns}
                     onChange={(e) => setDuns(e.target.value)}
@@ -403,23 +403,23 @@ export const OalBorrowerKyc = () => {
           </div>
 
           {/* Section 2: Primary Officer Identity */}
-          <div className="flex flex-col gap-2.5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-2.5 flex-wrap">
                 <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                   Primary Authorized Signatory & Executive Officer
                 </h2>
-                <span className="text-xs text-secondary">
-                  Authorized corporate representative legally permitted to execute debt facilities
-                </span>
+                <Badge variant="success" icon={ShieldCheck} style={{ display: 'inline-flex', width: 'auto' }}>
+                  Identity Verified
+                </Badge>
               </div>
-              <Badge variant="success" icon={ShieldCheck} style={{ flexShrink: 0 }}>
-                Identity Verified
-              </Badge>
+              <span className="text-xs text-secondary">
+                Authorized signatory with full executive borrowing power
+              </span>
             </div>
 
-            <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
                 <div>
                   <label className="form-label mb-1 font-semibold text-secondary">Authorized Officer Full Legal Name</label>
                   <Input
@@ -440,12 +440,12 @@ export const OalBorrowerKyc = () => {
               </div>
 
               {/* Officer Verification Status Box */}
-              <div className="p-3.5 surface-secondary rounded-lg border-subtle flex items-center justify-between gap-3 text-xs flex-wrap">
+              <div className="p-3 surface-secondary rounded-lg border-subtle flex items-center justify-between gap-3 text-xs flex-wrap">
                 <div className="flex items-center gap-2.5">
                   <div
                     style={{
-                      width: '36px',
-                      height: '36px',
+                      width: '34px',
+                      height: '34px',
                       borderRadius: '50%',
                       background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
                       color: '#ffffff',
@@ -454,6 +454,7 @@ export const OalBorrowerKyc = () => {
                       justifyContent: 'center',
                       fontWeight: 800,
                       fontSize: '12px',
+                      flexShrink: 0,
                     }}
                   >
                     AT
@@ -464,7 +465,7 @@ export const OalBorrowerKyc = () => {
                   </div>
                 </div>
 
-                <Badge variant="success">● RealID Validated</Badge>
+                <Badge variant="success" style={{ display: 'inline-flex', width: 'auto' }}>● RealID Validated</Badge>
               </div>
             </Card>
           </div>

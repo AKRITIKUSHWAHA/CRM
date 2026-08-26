@@ -20,13 +20,32 @@ export const OalLayout = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--background)' }}>
-      {/* Fixed Topbar */}
+    <div
+      style={{
+        height: '100vh',
+        maxHeight: '100vh',
+        width: '100vw',
+        maxWidth: '100vw',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'var(--background)',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Fixed Topbar Header */}
       <Topbar onToggleSidebar={handleToggleSidebar} product="oal" />
 
       {/* Main Shell Container */}
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', height: 'calc(100vh - var(--topbar-height))' }}>
-        {/* Desktop / Tablet Sidebar */}
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          overflow: 'hidden',
+          height: 'calc(100vh - var(--topbar-height))',
+          maxHeight: 'calc(100vh - var(--topbar-height))',
+        }}
+      >
+        {/* Desktop / Tablet Sidebar (Fixed Height) */}
         {!isMobile && (
           <Sidebar
             isCollapsed={isSidebarCollapsed}
@@ -52,13 +71,15 @@ export const OalLayout = () => {
           </Drawer>
         )}
 
-        {/* Main Content Area */}
+        {/* Main Content Area — ONLY THIS AREA SCROLLS */}
         <main
           style={{
             flex: 1,
+            height: '100%',
             overflowY: 'auto',
             padding: isMobile ? '1rem' : '1.5rem',
             backgroundColor: 'var(--background)',
+            boxSizing: 'border-box',
           }}
         >
           <Outlet />

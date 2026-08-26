@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, LogOut, Sparkles } from 'lucide-react';
 import { crmNavigation, oalNavigation } from '../../data/mockData';
-import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 
@@ -45,15 +44,18 @@ export const Sidebar = ({
         backgroundColor: 'var(--surface)',
         borderRight: '1px solid var(--border)',
         height: '100%',
+        maxHeight: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        flexShrink: 0,
         transition: 'width var(--transition-normal)',
-        overflowX: 'hidden',
+        overflow: 'hidden',
         zIndex: 10,
+        boxSizing: 'border-box',
       }}
     >
-      {/* Navigation Scrollable Body */}
+      {/* Navigation Scrollable Body (Only this middle section scrolls internally) */}
       <div className="flex flex-col gap-4 p-3" style={{ overflowY: 'auto', flex: 1 }}>
         {Object.entries(groupedSections).map(([sectionTitle, items]) => (
           <div key={sectionTitle} className="flex flex-col gap-1">
@@ -109,9 +111,9 @@ export const Sidebar = ({
         ))}
       </div>
 
-      {/* Sidebar Footer — Perfectly Formatted Action Buttons */}
+      {/* Sidebar Footer — PINNED AT BOTTOM ALWAYS */}
       <div
-        className="p-3 flex flex-col gap-1.5"
+        className="p-3 flex flex-col gap-1.5 flex-shrink-0"
         style={{ borderTop: '1px solid var(--border)', backgroundColor: 'var(--surface-secondary)' }}
       >
         <button

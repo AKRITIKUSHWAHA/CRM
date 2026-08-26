@@ -7,15 +7,15 @@ import {
   Lock,
   Mail,
   ArrowRight,
-  Sparkles,
+  TrendingUp,
+  DollarSign,
   Users,
   Briefcase,
-  DollarSign,
   Landmark,
   Shield,
-  LogIn
+  CheckCircle2,
+  ChevronRight
 } from 'lucide-react';
-import { Input, Button, Card, Badge, Tabs } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
@@ -29,9 +29,8 @@ const crmRoles = [
     role: 'Company Owner',
     company: 'nErgy Enterprise Logistics',
     target: '/crm/dashboard',
-    badge: 'Full Admin',
-    badgeVariant: 'success',
-    icon: ShieldCheck,
+    badge: 'Full Admin Access',
+    icon: Building2,
   },
   {
     id: 'sales',
@@ -42,9 +41,8 @@ const crmRoles = [
     role: 'Sales Manager',
     company: 'nErgy Enterprise Logistics',
     target: '/crm/leads',
-    badge: 'Sales & Leads',
-    badgeVariant: 'primary',
-    icon: Briefcase,
+    badge: 'Sales & Leads Pipeline',
+    icon: TrendingUp,
   },
   {
     id: 'finance',
@@ -55,8 +53,7 @@ const crmRoles = [
     role: 'Finance Lead',
     company: 'nErgy Enterprise Logistics',
     target: '/crm/erp/finance',
-    badge: 'ERP & Finance',
-    badgeVariant: 'info',
+    badge: 'ERP & Ledgers',
     icon: DollarSign,
   },
   {
@@ -68,8 +65,7 @@ const crmRoles = [
     role: 'HR Director',
     company: 'nErgy Enterprise Logistics',
     target: '/crm/hr',
-    badge: 'HR & Staff',
-    badgeVariant: 'warning',
+    badge: 'Recruiting & Staff',
     icon: Users,
   },
   {
@@ -82,7 +78,6 @@ const crmRoles = [
     company: 'nErgy Enterprise Logistics',
     target: '/crm/tasks',
     badge: 'Tasks & Comms',
-    badgeVariant: 'default',
     icon: User,
   },
 ];
@@ -97,8 +92,7 @@ const oalRoles = [
     role: 'Borrower Account',
     company: 'BioGenix Labs Inc.',
     target: '/oal/borrower/dashboard',
-    badge: 'Borrower Hub',
-    badgeVariant: 'success',
+    badge: 'Borrower Onboarding',
     icon: Landmark,
   },
   {
@@ -110,8 +104,7 @@ const oalRoles = [
     role: 'Lender Account',
     company: 'Vanguard Capital Debt Fund',
     target: '/oal/lender/dashboard',
-    badge: 'Lender Bidding',
-    badgeVariant: 'primary',
+    badge: 'Leads & Bidding Engine',
     icon: Building2,
   },
   {
@@ -123,8 +116,7 @@ const oalRoles = [
     role: 'OAL Agent',
     company: 'OAL Network Services',
     target: '/oal/rep/dashboard',
-    badge: 'OAL Agent Desk',
-    badgeVariant: 'info',
+    badge: 'Underwriting Desk',
     icon: Shield,
   },
   {
@@ -136,8 +128,7 @@ const oalRoles = [
     role: 'Master Admin',
     company: 'OAL Network Marketplace',
     target: '/oal/admin/dashboard',
-    badge: 'Master Admin',
-    badgeVariant: 'error',
+    badge: 'Platform Governance',
     icon: ShieldCheck,
   },
 ];
@@ -184,8 +175,8 @@ export const UnifiedLogin = () => {
       );
 
       addToast({
-        title: `Logged in as ${roleObj.title}`,
-        message: `Welcome ${roleObj.name}! Navigating to ${roleObj.title} dashboard...`,
+        title: `Signed in as ${roleObj.title}`,
+        message: `Welcome ${roleObj.name}! Navigating to ${roleObj.title} workspace...`,
         type: 'success',
       });
 
@@ -204,43 +195,53 @@ export const UnifiedLogin = () => {
   return (
     <div
       style={{
-        height: '100vh',
-        maxHeight: '100vh',
-        overflow: 'hidden',
+        minHeight: '100vh',
         backgroundColor: 'var(--background)',
+        backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(29, 78, 216, 0.03) 0%, transparent 65%)',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1rem',
+        padding: '1.5rem 1rem',
+        boxSizing: 'border-box',
       }}
     >
       <div
         style={{
           width: '100%',
-          maxWidth: '1180px',
-          height: '100%',
-          maxHeight: '620px',
+          maxWidth: '1240px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.75rem',
+          gap: '1.25rem',
+          margin: '0 auto',
         }}
       >
-        {/* Compact Header */}
-        <div className="flex items-center justify-between px-2">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
+        {/* Top Header Bar */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 0.5rem',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+          }}
+        >
+          {/* Brand Identity */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
               <div
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: 'var(--radius-sm)',
-                  backgroundColor: 'var(--primary)',
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '8px',
+                  backgroundColor: '#1d4ed8',
                   color: '#ffffff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: 800,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   fontFamily: 'var(--font-display)',
                 }}
               >
@@ -248,16 +249,16 @@ export const UnifiedLogin = () => {
               </div>
               <div
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: 'var(--radius-sm)',
-                  backgroundColor: 'var(--accent)',
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '8px',
+                  backgroundColor: '#0f766e',
                   color: '#ffffff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: 800,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   fontFamily: 'var(--font-display)',
                 }}
               >
@@ -265,38 +266,182 @@ export const UnifiedLogin = () => {
               </div>
             </div>
 
-            <div className="flex flex-col">
-              <h1 style={{ fontSize: '18px', fontWeight: 800, margin: 0, lineHeight: 1.2 }}>
-                CRM nErgy & OAL Network Unified Login Gateway
-              </h1>
-              <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>
-                Click any role preset below or use the form to log in instantly (Zero Scrolling Layout)
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                <h1
+                  style={{
+                    fontSize: '22px',
+                    fontWeight: 800,
+                    color: 'var(--text-primary)',
+                    margin: 0,
+                    lineHeight: 1.1,
+                    fontFamily: 'var(--font-display)',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  CRM nErgy & OAL Network
+                </h1>
+                <span
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: 'var(--text-secondary)',
+                  }}
+                >
+                  Unified Enterprise Access
+                </span>
+              </div>
+              <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+                Secure access to your business and lending workspace
               </span>
             </div>
           </div>
 
-          <Badge variant="success" icon={Sparkles}>9 Dummy Roles Ready</Badge>
+          {/* System Status Indicator */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.375rem 0.75rem',
+              borderRadius: '9999px',
+              backgroundColor: 'var(--surface)',
+              border: '1px solid var(--border)',
+              fontSize: '12px',
+              fontWeight: 500,
+              color: 'var(--text-secondary)',
+            }}
+          >
+            <span
+              style={{
+                width: '7px',
+                height: '7px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--success)',
+                display: 'inline-block',
+              }}
+            />
+            <span>Secure Demo Environment</span>
+          </div>
         </div>
 
-        {/* Side-by-Side 2-Column Main Shell */}
-        <div style={{ flex: 1, display: 'flex', gap: '1rem', overflow: 'hidden' }}>
-          {/* Left Column: Role Presets (58% width) */}
-          <Card className="p-4 flex flex-col justify-between" style={{ flex: '1.4', overflow: 'hidden' }}>
-            <div className="flex flex-col gap-3" style={{ overflow: 'hidden' }}>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-primary">Select Platform & Persona Role:</span>
-                <Tabs
-                  tabs={[
-                    { id: 'crm', label: 'CRM Enterprise (5)' },
-                    { id: 'oal', label: 'OAL Marketplace (4)' },
-                  ]}
-                  activeTab={activePlatform}
-                  onChange={handlePlatformTabChange}
-                />
+        {/* Main 2-Column Desktop Grid / 1-Column Mobile Stack */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(12, 1fr)',
+            gap: '1.25rem',
+            alignItems: 'stretch',
+          }}
+          className="login-grid-wrapper"
+        >
+          {/* Left Panel: Segmented Control & Role Selection List (7 Cols) */}
+          <div
+            style={{
+              gridColumn: 'span 7 / span 7',
+              backgroundColor: 'var(--surface)',
+              borderRadius: '12px',
+              border: '1px solid var(--border)',
+              padding: '1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '1.25rem',
+            }}
+            className="login-left-card"
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {/* Segmented Control Platform Switcher */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '0.75rem',
+                  paddingBottom: '0.75rem',
+                  borderBottom: '1px solid var(--border)',
+                }}
+              >
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                  Select Persona Role
+                </span>
+
+                {/* Polished Segmented Control */}
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    padding: '3px',
+                    borderRadius: '8px',
+                    backgroundColor: 'var(--surface-secondary)',
+                    border: '1px solid var(--border)',
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => handlePlatformTabChange('crm')}
+                    style={{
+                      padding: '0.4rem 0.875rem',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all var(--transition-fast)',
+                      backgroundColor: activePlatform === 'crm' ? '#1d4ed8' : 'transparent',
+                      color: activePlatform === 'crm' ? '#ffffff' : 'var(--text-secondary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                    }}
+                  >
+                    <span>CRM Enterprise</span>
+                    <span
+                      style={{
+                        fontSize: '10px',
+                        padding: '1px 5px',
+                        borderRadius: '4px',
+                        backgroundColor: activePlatform === 'crm' ? 'rgba(255,255,255,0.2)' : 'var(--border)',
+                      }}
+                    >
+                      5 roles
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handlePlatformTabChange('oal')}
+                    style={{
+                      padding: '0.4rem 0.875rem',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all var(--transition-fast)',
+                      backgroundColor: activePlatform === 'oal' ? '#0f766e' : 'transparent',
+                      color: activePlatform === 'oal' ? '#ffffff' : 'var(--text-secondary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                    }}
+                  >
+                    <span>OAL Marketplace</span>
+                    <span
+                      style={{
+                        fontSize: '10px',
+                        padding: '1px 5px',
+                        borderRadius: '4px',
+                        backgroundColor: activePlatform === 'oal' ? 'rgba(255,255,255,0.2)' : 'var(--border)',
+                      }}
+                    >
+                      4 roles
+                    </span>
+                  </button>
+                </div>
               </div>
 
               {/* Role Cards List */}
-              <div className="flex flex-col gap-2" style={{ overflowY: 'auto', paddingRight: '4px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
                 {currentRoleList.map((r) => {
                   const Icon = r.icon;
                   const isSelected = selectedRole.id === r.id;
@@ -305,25 +450,32 @@ export const UnifiedLogin = () => {
                     <div
                       key={r.id}
                       onClick={() => handleSelectRole(r, activePlatform)}
-                      className="p-2.5 rounded-sm border-subtle flex items-center justify-between cursor-pointer transition-all"
                       style={{
+                        padding: '0.875rem 1rem',
+                        borderRadius: '10px',
+                        border: '1px solid',
+                        borderColor: isSelected
+                          ? activePlatform === 'crm' ? '#1d4ed8' : '#0f766e'
+                          : 'var(--border)',
                         backgroundColor: isSelected
                           ? activePlatform === 'crm' ? 'var(--primary-light)' : 'var(--accent-light)'
-                          : 'var(--surface-secondary)',
-                        borderColor: isSelected
-                          ? activePlatform === 'crm' ? 'var(--primary)' : 'var(--accent)'
-                          : 'var(--border)',
+                          : 'var(--surface)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        transition: 'all var(--transition-fast)',
                       }}
                     >
-                      <div className="flex items-center gap-2.5">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
                         <div
                           style={{
-                            width: '32px',
-                            height: '32px',
+                            width: '36px',
+                            height: '36px',
                             borderRadius: '50%',
                             backgroundColor: isSelected
-                              ? activePlatform === 'crm' ? 'var(--primary)' : 'var(--accent)'
-                              : 'var(--surface)',
+                              ? activePlatform === 'crm' ? '#1d4ed8' : '#0f766e'
+                              : 'var(--surface-secondary)',
                             color: isSelected ? '#ffffff' : 'var(--text-secondary)',
                             display: 'flex',
                             alignItems: 'center',
@@ -331,39 +483,72 @@ export const UnifiedLogin = () => {
                             flexShrink: 0,
                           }}
                         >
-                          <Icon size={16} />
+                          <Icon size={18} />
                         </div>
 
-                        <div className="flex flex-col gap-0.5 text-left">
-                          <span className="font-bold text-xs text-primary leading-none">{r.title}</span>
-                          <span className="text-secondary" style={{ fontSize: '11px' }}>
-                            {r.name} &bull; <span className="font-mono text-tertiary">{r.email}</span>
+                        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                              {r.title}
+                            </span>
+                            {isSelected && (
+                              <CheckCircle2
+                                size={14}
+                                style={{ color: activePlatform === 'crm' ? '#1d4ed8' : '#0f766e' }}
+                              />
+                            )}
+                          </div>
+                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '1px' }}>
+                            {r.name} &bull; <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)' }}>{r.email}</span>
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-tertiary" style={{ fontSize: '10px' }}>
-                          {r.password}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '11px',
+                            color: 'var(--text-tertiary)',
+                            backgroundColor: 'var(--surface-secondary)',
+                            padding: '3px 7px',
+                            borderRadius: '4px',
+                            border: '1px solid var(--border)',
+                          }}
+                        >
+                          Pass: {r.password}
                         </span>
 
-                        <Button
-                          variant={isSelected ? 'primary' : 'outline'}
-                          size="xs"
-                          icon={LogIn}
+                        <button
+                          type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleSelectRole(r, activePlatform);
                             executeLogin(r, activePlatform);
                           }}
                           style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.375rem',
+                            padding: '0.375rem 0.75rem',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            border: '1px solid',
+                            borderColor: isSelected
+                              ? activePlatform === 'crm' ? '#1d4ed8' : '#0f766e'
+                              : 'var(--border)',
                             backgroundColor: isSelected
-                              ? activePlatform === 'crm' ? 'var(--primary)' : 'var(--accent)'
-                              : undefined,
+                              ? activePlatform === 'crm' ? '#1d4ed8' : '#0f766e'
+                              : 'var(--surface)',
+                            color: isSelected ? '#ffffff' : 'var(--text-primary)',
+                            cursor: 'pointer',
+                            transition: 'all var(--transition-fast)',
                           }}
                         >
-                          Login
-                        </Button>
+                          <span>Sign In</span>
+                          <ChevronRight size={14} />
+                        </button>
                       </div>
                     </div>
                   );
@@ -371,94 +556,215 @@ export const UnifiedLogin = () => {
               </div>
             </div>
 
-            <div className="pt-2 border-t border-subtle flex items-center justify-between text-xs text-tertiary">
-              <span>Isolated Multi-Tenant Security</span>
-              <span className="font-semibold text-primary">Click any card to auto-fill form</span>
+            {/* Bottom Left Helper Text */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '12px',
+                color: 'var(--text-tertiary)',
+                paddingTop: '0.75rem',
+                borderTop: '1px solid var(--border)',
+              }}
+            >
+              <span>Tenant-isolated enterprise environment</span>
+              <span>Select a role to continue</span>
             </div>
-          </Card>
+          </div>
 
-          {/* Right Column: Pre-filled Form (42% width) */}
-          <Card className="p-4 flex flex-col justify-between" style={{ flex: '1' }}>
-            <form onSubmit={handleLoginSubmit} className="flex flex-col gap-3">
-              <div className="flex flex-col items-center text-center pb-2 border-b border-subtle">
+          {/* Right Panel: Premium Authentication Card (5 Cols) */}
+          <div
+            style={{
+              gridColumn: 'span 5 / span 5',
+              backgroundColor: 'var(--surface)',
+              borderRadius: '12px',
+              border: '1px solid var(--border)',
+              padding: '1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '1.25rem',
+            }}
+            className="login-right-card"
+          >
+            <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.125rem' }}>
+              {/* Login Card Header */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  paddingBottom: '0.875rem',
+                  borderBottom: '1px solid var(--border)',
+                }}
+              >
                 <div
                   style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: 'var(--radius-sm)',
-                    backgroundColor: activePlatform === 'crm' ? 'var(--primary)' : 'var(--accent)',
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '10px',
+                    backgroundColor: activePlatform === 'crm' ? '#1d4ed8' : '#0f766e',
                     color: '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontWeight: 800,
-                    fontSize: '18px',
+                    fontSize: '16px',
                     fontFamily: 'var(--font-display)',
-                    marginBottom: '0.25rem',
+                    marginBottom: '0.5rem',
                   }}
                 >
                   {activePlatform === 'crm' ? 'nE' : 'OA'}
                 </div>
-                <h3 className="text-sm font-bold margin-0">{selectedRole.title}</h3>
-                <span className="text-tertiary font-mono" style={{ fontSize: '11px' }}>
-                  Target: {selectedRole.target}
+                <h2
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    margin: 0,
+                  }}
+                >
+                  {selectedRole.title}
+                </h2>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                  Sign in to continue to your {activePlatform === 'crm' ? 'CRM workspace' : 'OAL lending portal'}.
                 </span>
               </div>
 
-              <Input
-                label="Role Email Address"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                startIcon={Mail}
-                required
-                style={{ height: '36px', fontSize: '13px' }}
-              />
-
-              <Input
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                startIcon={Lock}
-                required
-                style={{ height: '36px', fontSize: '13px' }}
-              />
-
-              <div className="p-2.5 surface-secondary rounded-sm border-subtle flex flex-col gap-1" style={{ fontSize: '11px' }}>
-                <div className="flex justify-between">
-                  <span className="text-tertiary">Authenticated Name:</span>
-                  <span className="font-semibold text-primary">{selectedRole.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-tertiary">Tenant Organization:</span>
-                  <span className="font-semibold text-primary">{selectedRole.company}</span>
+              {/* Form Input: Email */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', textAlign: 'left' }}>
+                <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                  Email Address
+                </label>
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  <Mail
+                    size={16}
+                    style={{ position: 'absolute', left: '14px', color: 'var(--text-tertiary)', pointerEvents: 'none' }}
+                  />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    style={{
+                      width: '100%',
+                      height: '48px',
+                      paddingLeft: '40px',
+                      paddingRight: '14px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border)',
+                      backgroundColor: 'var(--surface)',
+                      color: 'var(--text-primary)',
+                      fontSize: '13px',
+                      outline: 'none',
+                      transition: 'border-color var(--transition-fast)',
+                    }}
+                  />
                 </div>
               </div>
 
-              <Button
-                variant="primary"
-                size="md"
-                type="submit"
-                isLoading={isLoading}
-                icon={ArrowRight}
-                iconPosition="right"
-                className="w-full mt-1"
+              {/* Form Input: Password */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', textAlign: 'left' }}>
+                <div style={{ display: 'flex', itemsCenter: 'center', justifyBetween: 'space-between' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                    Password
+                  </label>
+                </div>
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  <Lock
+                    size={16}
+                    style={{ position: 'absolute', left: '14px', color: 'var(--text-tertiary)', pointerEvents: 'none' }}
+                  />
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    style={{
+                      width: '100%',
+                      height: '48px',
+                      paddingLeft: '40px',
+                      paddingRight: '14px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border)',
+                      backgroundColor: 'var(--surface)',
+                      color: 'var(--text-primary)',
+                      fontSize: '13px',
+                      outline: 'none',
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Compact Authenticated Information Box */}
+              <div
                 style={{
-                  backgroundColor: activePlatform === 'crm' ? 'var(--primary)' : 'var(--accent)',
-                  borderColor: activePlatform === 'crm' ? 'var(--primary)' : 'var(--accent)',
-                  height: '38px',
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--surface-secondary)',
+                  border: '1px solid var(--border)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.375rem',
+                  fontSize: '12px',
+                  textAlign: 'left',
                 }}
               >
-                Sign In as {selectedRole.title}
-              </Button>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--text-tertiary)', fontSize: '11px' }}>Authenticated as</span>
+                  <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{selectedRole.name}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--text-tertiary)', fontSize: '11px' }}>Organization</span>
+                  <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{selectedRole.company}</span>
+                </div>
+              </div>
+
+              {/* Primary CTA Button */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                style={{
+                  width: '100%',
+                  height: '48px',
+                  borderRadius: '8px',
+                  backgroundColor: activePlatform === 'crm' ? '#1d4ed8' : '#0f766e',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  cursor: isLoading ? 'not-allowed' : 'pointer',
+                  transition: 'background-color var(--transition-fast)',
+                }}
+              >
+                <span>{isLoading ? 'Signing In...' : `Sign in as ${selectedRole.title}`}</span>
+                {!isLoading && <ArrowRight size={16} />}
+              </button>
             </form>
 
-            <div className="pt-2 border-t border-subtle flex items-center justify-center gap-1.5 text-tertiary" style={{ fontSize: '11px' }}>
-              <ShieldCheck size={14} className="text-success" />
-              <span>256-bit AES Tenant Session Protection</span>
+            {/* Security Footer */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.375rem',
+                fontSize: '12px',
+                color: 'var(--text-tertiary)',
+                paddingTop: '0.75rem',
+                borderTop: '1px solid var(--border)',
+              }}
+            >
+              <ShieldCheck size={14} style={{ color: 'var(--success)' }} />
+              <span>Secure enterprise session &bull; Tenant-isolated workspace</span>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>

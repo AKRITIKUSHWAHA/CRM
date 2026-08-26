@@ -100,20 +100,21 @@ export const OalBorrowerOffers = () => {
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* 1. Header Row */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <Breadcrumb items={[{ label: 'OAL Network' }, { label: 'Lending Offers Marketplace' }]} />
-          <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             Lender Offers Marketplace
           </h1>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
           <Button
             variant="outline"
             size="sm"
             icon={Sparkles}
             onClick={() => setIsBenchmarkOpen(true)}
+            style={{ fontSize: '12px' }}
           >
             AI Rate Benchmark
           </Button>
@@ -123,6 +124,7 @@ export const OalBorrowerOffers = () => {
             size="sm"
             icon={Sliders}
             onClick={() => setIsCompareOpen(true)}
+            style={{ fontSize: '12px' }}
           >
             Compare All ({offers.length})
           </Button>
@@ -131,7 +133,7 @@ export const OalBorrowerOffers = () => {
             variant="primary"
             size="sm"
             icon={MessageSquare}
-            style={{ backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' }}
+            style={{ backgroundColor: 'var(--accent)', borderColor: 'var(--accent)', fontSize: '12px' }}
             onClick={() => navigate('/oal/borrower/messages')}
           >
             Chat with Underwriter
@@ -167,7 +169,7 @@ export const OalBorrowerOffers = () => {
               <CheckCircle2 size={24} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-bold text-base text-primary">
                   Executed Term Sheet: {acceptedOffer.lender}
                 </span>
@@ -184,7 +186,7 @@ export const OalBorrowerOffers = () => {
             size="sm"
             icon={FileText}
             onClick={() => handleDownloadPDF(acceptedOffer)}
-            style={{ fontWeight: 600, flexShrink: 0 }}
+            style={{ fontWeight: 600, flexShrink: 0, fontSize: '12px' }}
           >
             Download Executed PDF
           </Button>
@@ -234,9 +236,18 @@ export const OalBorrowerOffers = () => {
         </Card>
       </div>
 
-      {/* 4. Filter Toolbar */}
+      {/* 4. Filter Toolbar - Touch Scrollable on Mobile */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-1.5 p-1 surface-secondary rounded-lg border-subtle">
+        <div
+          className="flex items-center gap-1.5 p-1 surface-secondary rounded-lg border-subtle"
+          style={{
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-x',
+            maxWidth: '100%',
+            scrollbarWidth: 'none',
+          }}
+        >
           <button
             type="button"
             onClick={() => setActiveFilter('all')}
@@ -247,6 +258,8 @@ export const OalBorrowerOffers = () => {
               borderRadius: '6px',
               border: 'none',
               cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
               backgroundColor: activeFilter === 'all' ? 'var(--surface)' : 'transparent',
               color: activeFilter === 'all' ? 'var(--text-primary)' : 'var(--text-secondary)',
               boxShadow: activeFilter === 'all' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
@@ -264,6 +277,8 @@ export const OalBorrowerOffers = () => {
               borderRadius: '6px',
               border: 'none',
               cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
               backgroundColor: activeFilter === 'lowest-apr' ? 'var(--surface)' : 'transparent',
               color: activeFilter === 'lowest-apr' ? 'var(--text-primary)' : 'var(--text-secondary)',
               boxShadow: activeFilter === 'lowest-apr' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
@@ -281,6 +296,8 @@ export const OalBorrowerOffers = () => {
               borderRadius: '6px',
               border: 'none',
               cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
               backgroundColor: activeFilter === 'max-capital' ? 'var(--surface)' : 'transparent',
               color: activeFilter === 'max-capital' ? 'var(--text-primary)' : 'var(--text-secondary)',
               boxShadow: activeFilter === 'max-capital' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',

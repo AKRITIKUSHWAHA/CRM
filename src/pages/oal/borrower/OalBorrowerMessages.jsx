@@ -163,7 +163,7 @@ export const OalBorrowerMessages = () => {
             borderRight: '1px solid var(--border)',
             backgroundColor: 'var(--surface)',
           }}
-          className={`${showMobileChat ? 'hidden md:flex' : 'flex'}`}
+          className={`chat-panel-left ${showMobileChat ? 'mobile-hide' : ''}`}
         >
           {/* Panel Header & Search */}
           <div className="flex flex-col gap-2.5" style={{ width: '100%', minWidth: 0 }}>
@@ -318,7 +318,7 @@ export const OalBorrowerMessages = () => {
             height: '100%',
             backgroundColor: 'var(--surface)',
           }}
-          className={`${!showMobileChat ? 'hidden md:flex' : 'flex'}`}
+          className={`chat-panel-right ${!showMobileChat ? 'mobile-hide' : ''}`}
         >
           {/* Active Contact Seamless Header Bar */}
           <div
@@ -333,15 +333,25 @@ export const OalBorrowerMessages = () => {
             }}
           >
             <div className="flex items-center gap-3 min-w-0">
-              {/* Mobile Back Button */}
-              <Button
-                variant="ghost"
-                size="sm"
-                icon={ArrowLeft}
+              {/* Mobile Back Button - visible only on mobile screens */}
+              <button
+                type="button"
                 onClick={() => setShowMobileChat(false)}
-                className="md:hidden"
-                style={{ padding: '0 6px', height: '32px' }}
-              />
+                className="chat-back-btn"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: '4px',
+                  cursor: 'pointer',
+                  color: 'var(--text-primary)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: '2px',
+                }}
+                title="Back to Conversations"
+              >
+                <ArrowLeft size={18} />
+              </button>
 
               <div style={{ position: 'relative', flexShrink: 0 }}>
                 <div

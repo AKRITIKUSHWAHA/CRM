@@ -7,7 +7,8 @@ import {
   Sparkles,
   Paperclip,
   CheckCheck,
-  Search
+  Search,
+  Plus
 } from 'lucide-react';
 import {
   Breadcrumb,
@@ -50,13 +51,15 @@ export const CrmCommunication = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
       <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Communication Center' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>Omnichannel Communication Center</h1>
-          <p className="text-xs text-secondary margin-0">
+          <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, color: 'var(--text-primary)', margin: '2px 0 0 0' }}>
+            Omnichannel Communication Center
+          </h1>
+          <p className="text-xs text-secondary margin-0" style={{ marginTop: '2px' }}>
             Unified inbox for Corporate Email, SMS Alerts, and Internal Team Communication
           </p>
         </div>
@@ -73,7 +76,7 @@ export const CrmCommunication = () => {
       </div>
 
       {/* Channel Switcher Tabs */}
-      <Card>
+      <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
         <CardBody className="p-2">
           <Tabs
             tabs={[
@@ -92,10 +95,10 @@ export const CrmCommunication = () => {
       </Card>
 
       {/* Communication 2-Column Interface */}
-      <div className="grid-responsive-2col" style={{ gridTemplateColumns: '320px 1fr' }}>
-        {/* Left Column: Messages List */}
-        <Card className="p-3 flex flex-col gap-2" style={{ maxHeight: '600px', overflowY: 'auto' }}>
-          <div className="text-xs font-semibold text-tertiary uppercase tracking-wider mb-1 px-1">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5" style={{ minHeight: '520px' }}>
+        {/* Left Column: Messages List (1 Column) */}
+        <Card className="md:col-span-1 p-3 flex flex-col gap-2" style={{ maxHeight: '600px', overflowY: 'auto', borderRadius: '12px' }}>
+          <div className="text-xs font-bold text-tertiary uppercase tracking-wider mb-1 px-1">
             {activeChannel.toUpperCase()} Threads ({filteredMessages.length})
           </div>
 
@@ -108,7 +111,7 @@ export const CrmCommunication = () => {
                 <div
                   key={msg.id}
                   onClick={() => setActiveThreadId(msg.id)}
-                  className="p-3 surface-secondary rounded-sm border-subtle cursor-pointer transition-all"
+                  className="p-3 surface-secondary rounded-md border-subtle cursor-pointer transition-all hover:border-strong"
                   style={{
                     backgroundColor: isSelected ? 'var(--primary-light)' : 'var(--surface)',
                     borderColor: isSelected ? 'var(--primary-border)' : 'var(--border)',
@@ -126,26 +129,28 @@ export const CrmCommunication = () => {
           )}
         </Card>
 
-        {/* Right Column: Message Thread Details & Reply Composer */}
-        <Card className="p-6 flex flex-col justify-between" style={{ minHeight: '500px' }}>
+        {/* Right Column: Message Thread Details & Reply Composer (2 Columns) */}
+        <Card className="md:col-span-2 p-6 flex flex-col justify-between" style={{ minHeight: '500px', borderRadius: '12px' }}>
           {activeMessage ? (
-            <div className="flex flex-col gap-4 flex-1">
-              <div className="border-b border-subtle pb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-base font-semibold">{activeMessage.subject}</h3>
-                  <Badge variant="primary" icon={CheckCheck}>
-                    {activeMessage.type.toUpperCase()} Gateway
-                  </Badge>
+            <div className="flex flex-col gap-4 flex-1 justify-between">
+              <div className="flex flex-col gap-4">
+                <div className="border-b border-subtle pb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-base font-bold text-primary margin-0">{activeMessage.subject}</h3>
+                    <Badge variant="primary" icon={CheckCheck}>
+                      {activeMessage.type.toUpperCase()} Gateway
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-secondary">
+                    <span>From: <strong className="text-primary">{activeMessage.sender}</strong></span>
+                    <span>{activeMessage.timestamp}</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-xs text-secondary">
-                  <span>From: <strong className="text-primary">{activeMessage.sender}</strong></span>
-                  <span>{activeMessage.timestamp}</span>
-                </div>
-              </div>
 
-              {/* Message Body Content */}
-              <div className="p-4 surface-secondary rounded-md border-subtle text-sm text-primary flex-1">
-                {activeMessage.body}
+                {/* Message Body Content */}
+                <div className="p-4 surface-secondary rounded-md border-subtle text-sm text-primary" style={{ minHeight: '140px', lineHeight: 1.5 }}>
+                  {activeMessage.body}
+                </div>
               </div>
 
               {/* Reply Form */}

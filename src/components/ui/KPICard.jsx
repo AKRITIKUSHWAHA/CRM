@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Minus, MoreVertical } from 'lucide-react';
 import { Skeleton } from './Skeleton';
 import { cx } from '../../utils/classNames';
 
@@ -8,36 +8,25 @@ export const KPICard = ({
   value,
   change,
   changeType = 'positive', // 'positive' | 'negative' | 'neutral'
-  changePeriod = 'vs last month',
+  changePeriod = 'vs last 7 days',
   icon: Icon,
-  badgeText,
+  iconBg = 'rgba(22, 163, 74, 0.1)',
+  iconColor = '#16a34a',
   isLoading = false,
   className = '',
   onClick,
 }) => {
   if (isLoading) {
     return (
-      <div className={cx('kpi-card', className)}>
-        <Skeleton width="60%" height="14px" />
-        <Skeleton width="40%" height="24px" />
-        <Skeleton width="70%" height="14px" />
+      <div className={cx('kpi-card', className)} style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', padding: '0.75rem' }}>
+        <Skeleton width="50%" height="10px" />
+        <Skeleton width="40%" height="20px" style={{ margin: '6px 0' }} />
+        <Skeleton width="60%" height="10px" />
       </div>
     );
   }
 
   const TrendIcon = changeType === 'positive' ? ArrowUpRight : changeType === 'negative' ? ArrowDownRight : Minus;
-  
-  const trendBg = changeType === 'positive'
-    ? 'rgba(22, 163, 74, 0.08)'
-    : changeType === 'negative'
-    ? 'rgba(220, 38, 38, 0.08)'
-    : 'var(--surface-secondary)';
-
-  const trendColor = changeType === 'positive'
-    ? '#16a34a'
-    : changeType === 'negative'
-    ? '#dc2626'
-    : 'var(--text-tertiary)';
 
   return (
     <div
@@ -46,114 +35,127 @@ export const KPICard = ({
       style={{
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: '12px',
-        padding: '1.125rem 1.25rem',
+        borderRadius: '10px',
+        padding: '0.75rem 0.875rem',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        gap: '0.75rem',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.03)',
+        gap: '0.375rem',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.02)',
         transition: 'all 0.15s ease',
         cursor: onClick ? 'pointer' : 'default',
+        position: 'relative',
+        boxSizing: 'border-box',
+        minWidth: 0,
       }}
       onMouseEnter={(e) => {
         if (onClick) {
           e.currentTarget.style.borderColor = 'var(--primary-border)';
-          e.currentTarget.style.boxShadow = '0 4px 12px 0 rgba(0, 0, 0, 0.05)';
+          e.currentTarget.style.boxShadow = '0 3px 8px 0 rgba(0, 0, 0, 0.04)';
         }
       }}
       onMouseLeave={(e) => {
         if (onClick) {
           e.currentTarget.style.borderColor = 'var(--border)';
-          e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.03)';
+          e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.02)';
         }
       }}
     >
+      {/* Top Header: Custom Color Icon & 3 Vertical Dots */}
       <div className="flex items-center justify-between">
-        <span
-          style={{
-            fontSize: '12px',
-            fontWeight: 600,
-            color: 'var(--text-secondary)',
-            letterSpacing: '-0.01em',
-          }}
-        >
-          {title}
-        </span>
-        {Icon && (
+        {Icon ? (
           <div
             style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '9px',
-              backgroundColor: 'var(--primary-light)',
-              color: 'var(--primary)',
+              width: '28px',
+              height: '28px',
+              borderRadius: '7px',
+              backgroundColor: iconBg,
+              color: iconColor,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
             }}
           >
-            <Icon size={17} />
+            <Icon size={14} />
           </div>
-        )}
+        ) : <div />}
+
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); }}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-tertiary)',
+            cursor: 'pointer',
+            padding: '2px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <MoreVertical size={14} />
+        </button>
       </div>
 
-      <div
-        style={{
-          fontSize: '1.5rem',
-          fontWeight: 800,
-          color: 'var(--text-primary)',
-          fontFamily: 'var(--font-display)',
-          lineHeight: 1.1,
-          letterSpacing: '-0.02em',
-        }}
-      >
-        {value}
+      {/* Label & Value */}
+      <div className="flex flex-col gap-0.5">
+        <span
+          className="truncate"
+          style={{
+            fontSize: '10px',
+            fontWeight: 700,
+            color: 'var(--text-tertiary)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em',
+          }}
+        >
+          {title}
+        </span>
+        <div
+          style={{
+            fontSize: '1.25rem',
+            fontWeight: 800,
+            color: 'var(--text-primary)',
+            fontFamily: 'var(--font-display)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+          }}
+        >
+          {value}
+        </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2" style={{ fontSize: '12px' }}>
-        {change && (
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '2px',
-              padding: '2px 7px',
-              borderRadius: '9999px',
-              backgroundColor: trendBg,
-              color: trendColor,
-              fontWeight: 600,
-              fontSize: '11px',
-            }}
-          >
-            <TrendIcon size={13} />
-            <span>{change}</span>
-          </div>
-        )}
-
-        {changePeriod && (
-          <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
-            {changePeriod}
-          </span>
-        )}
-
-        {badgeText && (
-          <span
-            style={{
-              fontSize: '10px',
-              fontWeight: 600,
-              padding: '2px 6px',
-              borderRadius: '4px',
-              backgroundColor: 'var(--surface-secondary)',
-              color: 'var(--text-secondary)',
-              border: '1px solid var(--border)',
-            }}
-          >
-            {badgeText}
-          </span>
-        )}
-      </div>
+      {/* Contextual Growth Pill Line */}
+      {(change || changePeriod) && (
+        <div className="flex items-center gap-1.5 text-xs flex-wrap">
+          {change && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '1px',
+                padding: '1px 5px',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                color: '#16a34a',
+                fontSize: '10px',
+                fontWeight: 700,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <TrendIcon size={11} />
+              {change}
+            </span>
+          )}
+          {changePeriod && (
+            <span className="truncate" style={{ fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+              {changePeriod}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };

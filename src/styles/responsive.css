@@ -9,17 +9,38 @@ html, body, #root, .app-layout, .main-content {
 .visible-mobile { display: flex !important; }
 .hidden-mobile { display: none !important; }
 
-/* Grid Responsive Breakpoints */
+/* Grid Responsive Breakpoints — ALWAYS 4 CARDS IN A SINGLE ROW */
 .grid-responsive-kpi {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.grid-responsive-health {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.health-col-bordered {
+  border-left: 1px solid var(--border);
+  padding-left: 1rem;
+}
+
+.grid-responsive-6kpi {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 0.625rem;
+  width: 100%;
 }
 
 .grid-responsive-2col {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 1.25rem;
+  width: 100%;
 }
 
 /* Mobile Login Gateway Responsiveness */
@@ -106,6 +127,10 @@ html, body, #root, .app-layout, .main-content {
   .login-left-card, .login-right-card {
     padding: 1rem !important;
   }
+
+  .grid-responsive-kpi {
+    gap: 0.375rem !important;
+  }
 }
 
 /* 320px - 430px (Small to Large Mobile Devices) */
@@ -126,33 +151,13 @@ html, body, #root, .app-layout, .main-content {
   .visible-mobile { display: none !important; }
   .hidden-mobile { display: flex !important; }
   
-  .grid-responsive-kpi {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
   .grid-responsive-2col {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* 1024px (Tablet Landscape / Laptop) */
-@media (min-width: 1024px) {
-  .grid-responsive-kpi {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* 1280px (Desktop Wide) */
-@media (min-width: 1280px) {
-  .container-wide {
-    max-width: 1280px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-/* 1440px+ (Ultra Wide Enterprise Screens) */
-@media (min-width: 1440px) {
+/* 1400px+ (Ultra Wide Enterprise Screens) */
+@media (min-width: 1400px) {
   .container-wide {
     max-width: 1400px;
   }

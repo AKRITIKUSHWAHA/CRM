@@ -1,25 +1,30 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, LogOut, Sparkles } from 'lucide-react';
+import { LogOut, Shield } from 'lucide-react';
 import { crmNavigation, oalNavigation } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { getFilteredNavigation, getRoleConfig } from '../../utils/rbac';
 
 export const Sidebar = ({
   isCollapsed = false,
-  onToggleCollapse,
   product = 'crm',
   onCloseMobile,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, crmUser, oalUser } = useAuth();
   const { addToast } = useToast();
 
+  const currentUser = product === 'crm' ? crmUser : oalUser;
+  const roleConfig = getRoleConfig(currentUser, product);
   const rawNavItems = product === 'crm' ? crmNavigation : oalNavigation;
 
-  // Group items by section
-  const groupedSections = rawNavItems.reduce((acc, item) => {
+  // Filter items permitted for the active role
+  const permittedNavItems = getFilteredNavigation(rawNavItems, product, currentUser);
+
+  // Group filtered items by section
+  const groupedSections = permittedNavItems.reduce((acc, item) => {
     const sec = item.section || 'General';
     if (!acc[sec]) acc[sec] = [];
     acc[sec].push(item);
@@ -55,8 +60,27 @@ export const Sidebar = ({
         boxSizing: 'border-box',
       }}
     >
-      {/* Navigation Scrollable Body (Only this middle section scrolls internally) */}
+      {/* Navigation Scrollable Body */}
       <div className="flex flex-col gap-4 p-3" style={{ overflowY: 'auto', flex: 1 }}>
+        {!isCollapsed && (
+          <div
+            className="p-2.5 surface-secondary rounded-sm border-subtle flex items-center justify-between gap-2"
+            style={{ marginBottom: '0.125rem' }}
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <Shield size={14} className="text-primary flex-shrink-0" />
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-bold text-primary truncate leading-tight">
+                  {roleConfig.title}
+                </span>
+                <span className="text-tertiary truncate" style={{ fontSize: '10px' }}>
+                  {roleConfig.badge}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {Object.entries(groupedSections).map(([sectionTitle, items]) => (
           <div key={sectionTitle} className="flex flex-col gap-1">
             {!isCollapsed && (
@@ -94,15 +118,15 @@ export const Sidebar = ({
                       borderRadius: 'var(--radius-sm)',
                       fontSize: '13px',
                       fontWeight: currentActive ? 600 : 500,
-                      color: currentActive ? 'var(--primary)' : 'var(--text-secondary)',
-                      backgroundColor: currentActive ? 'var(--primary-light)' : 'transparent',
+                      color: currentActive ? '#1d4ed8' : 'var(--text-secondary)',
+                      backgroundColor: currentActive ? '#eff6ff' : 'transparent',
                       textDecoration: 'none',
                       whiteSpace: 'nowrap',
                       transition: 'all var(--transition-fast)',
                     };
                   }}
                 >
-                  <Icon size={18} className="flex-shrink-0" />
+                  <Icon size={18} className="flex-shrink-0" style={{ color: (location.pathname === item.path) ? '#1d4ed8' : undefined }} />
                   {!isCollapsed && <span>{item.label}</span>}
                 </NavLink>
               );
@@ -111,15 +135,15 @@ export const Sidebar = ({
         ))}
       </div>
 
-      {/* Sidebar Footer — PINNED AT BOTTOM ALWAYS */}
+      {/* Sidebar Footer — CLEAN SIGN OUT */}
       <div
-        className="p-3 flex flex-col gap-1.5 flex-shrink-0"
+        className="p-3 flex flex-col flex-shrink-0"
         style={{ borderTop: '1px solid var(--border)', backgroundColor: 'var(--surface-secondary)' }}
       >
         <button
           type="button"
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-xs font-semibold cursor-pointer transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-xs font-semibold cursor-pointer transition-colors"
           style={{
             backgroundColor: 'transparent',
             color: 'var(--error)',
@@ -131,38 +155,6 @@ export const Sidebar = ({
         >
           <LogOut size={16} className="flex-shrink-0" />
           {!isCollapsed && <span>Sign Out ({product.toUpperCase()})</span>}
-        </button>
-
-        <button
-          type="button"
-          onClick={onToggleCollapse}
-          className="w-full flex items-center justify-between px-3 py-1.5 rounded-sm text-xs text-secondary cursor-pointer hidden-mobile transition-colors"
-          style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--surface-hover)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-          title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-        >
-          <div className="flex items-center gap-2">
-            {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-            {!isCollapsed && <span>Collapse Menu</span>}
-          </div>
-          {!isCollapsed && (
-            <span
-              style={{
-                fontSize: '10px',
-                backgroundColor: 'var(--surface)',
-                padding: '1px 5px',
-                borderRadius: '3px',
-                border: '1px solid var(--border)',
-                color: 'var(--text-tertiary)',
-              }}
-            >
-              [
-            </span>
-          )}
         </button>
       </div>
     </aside>

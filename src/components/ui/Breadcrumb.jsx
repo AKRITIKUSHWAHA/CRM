@@ -2,10 +2,10 @@ import React from 'react';
 import { ChevronRight, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export const Breadcrumb = ({ items = [] }) => {
+export const Breadcrumb = ({ items = [], homeHref = '/' }) => {
   return (
     <nav className="flex items-center gap-1.5 text-xs text-secondary mb-2" aria-label="Breadcrumb">
-      <Link to="/" className="flex items-center gap-1 hover:text-primary">
+      <Link to={homeHref} className="flex items-center gap-1 hover:text-primary transition-colors" title="Home">
         <Home size={14} />
       </Link>
 

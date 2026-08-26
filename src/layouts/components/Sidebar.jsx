@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, LogOut, Sparkles, Shield, UserCheck } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LogOut, Sparkles, Shield, UserCheck, MoreVertical } from 'lucide-react';
 import { crmNavigation, oalNavigation } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
@@ -61,7 +61,7 @@ export const Sidebar = ({
         boxSizing: 'border-box',
       }}
     >
-      {/* Navigation Scrollable Body (Only this middle section scrolls internally) */}
+      {/* Navigation Scrollable Body */}
       <div className="flex flex-col gap-4 p-3" style={{ overflowY: 'auto', flex: 1 }}>
         {!isCollapsed && (
           <div
@@ -119,15 +119,15 @@ export const Sidebar = ({
                       borderRadius: 'var(--radius-sm)',
                       fontSize: '13px',
                       fontWeight: currentActive ? 600 : 500,
-                      color: currentActive ? 'var(--primary)' : 'var(--text-secondary)',
-                      backgroundColor: currentActive ? 'var(--primary-light)' : 'transparent',
+                      color: currentActive ? '#1d4ed8' : 'var(--text-secondary)',
+                      backgroundColor: currentActive ? '#eff6ff' : 'transparent',
                       textDecoration: 'none',
                       whiteSpace: 'nowrap',
                       transition: 'all var(--transition-fast)',
                     };
                   }}
                 >
-                  <Icon size={18} className="flex-shrink-0" />
+                  <Icon size={18} className="flex-shrink-0" style={{ color: (location.pathname === item.path) ? '#1d4ed8' : undefined }} />
                   {!isCollapsed && <span>{item.label}</span>}
                 </NavLink>
               );
@@ -144,7 +144,7 @@ export const Sidebar = ({
         <button
           type="button"
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-xs font-semibold cursor-pointer transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-1.5 rounded-sm text-xs font-semibold cursor-pointer transition-colors"
           style={{
             backgroundColor: 'transparent',
             color: 'var(--error)',
@@ -171,24 +171,18 @@ export const Sidebar = ({
           title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
         >
           <div className="flex items-center gap-2">
-            {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            {isCollapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
             {!isCollapsed && <span>Collapse Menu</span>}
           </div>
-          {!isCollapsed && (
-            <span
-              style={{
-                fontSize: '10px',
-                backgroundColor: 'var(--surface)',
-                padding: '1px 5px',
-                borderRadius: '3px',
-                border: '1px solid var(--border)',
-                color: 'var(--text-tertiary)',
-              }}
-            >
-              [
-            </span>
-          )}
+          {!isCollapsed && <MoreVertical size={14} className="text-tertiary" />}
         </button>
+
+        {!isCollapsed && (
+          <div className="pt-2 px-1 text-tertiary flex flex-col gap-0.5" style={{ fontSize: '10px', borderTop: '1px solid var(--border)', marginTop: '4px' }}>
+            <span className="font-semibold text-secondary">nErgy Enterprise</span>
+            <span>© 2025 All rights reserved</span>
+          </div>
+        )}
       </div>
     </aside>
   );

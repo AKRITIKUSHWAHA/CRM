@@ -2,44 +2,40 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Users,
-  Target,
-  Kanban,
+  Briefcase,
   DollarSign,
-  CheckSquare,
-  Building2,
-  TrendingUp,
+  User,
   Plus,
   RefreshCw,
-  ArrowRight,
+  Calendar,
+  ChevronDown,
+  ArrowUpRight,
+  ArrowDownRight,
+  ShieldCheck,
+  CheckSquare,
+  Globe,
+  Share2,
+  Award,
+  TrendingUp,
+  PieChart,
+  BarChart2,
   Sparkles,
   ExternalLink,
   Check,
-  Clock,
-  Briefcase,
-  Layers,
-  ChevronRight,
-  Filter,
   Trash2,
-  Info,
-  Calendar,
-  UserPlus
+  ArrowRight
 } from 'lucide-react';
 import {
   Breadcrumb,
   Button,
   KPICard,
   Card,
-  CardHeader,
-  CardBody,
   Badge,
   ProgressBar,
   Modal,
   Input,
   Select,
-  Dropdown,
-  DropdownItem,
-  DropdownDivider,
-  DropdownHeader
+  Timeline
 } from '../../components/ui';
 import { useCrm } from '../../context/CrmContext';
 import { useToast } from '../../context/ToastContext';
@@ -58,12 +54,8 @@ export const CrmDashboard = () => {
   } = useCrm();
   const { addToast } = useToast();
 
-  // Local state for dashboard controls
+  const [activeRange, setActiveRange] = useState('30 Days');
   const [isSyncing, setIsSyncing] = useState(false);
-  const [timeframe, setTimeframe] = useState('month'); // 'month' | '30d' | 'quarter' | 'all'
-  const [pipelineMetric, setPipelineMetric] = useState('value'); // 'value' | 'count' | 'winRate'
-  const [activityFilter, setActivityFilter] = useState('all'); // 'all' | 'deals' | 'contacts' | 'leads'
-  const [isActivityExpanded, setIsActivityExpanded] = useState(false);
 
   // Modals state
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
@@ -73,7 +65,7 @@ export const CrmDashboard = () => {
 
   // Form states for Quick Task
   const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [newTaskContact, setNewTaskContact] = useState(contacts[0]?.name || 'Eleanor Vance');
+  const [newTaskContact, setNewTaskContact] = useState(contacts[0]?.name || 'Marcus Vance');
   const [newTaskPriority, setNewTaskPriority] = useState('High');
   const [newTaskDueDate, setNewTaskDueDate] = useState('2026-03-01');
 
@@ -86,45 +78,24 @@ export const CrmDashboard = () => {
 
   // Multiplier / calculations based on timeframe
   const timeframeMultiplier =
-    timeframe === '30d' ? 1.25 : timeframe === 'quarter' ? 2.8 : timeframe === 'all' ? 5.2 : 1;
+    activeRange === '7 Days' ? 0.6 : activeRange === '30 Days' ? 1.0 : 2.5;
 
-  const totalLeadsCount = Math.round(leads.length * timeframeMultiplier);
-  const qualifiedLeadsCount = Math.round(
-    leads.filter((l) => l.status === 'Qualified' || l.status === 'Proposal').length * timeframeMultiplier
-  );
-  const openDealsCount = deals.filter((d) => d.stage !== 'Won' && d.stage !== 'Lost').length;
-  const pendingTasksCount = tasks.filter((t) => t.status === 'Pending').length;
-  const customerCount = contacts.length;
-
+  const totalLeadsDisplay = Math.round(Math.max(leads.length, 1) * (activeRange === '7 Days' ? 14 : activeRange === '30 Days' ? 48 : 124));
+  const qualifiedOppDisplay = Math.round(342 * timeframeMultiplier);
   const revenueDisplay =
-    timeframe === 'month'
-      ? '$482,900'
-      : timeframe === '30d'
-      ? '$612,400'
-      : timeframe === 'quarter'
-      ? '$1,480,000'
-      : '$3,280,000';
+    activeRange === '7 Days' ? '$124,500' : activeRange === '30 Days' ? '$482,900' : '$1,480,000';
+  const enterpriseClientCount = contacts.length || 3;
 
-  const revenueGrowth =
-    timeframe === 'month'
-      ? '+19.8%'
-      : timeframe === '30d'
-      ? '+24.1%'
-      : timeframe === 'quarter'
-      ? '+38.5%'
-      : '+52.0%';
-
-  // Sync Data Handler
   const handleSyncData = () => {
     setIsSyncing(true);
     setTimeout(() => {
       setIsSyncing(false);
       addToast({
-        title: 'Dashboard Refreshed',
+        title: 'Data Synced',
         message: 'Live pipeline analytics and tenant telemetry synced successfully.',
         type: 'success',
       });
-    }, 600);
+    }, 500);
   };
 
   // Quick Task Submit
@@ -184,107 +155,14 @@ export const CrmDashboard = () => {
     setIsContactModalOpen(false);
   };
 
-  // Pipeline stages data
-  const pipelineStages = [
-    {
-      name: 'Negotiation Stage',
-      valueStr: '$1.68M',
-      countStr: '8 Deals',
-      winRateStr: '72% Win Rate',
-      pct: 45,
-      variant: 'primary',
-      badgeColor: 'primary',
-      description: 'Terms and SLA agreements in active legal review',
-    },
-    {
-      name: 'Proposal Sent',
-      valueStr: '$840,000',
-      countStr: '5 Deals',
-      winRateStr: '54% Win Rate',
-      pct: 25,
-      variant: 'success',
-      badgeColor: 'success',
-      description: 'Formal commercial quote submitted to decision makers',
-    },
-    {
-      name: 'Qualified Opportunities',
-      valueStr: '$450,000',
-      countStr: '4 Deals',
-      winRateStr: '41% Win Rate',
-      pct: 18,
-      variant: 'warning',
-      badgeColor: 'warning',
-      description: 'Technical scope validated, budget confirmed',
-    },
-    {
-      name: 'Discovery & Needs Analysis',
-      valueStr: '$310,000',
-      countStr: '3 Deals',
-      winRateStr: '28% Win Rate',
-      pct: 12,
-      variant: 'info',
-      badgeColor: 'info',
-      description: 'Initial architectural consultation and capability fit',
-    },
-  ];
-
-  // Lead channels data
-  const leadChannels = [
-    {
-      id: 'web',
-      name: 'Website Direct Forms',
-      pct: 42,
-      volume: '1,194 leads',
-      conversion: '4.8% Conv.',
-      badgeVariant: 'primary',
-      cac: '$142 CAC',
-      roi: '420% ROI',
-      trend: '+12.4% MoM',
-    },
-    {
-      id: 'linkedin',
-      name: 'LinkedIn B2B Campaigns',
-      pct: 28,
-      volume: '796 leads',
-      conversion: '6.2% Conv.',
-      badgeVariant: 'success',
-      cac: '$285 CAC',
-      roi: '380% ROI',
-      trend: '+18.1% MoM',
-    },
-    {
-      id: 'referrals',
-      name: 'Referral Partners & Brokers',
-      pct: 18,
-      volume: '512 leads',
-      conversion: '11.5% Conv.',
-      badgeVariant: 'info',
-      cac: '$95 CAC',
-      roi: '780% ROI',
-      trend: '+8.3% MoM',
-    },
-    {
-      id: 'events',
-      name: 'Trade Conferences 2026',
-      pct: 12,
-      volume: '343 leads',
-      conversion: '8.1% Conv.',
-      badgeVariant: 'warning',
-      cac: '$410 CAC',
-      roi: '290% ROI',
-      trend: '+4.5% MoM',
-    },
-  ];
-
   // Activity feed items
   const activityItems = [
     {
       id: 'act-1',
-      type: 'deals',
       title: 'New Deal Moved to Negotiation',
       description: 'Enterprise Logistics Expansion deal moved by Alexander Wright',
       time: '10 mins ago',
-      color: 'var(--primary)',
+      color: '#1d4ed8',
       badge: 'Deal Update',
       user: 'Alexander Wright',
       meta: 'Value: $480,000 · Probability: 85%',
@@ -292,11 +170,10 @@ export const CrmDashboard = () => {
     },
     {
       id: 'act-2',
-      type: 'contacts',
       title: 'Contact Record Created',
       description: 'Sofia Rodriguez added to isolated tenant database',
       time: '1 hour ago',
-      color: 'var(--success)',
+      color: '#16a34a',
       badge: 'New Contact',
       user: 'Sarah Jenkins',
       meta: 'Company: BioGenix Labs · Owner: Sarah Jenkins',
@@ -304,11 +181,10 @@ export const CrmDashboard = () => {
     },
     {
       id: 'act-3',
-      type: 'leads',
       title: 'Lead Status Updated',
       description: 'Samantha Ray moved from New to Qualified',
       time: '3 hours ago',
-      color: 'var(--info)',
+      color: '#0284c7',
       badge: 'Lead Qualification',
       user: 'Sarah Jenkins',
       meta: 'Score: 85/100 · Est Value: $250,000',
@@ -316,574 +192,612 @@ export const CrmDashboard = () => {
     },
     {
       id: 'act-4',
-      type: 'deals',
-      title: 'Commercial Proposal Generated',
-      description: 'Master service agreement draft created for Apex Global Technologies',
+      title: 'Proposal Sent to Prospect',
+      description: 'Renewal proposal sent to TechNova Solutions',
       time: '5 hours ago',
-      color: 'var(--warning)',
+      color: '#d97706',
       badge: 'Proposal Sent',
       user: 'Alexander Wright',
       meta: 'Deal ID: DEAL-301 · Amount: $1,200,000',
       route: '/crm/pipeline',
     },
-    {
-      id: 'act-5',
-      type: 'contacts',
-      title: 'KYC Vault Verification Complete',
-      description: 'Marcus Sterling documents certified by Compliance Officer',
-      time: '1 day ago',
-      color: 'var(--success)',
-      badge: 'Compliance Passed',
-      user: 'System Bot',
-      meta: 'Tenant: Vanguard Capital Partners',
-      route: '/crm/contacts',
-    },
   ];
 
-  const filteredActivity = activityItems.filter(
-    (item) => activityFilter === 'all' || item.type === activityFilter
-  );
-
-  const displayedActivity = isActivityExpanded
-    ? filteredActivity
-    : filteredActivity.slice(0, 3);
-
   return (
-    <div className="flex flex-col gap-6 w-full max-w-full">
-      {/* Header Section */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <Breadcrumb
-            homeHref="/crm/dashboard"
-            items={[{ label: 'CRM nErgy', href: '/crm/dashboard' }, { label: 'Main Dashboard' }]}
-          />
-          <div className="flex items-center gap-3 flex-wrap">
-            <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, margin: 0 }}>
-              CRM Enterprise Dashboard
-            </h1>
-            <Badge variant="primary" icon={Sparkles}>
-              Live Pipeline Active
-            </Badge>
-          </div>
-          <p className="text-xs text-secondary margin-0">
-            Real-time pipeline analytics, lead activity feeds, and upcoming tasks
-          </p>
-        </div>
+    <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
+      {/* 1. Top Breadcrumb & Executive Header Controls */}
+      <div className="flex flex-col gap-2">
+        <Breadcrumb
+          homeHref="/crm/dashboard"
+          items={[{ label: 'Enterprise SaaS Portal' }, { label: 'CRM nErgy' }, { label: 'Executive Dashboard' }]}
+        />
 
-        {/* Top Controls: Timeframe Selector + Action Buttons */}
-        <div className="flex items-center gap-2.5 flex-wrap">
-          {/* Timeframe Segmented Control */}
-          <div className="segmented-control" role="tablist" aria-label="Dashboard timeframe">
-            <button
-              type="button"
-              className={`segmented-control-item ${timeframe === 'month' ? 'segmented-control-item-active' : ''}`}
-              onClick={() => {
-                setTimeframe('month');
-                addToast({ title: 'Timeframe Changed', message: 'Showing metrics for This Month.', type: 'info' });
-              }}
-            >
-              This Month
-            </button>
-            <button
-              type="button"
-              className={`segmented-control-item ${timeframe === '30d' ? 'segmented-control-item-active' : ''}`}
-              onClick={() => {
-                setTimeframe('30d');
-                addToast({ title: 'Timeframe Changed', message: 'Showing metrics for Last 30 Days.', type: 'info' });
-              }}
-            >
-              30 Days
-            </button>
-            <button
-              type="button"
-              className={`segmented-control-item ${timeframe === 'quarter' ? 'segmented-control-item-active' : ''}`}
-              onClick={() => {
-                setTimeframe('quarter');
-                addToast({ title: 'Timeframe Changed', message: 'Showing metrics for Q1 2026.', type: 'info' });
-              }}
-            >
-              Q1 2026
-            </button>
-            <button
-              type="button"
-              className={`segmented-control-item ${timeframe === 'all' ? 'segmented-control-item-active' : ''}`}
-              onClick={() => {
-                setTimeframe('all');
-                addToast({ title: 'Timeframe Changed', message: 'Showing All Time aggregated records.', type: 'info' });
-              }}
-            >
-              All Time
-            </button>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1
+                style={{
+                  fontSize: '26px',
+                  fontWeight: 800,
+                  color: 'var(--text-primary)',
+                  margin: 0,
+                  fontFamily: 'var(--font-display)',
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                CRM Executive Dashboard
+              </h1>
+              <Badge variant="primary" icon={Sparkles}>
+                Live Pipeline Active
+              </Badge>
+            </div>
+            <p className="text-xs text-secondary margin-0" style={{ marginTop: '3px' }}>
+              Real-time pipeline performance, lead acquisition channels, and team operations.
+            </p>
           </div>
 
-          {/* Sync Data Button */}
-          <Button
-            variant="outline"
-            size="sm"
-            icon={RefreshCw}
-            isLoading={isSyncing}
-            onClick={handleSyncData}
-            title="Refresh dashboard metrics"
-          >
-            Sync Data
-          </Button>
+          {/* Right Header Action Controls */}
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+            {/* Segmented Control Switcher */}
+            <div
+              style={{
+                display: 'inline-flex',
+                padding: '3px',
+                borderRadius: '8px',
+                backgroundColor: 'var(--surface-secondary)',
+                border: '1px solid var(--border)',
+              }}
+            >
+              {['7 Days', '30 Days', 'YTD'].map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => {
+                    setActiveRange(r);
+                    addToast({ title: 'Timeframe Changed', message: `Showing metrics for ${r}.`, type: 'info' });
+                  }}
+                  style={{
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                    backgroundColor: activeRange === r ? '#ffffff' : 'transparent',
+                    color: activeRange === r ? '#1d4ed8' : 'var(--text-secondary)',
+                    boxShadow: activeRange === r ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+                  }}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
 
-          {/* Quick Actions Dropdown */}
-          <Dropdown
-            trigger={
-              <Button variant="secondary" size="sm" icon={Plus}>
-                Quick Actions
-              </Button>
-            }
-          >
-            <DropdownHeader>Dashboard Fast Actions</DropdownHeader>
-            <DropdownItem
-              icon={UserPlus}
+            {/* Sync Data Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              icon={RefreshCw}
+              disabled={isSyncing}
+              onClick={handleSyncData}
+            >
+              {isSyncing ? 'Syncing...' : 'Sync Data'}
+            </Button>
+
+            {/* + Add Contact Primary Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              icon={Plus}
               onClick={() => setIsContactModalOpen(true)}
             >
-              + Quick Add Contact
-            </DropdownItem>
-            <DropdownItem
-              icon={CheckSquare}
+              Add Contact
+            </Button>
+
+            {/* + Schedule Task Primary Button */}
+            <Button
+              variant="primary"
+              size="sm"
+              icon={Plus}
               onClick={() => setIsTaskModalOpen(true)}
             >
-              + Quick Add Task
-            </DropdownItem>
-            <DropdownDivider />
-            <DropdownItem
-              icon={Users}
-              onClick={() => navigate('/crm/contacts')}
-            >
-              Manage Contacts Directory
-            </DropdownItem>
-            <DropdownItem
-              icon={Target}
-              onClick={() => navigate('/crm/leads')}
-            >
-              View Leads Directory
-            </DropdownItem>
-            <DropdownItem
-              icon={Kanban}
-              onClick={() => navigate('/crm/pipeline')}
-            >
-              Sales Pipeline Board
-            </DropdownItem>
-          </Dropdown>
+              New Task
+            </Button>
 
-          {/* Primary Manage Contacts Action */}
-          <Button
-            variant="primary"
-            size="sm"
-            icon={Users}
-            onClick={() => navigate('/crm/contacts')}
-          >
-            Manage Contacts
-          </Button>
+            {/* Date Range Selector Pill */}
+            <button
+              type="button"
+              onClick={() => addToast({ title: 'Date Range Selector', message: 'Current reporting cycle: Active Fiscal Q1', type: 'info' })}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-sm text-xs border-subtle surface cursor-pointer font-medium text-primary"
+              style={{
+                backgroundColor: 'var(--surface)',
+                border: '1px solid var(--border)',
+                height: '34px',
+              }}
+            >
+              <Calendar size={14} className="text-secondary" />
+              <span>May 12 &ndash; May 18, 2025</span>
+              <ChevronDown size={14} className="text-tertiary" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Symmetrical Responsive KPI Cards Grid */}
-      <div className="grid-responsive-6kpi">
+      {/* 2. Row 1: 4 Executive KPI Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard
-          title="Total Leads"
-          value={totalLeadsCount}
-          change="+14.2%"
+          title="TOTAL LEADS ACQUIRED"
+          value={String(totalLeadsDisplay)}
+          change="14.2%"
           changeType="positive"
-          changePeriod="vs last month"
-          icon={Target}
-          onClick={() => {
-            addToast({ title: 'Navigating', message: 'Opening Leads Directory...', type: 'info' });
-            navigate('/crm/leads');
-          }}
+          changePeriod="vs last 7 days"
+          icon={Users}
+          iconBg="rgba(22, 163, 74, 0.1)"
+          iconColor="#16a34a"
+          onClick={() => navigate('/crm/leads')}
           tooltip="Click to view Leads Directory"
         />
 
         <KPICard
-          title="Qualified Leads"
-          value={qualifiedLeadsCount}
-          change="+8.5%"
+          title="QUALIFIED OPPORTUNITIES"
+          value={String(qualifiedOppDisplay)}
+          change="46.1%"
           changeType="positive"
-          changePeriod="vs last month"
-          icon={Sparkles}
-          onClick={() => {
-            addToast({ title: 'Navigating', message: 'Opening Qualified Leads in Directory...', type: 'info' });
-            navigate('/crm/leads');
-          }}
-          tooltip="Click to view Qualified Leads"
+          changePeriod="$2.21M Value"
+          icon={Briefcase}
+          iconBg="rgba(29, 78, 216, 0.1)"
+          iconColor="#1d4ed8"
+          onClick={() => navigate('/crm/leads')}
+          tooltip="Click to view Qualified Opportunities"
         />
 
         <KPICard
-          title="Open Opportunities"
-          value={openDealsCount}
-          change="$3.28M Value"
-          changeType="positive"
-          changePeriod="vs last month"
-          icon={Kanban}
-          onClick={() => {
-            addToast({ title: 'Navigating', message: 'Opening Sales Pipeline...', type: 'info' });
-            navigate('/crm/pipeline');
-          }}
-          tooltip="Click to view Sales Pipeline"
-        />
-
-        <KPICard
-          title="Monthly Revenue"
+          title="MONTHLY REVENUE (ARR)"
           value={revenueDisplay}
-          change={revenueGrowth}
+          change="19.8%"
           changeType="positive"
-          changePeriod="vs last month"
+          changePeriod="YoY Growth"
           icon={DollarSign}
-          onClick={() => {
-            addToast({ title: 'Navigating', message: 'Opening Financial Analytics & Pipeline...', type: 'info' });
-            navigate('/crm/pipeline');
-          }}
-          tooltip="Click to view Revenue Analytics"
+          iconBg="rgba(147, 51, 234, 0.1)"
+          iconColor="#9333ea"
+          onClick={() => navigate('/crm/pipeline')}
+          tooltip="Click to view Revenue Pipeline"
         />
 
         <KPICard
-          title="Pending Tasks"
-          value={pendingTasksCount}
-          change="Action Required"
-          changeType="warning"
-          changePeriod="vs last month"
-          icon={CheckSquare}
-          onClick={() => {
-            addToast({ title: 'Navigating', message: 'Opening Tasks & Reminders...', type: 'info' });
-            navigate('/crm/tasks');
-          }}
-          tooltip="Click to view Tasks & Reminders"
-        />
-
-        <KPICard
-          title="Active Customers"
-          value={customerCount}
-          change="Isolated Tenant DB"
-          changeType="neutral"
-          changePeriod="vs last month"
-          icon={Building2}
-          onClick={() => {
-            addToast({ title: 'Navigating', message: 'Opening Contacts & Accounts...', type: 'info' });
-            navigate('/crm/contacts');
-          }}
-          tooltip="Click to view Active Contacts"
+          title="ACTIVE ENTERPRISE CLIENTS"
+          value={String(enterpriseClientCount)}
+          change="15.4%"
+          changeType="positive"
+          changePeriod="Tiered 03"
+          icon={User}
+          iconBg="rgba(234, 88, 12, 0.1)"
+          iconColor="#ea580c"
+          onClick={() => navigate('/crm/contacts')}
+          tooltip="Click to view Enterprise Contacts"
         />
       </div>
 
-      {/* Main Dashboard Widgets Row 1: Pipeline & Attribution */}
-      <div className="grid-responsive-2col">
-        {/* Widget 1: Sales Pipeline Distribution */}
-        <Card className="flex flex-col justify-between">
-          <div>
-            <CardHeader
-              title="Sales Pipeline Distribution"
-              subtitle="Deal progression by pipeline status"
-              action={
-                <div className="flex items-center gap-2">
-                  <div className="segmented-control hidden-mobile" style={{ padding: '2px' }}>
-                    <button
-                      type="button"
-                      className={`segmented-control-item ${pipelineMetric === 'value' ? 'segmented-control-item-active' : ''}`}
-                      onClick={() => setPipelineMetric('value')}
-                    >
-                      Value ($)
-                    </button>
-                    <button
-                      type="button"
-                      className={`segmented-control-item ${pipelineMetric === 'count' ? 'segmented-control-item-active' : ''}`}
-                      onClick={() => setPipelineMetric('count')}
-                    >
-                      Deals (#)
-                    </button>
-                    <button
-                      type="button"
-                      className={`segmented-control-item ${pipelineMetric === 'winRate' ? 'segmented-control-item-active' : ''}`}
-                      onClick={() => setPipelineMetric('winRate')}
-                    >
-                      Win Rate (%)
-                    </button>
-                  </div>
-
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    icon={ArrowRight}
-                    iconPosition="right"
-                    onClick={() => {
-                      addToast({ title: 'Pipeline Kanban', message: 'Loading Kanban workflow...', type: 'info' });
-                      navigate('/crm/pipeline');
-                    }}
-                  >
-                    View Kanban
-                  </Button>
-                </div>
-              }
-            />
-
-            <CardBody className="flex flex-col gap-4">
-              {pipelineStages.map((stage) => {
-                const metricLabel =
-                  pipelineMetric === 'value'
-                    ? stage.valueStr
-                    : pipelineMetric === 'count'
-                    ? stage.countStr
-                    : stage.winRateStr;
-
-                return (
-                  <div
-                    key={stage.name}
-                    className="p-2.5 rounded-sm surface-secondary border-subtle transition-all cursor-pointer hover:border-strong"
-                    onClick={() => {
-                      addToast({
-                        title: `Pipeline Stage: ${stage.name}`,
-                        message: `${stage.valueStr} in active deal volume. Navigating to Pipeline...`,
-                        type: 'info',
-                      });
-                      navigate('/crm/pipeline');
-                    }}
-                    title={`Click to view ${stage.name} deals`}
-                  >
-                    <div className="flex items-center justify-between text-xs mb-1.5">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-primary">{stage.name}</span>
-                        <span className="text-tertiary">({stage.valueStr})</span>
-                      </div>
-                      <span className={`font-bold text-${stage.badgeColor}`}>{stage.pct}%</span>
-                    </div>
-
-                    <ProgressBar
-                      value={stage.pct}
-                      variant={stage.variant}
-                      showLabel={false}
-                      height="6px"
-                    />
-
-                    <div className="flex items-center justify-between text-xs text-tertiary mt-1" style={{ fontSize: '11px' }}>
-                      <span>{stage.description}</span>
-                      <span className="font-medium text-secondary">{metricLabel}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </CardBody>
+      {/* 3. Row 2: Business Health Horizontal 4-Column Card */}
+      <div
+        style={{
+          backgroundColor: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderRadius: '12px',
+          padding: '1.25rem 1.5rem',
+          boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)',
+        }}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Col 1 */}
+          <div className="flex flex-col gap-1">
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              CONVERSION RATE
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
+                26.6%
+              </span>
+              <span className="flex items-center font-bold" style={{ fontSize: '12px', color: '#16a34a' }}>
+                <ArrowUpRight size={14} />
+                2.3%
+              </span>
+            </div>
+            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>Lead to Opportunity</span>
           </div>
 
-          <div
-            className="p-3 border-t border-subtle flex items-center justify-between text-xs text-secondary"
-            style={{ backgroundColor: 'var(--surface-secondary)' }}
-          >
-            <span>Total Active Pipeline: <strong className="text-primary">$3.28M</strong> across 20 deals</span>
-            <span className="badge badge-success">68% Close Probability</span>
+          {/* Col 2 */}
+          <div className="flex flex-col gap-1 sm:border-l sm:border-border sm:pl-6">
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              AVG DEAL CYCLE
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
+                14.2 Days
+              </span>
+              <span className="flex items-center font-bold" style={{ fontSize: '12px', color: '#16a34a' }}>
+                <ArrowDownRight size={14} />
+                2.5 days
+              </span>
+            </div>
+            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>From Lead to Close</span>
+          </div>
+
+          {/* Col 3 */}
+          <div className="flex flex-col gap-1 lg:border-l lg:border-border lg:pl-6">
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              TENANT SLA LIFETIME
+            </span>
+            <div className="flex items-center gap-2">
+              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
+                99.98%
+              </span>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  padding: '2px 7px',
+                  borderRadius: '9999px',
+                  backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                  color: '#16a34a',
+                }}
+              >
+                Optimal
+              </span>
+            </div>
+            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>Platform Uptime</span>
+          </div>
+
+          {/* Col 4 */}
+          <div className="flex flex-col gap-1 lg:border-l lg:border-border lg:pl-6">
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              DATA SYNC STATUS
+            </span>
+            <div className="flex items-center gap-2" style={{ marginTop: '2px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#16a34a', display: 'inline-block' }} />
+              <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                Synced
+              </span>
+            </div>
+            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>Just now</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Row 3: Sales Pipeline Distribution (50%) & Lead Sources & Attribution (50%) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Left Card: Sales Pipeline Distribution */}
+        <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
+          <div className="p-5 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                  Sales Pipeline Distribution
+                </h3>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                  Deal progression by status pipeline stages.
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/crm/pipeline')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#1d4ed8',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                View Kanban &rarr;
+              </button>
+            </div>
+
+            {/* Visual SVG Trend Graph Sparkline */}
+            <div className="p-3 surface-secondary rounded-lg border-subtle flex flex-col gap-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-secondary flex items-center gap-1.5">
+                  <TrendingUp size={14} className="text-primary" />
+                  Monthly Pipeline Velocity & Trend
+                </span>
+                <span className="font-bold text-success">+24.5% Conversion</span>
+              </div>
+              
+              {/* Responsive SVG Area Curve Chart */}
+              <div style={{ height: '54px', width: '100%' }}>
+                <svg viewBox="0 0 500 60" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+                  <defs>
+                    <linearGradient id="pipelineGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#1d4ed8" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 0,45 Q 60,15 120,30 T 240,10 T 360,25 T 500,5 L 500,60 L 0,60 Z"
+                    fill="url(#pipelineGrad)"
+                  />
+                  <path
+                    d="M 0,45 Q 60,15 120,30 T 240,10 T 360,25 T 500,5"
+                    fill="none"
+                    stroke="#1d4ed8"
+                    strokeWidth="2.5"
+                  />
+                  <circle cx="500" cy="5" r="4" fill="#1d4ed8" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Stages Progress Bars */}
+            <div className="flex flex-col gap-3.5 pt-1">
+              <div>
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span className="font-semibold text-primary">Negotiation Stage ($1.85M)</span>
+                  <span className="font-bold text-primary">48%</span>
+                </div>
+                <ProgressBar value={48} variant="primary" showLabel={false} />
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span className="font-semibold text-primary">Proposal Sent ($843,000)</span>
+                  <span className="font-bold text-success">26%</span>
+                </div>
+                <ProgressBar value={26} variant="success" showLabel={false} />
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span className="font-semibold text-primary">Qualified Opportunities ($426,000)</span>
+                  <span className="font-bold text-warning">18%</span>
+                </div>
+                <ProgressBar value={18} variant="warning" showLabel={false} />
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span className="font-semibold text-primary">New Leads ($210,000)</span>
+                  <span className="font-bold text-info">8%</span>
+                </div>
+                <ProgressBar value={8} variant="info" showLabel={false} />
+              </div>
+            </div>
+
+            {/* Pipeline Summary Footer */}
+            <div
+              className="flex items-center justify-between pt-3 text-xs"
+              style={{ borderTop: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+            >
+              <span>Total Pipeline Value: <strong className="text-primary">$3.33M</strong></span>
+              <span>Weighted Value: <strong className="text-primary">$1.68M</strong></span>
+            </div>
           </div>
         </Card>
 
-        {/* Widget 2: Lead Sources & Attribution */}
-        <Card className="flex flex-col justify-between">
-          <div>
-            <CardHeader
-              title="Lead Sources & Attribution"
-              subtitle="Top channels for lead acquisition this month"
-              action={
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon={ArrowRight}
-                  iconPosition="right"
-                  onClick={() => {
-                    addToast({ title: 'Leads Directory', message: 'Viewing acquisition channels...', type: 'info' });
-                    navigate('/crm/leads');
-                  }}
-                >
-                  View Leads
-                </Button>
-              }
-            />
+        {/* Right Card: Lead Sources & Attribution */}
+        <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
+          <div className="p-5 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                  Lead Sources & Attribution
+                </h3>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                  Top channels driving qualified leads this month.
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/crm/leads')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#1d4ed8',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                All Leads &rarr;
+              </button>
+            </div>
 
-            <CardBody className="flex flex-col gap-3">
-              {leadChannels.map((channel) => (
+            {/* Channels List */}
+            <div className="flex flex-col gap-2.5 pt-1">
+              <div
+                onClick={() => {
+                  setSelectedChannel({
+                    name: 'Website Direct Forms',
+                    pct: 42,
+                    volume: '1,124 leads',
+                    conversion: '4.8% Conv.',
+                    cac: '$142 CAC',
+                    roi: '420% ROI',
+                    trend: '+12.4% MoM',
+                    badgeVariant: 'primary',
+                  });
+                }}
+                className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:scale-[1.01]"
+                style={{ backgroundColor: 'var(--primary-light)', border: '1px solid var(--primary-border)' }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#1d4ed8' }} />
+                  <span className="font-semibold text-xs text-primary">Website Direct Forms</span>
+                </div>
+                <span className="font-bold text-xs" style={{ color: '#1d4ed8' }}>42% &bull; 1,124 leads</span>
+              </div>
+
+              <div
+                onClick={() => {
+                  setSelectedChannel({
+                    name: 'LinkedIn B2B Campaigns',
+                    pct: 26,
+                    volume: '702 leads',
+                    conversion: '6.2% Conv.',
+                    cac: '$285 CAC',
+                    roi: '380% ROI',
+                    trend: '+18.1% MoM',
+                    badgeVariant: 'success',
+                  });
+                }}
+                className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:scale-[1.01]"
+                style={{ backgroundColor: 'var(--success-light)', border: '1px solid var(--success-border)' }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#16a34a' }} />
+                  <span className="font-semibold text-xs text-primary">LinkedIn B2B Campaigns</span>
+                </div>
+                <span className="font-bold text-xs" style={{ color: '#16a34a' }}>26% &bull; 702 leads</span>
+              </div>
+
+              <div
+                onClick={() => {
+                  setSelectedChannel({
+                    name: 'Referral Partners & Brokers',
+                    pct: 18,
+                    volume: '512 leads',
+                    conversion: '11.5% Conv.',
+                    cac: '$95 CAC',
+                    roi: '780% ROI',
+                    trend: '+8.3% MoM',
+                    badgeVariant: 'info',
+                  });
+                }}
+                className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:scale-[1.01]"
+                style={{ backgroundColor: 'var(--info-light)', border: '1px solid var(--info-border)' }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#0284c7' }} />
+                  <span className="font-semibold text-xs text-primary">Referral Partners & Brokers</span>
+                </div>
+                <span className="font-bold text-xs" style={{ color: '#0284c7' }}>18% &bull; 512 leads</span>
+              </div>
+
+              <div
+                onClick={() => {
+                  setSelectedChannel({
+                    name: 'Trade Conferences 2025',
+                    pct: 13,
+                    volume: '343 leads',
+                    conversion: '8.1% Conv.',
+                    cac: '$410 CAC',
+                    roi: '290% ROI',
+                    trend: '+4.5% MoM',
+                    badgeVariant: 'warning',
+                  });
+                }}
+                className="flex items-center justify-between p-3 rounded-md cursor-pointer transition-all hover:scale-[1.01]"
+                style={{ backgroundColor: 'var(--warning-light)', border: '1px solid var(--warning-border)' }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#d97706' }} />
+                  <span className="font-semibold text-xs text-primary">Trade Conferences 2025</span>
+                </div>
+                <span className="font-bold text-xs" style={{ color: '#d97706' }}>13% &bull; 343 leads</span>
+              </div>
+            </div>
+
+            {/* Lead Sources Footer */}
+            <div
+              className="flex items-center justify-between pt-3 text-xs"
+              style={{ borderTop: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+            >
+              <span>Total Leads: <strong className="text-primary">2,681</strong></span>
+              <button
+                type="button"
+                onClick={() => navigate('/crm/leads')}
+                className="px-3 py-1 rounded-sm border-subtle surface hover:bg-hover transition-colors font-medium"
+                style={{ fontSize: '11px', backgroundColor: 'var(--surface-secondary)', border: '1px solid var(--border)' }}
+              >
+                View All Sources
+              </button>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* 5. Row 4: Live CRM Activity Audit (50%) & Upcoming Priority Tasks (50%) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Left Card: Live CRM Activity Audit */}
+        <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
+          <div className="p-5 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                  Live CRM Activity Audit
+                </h3>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                  Real-time system & team activities.
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/crm/admin')}
+                style={{ background: 'none', border: 'none', color: '#1d4ed8', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
+              >
+                View All &rarr;
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2.5">
+              {activityItems.map((act) => (
                 <div
-                  key={channel.id}
-                  onClick={() => setSelectedChannel(channel)}
-                  className="flex flex-col gap-1.5 p-2.5 surface-secondary rounded-sm border-subtle cursor-pointer hover:border-strong transition-all"
-                  title="Click to view detailed attribution telemetry"
+                  key={act.id}
+                  onClick={() => setSelectedActivity(act)}
+                  className="flex items-start justify-between p-3 surface-secondary rounded-md border-subtle cursor-pointer hover:border-strong transition-all"
                 >
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-primary">{channel.name}</span>
-                    <Badge variant={channel.badgeVariant}>
-                      {channel.pct}% ({channel.volume})
-                    </Badge>
+                  <div className="flex items-start gap-3">
+                    <div
+                      style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        backgroundColor: act.color,
+                        marginTop: '5px',
+                        flexShrink: 0,
+                      }}
+                    />
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-semibold text-xs text-primary">{act.title}</span>
+                      <span className="text-secondary" style={{ fontSize: '11px' }}>{act.description}</span>
+                    </div>
                   </div>
-
-                  <ProgressBar
-                    value={channel.pct}
-                    variant={channel.badgeVariant}
-                    showLabel={false}
-                    height="5px"
-                  />
-
-                  <div className="flex items-center justify-between text-xs text-tertiary" style={{ fontSize: '11px' }}>
-                    <span>{channel.conversion}</span>
-                    <span className="text-secondary font-medium">{channel.cac} · {channel.roi}</span>
-                  </div>
+                  <span className="text-tertiary text-xs flex-shrink-0 ml-2">{act.time}</span>
                 </div>
               ))}
-            </CardBody>
-          </div>
-
-          <div
-            className="p-3 border-t border-subtle flex items-center justify-between text-xs text-secondary"
-            style={{ backgroundColor: 'var(--surface-secondary)' }}
-          >
-            <span>Top Acquisition Driver: <strong className="text-primary">Website Forms (42%)</strong></span>
-            <span className="badge badge-primary">High Conversion Quality</span>
+            </div>
           </div>
         </Card>
-      </div>
 
-      {/* Main Dashboard Widgets Row 2: Activity Feed & Upcoming Tasks */}
-      <div className="grid-responsive-2col">
-        {/* Widget 3: Recent Activity Feed */}
-        <Card className="flex flex-col justify-between">
-          <div>
-            <CardHeader
-              title="Recent CRM Activity"
-              subtitle="Audit trail and real-time event stream"
-              action={
-                <div className="flex items-center gap-1.5">
-                  <div className="segmented-control" style={{ padding: '2px' }}>
-                    <button
-                      type="button"
-                      className={`segmented-control-item ${activityFilter === 'all' ? 'segmented-control-item-active' : ''}`}
-                      onClick={() => setActivityFilter('all')}
-                    >
-                      All
-                    </button>
-                    <button
-                      type="button"
-                      className={`segmented-control-item ${activityFilter === 'deals' ? 'segmented-control-item-active' : ''}`}
-                      onClick={() => setActivityFilter('deals')}
-                    >
-                      Deals
-                    </button>
-                    <button
-                      type="button"
-                      className={`segmented-control-item ${activityFilter === 'contacts' ? 'segmented-control-item-active' : ''}`}
-                      onClick={() => setActivityFilter('contacts')}
-                    >
-                      Contacts
-                    </button>
-                    <button
-                      type="button"
-                      className={`segmented-control-item ${activityFilter === 'leads' ? 'segmented-control-item-active' : ''}`}
-                      onClick={() => setActivityFilter('leads')}
-                    >
-                      Leads
-                    </button>
-                  </div>
-                </div>
-              }
-            />
-
-            <CardBody className="flex flex-col gap-3">
-              <div className="timeline">
-                {displayedActivity.map((item) => (
-                  <div
-                    key={item.id}
-                    className="timeline-item cursor-pointer p-2 rounded-sm transition-all hover:bg-surface-secondary"
-                    onClick={() => setSelectedActivity(item)}
-                    title="Click to view event audit payload"
-                  >
-                    <div className="timeline-node" style={{ backgroundColor: item.color }} />
-                    <div className="flex flex-col gap-0.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-primary hover:text-primary transition-colors">
-                          {item.title}
-                        </span>
-                        <span className="text-tertiary flex items-center gap-1">
-                          <Clock size={11} />
-                          {item.time}
-                        </span>
-                      </div>
-                      <p className="text-xs text-secondary margin-0">{item.description}</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="badge badge-default" style={{ fontSize: '10px', padding: '1px 5px' }}>
-                          {item.badge}
-                        </span>
-                        <span className="text-tertiary" style={{ fontSize: '11px' }}>
-                          by {item.user}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+        {/* Right Card: Upcoming Priority Tasks */}
+        <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
+          <div className="p-5 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+                  Upcoming Priority Tasks
+                </h3>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                  Actions scheduled for today ({tasks.length} total).
+                </span>
               </div>
-            </CardBody>
-          </div>
+              <button
+                type="button"
+                onClick={() => navigate('/crm/tasks')}
+                style={{ background: 'none', border: 'none', color: '#1d4ed8', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
+              >
+                View All Tasks &rarr;
+              </button>
+            </div>
 
-          <div
-            className="p-3 border-t border-subtle flex items-center justify-between text-xs"
-            style={{ backgroundColor: 'var(--surface-secondary)' }}
-          >
-            <span className="text-tertiary">
-              Showing {displayedActivity.length} of {filteredActivity.length} event records
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsActivityExpanded((prev) => !prev)}
-            >
-              {isActivityExpanded ? 'Collapse Feed' : 'View All Activity'}
-            </Button>
-          </div>
-        </Card>
-
-        {/* Widget 4: Upcoming Priority Tasks */}
-        <Card className="flex flex-col justify-between">
-          <div>
-            <CardHeader
-              title="Upcoming Priority Tasks"
-              subtitle="Actions scheduled for today"
-              action={
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={Plus}
-                    onClick={() => setIsTaskModalOpen(true)}
-                  >
-                    New Task
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    icon={ArrowRight}
-                    iconPosition="right"
-                    onClick={() => {
-                      addToast({ title: 'Tasks Hub', message: 'Opening Tasks & Reminders...', type: 'info' });
-                      navigate('/crm/tasks');
-                    }}
-                  >
-                    All Tasks
-                  </Button>
-                </div>
-              }
-            />
-
-            <CardBody className="flex flex-col gap-3">
+            {/* Task Items Checklist */}
+            <div className="flex flex-col gap-2.5">
               {tasks.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-6 text-center text-tertiary">
-                  <CheckSquare size={32} className="mb-2 text-secondary" />
+                  <CheckSquare size={28} className="mb-2 text-secondary" />
                   <span className="text-xs font-semibold text-primary">All caught up!</span>
                   <span className="text-xs">No pending priority tasks for today.</span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={Plus}
-                    className="mt-3"
-                    onClick={() => setIsTaskModalOpen(true)}
-                  >
-                    Create Task
-                  </Button>
                 </div>
               ) : (
                 tasks.slice(0, 4).map((task) => {
@@ -892,9 +806,11 @@ export const CrmDashboard = () => {
                   return (
                     <div
                       key={task.id}
-                      className={`flex items-center justify-between p-3 rounded-sm border-subtle transition-all ${
-                        isCompleted ? 'opacity-60 surface-secondary' : 'surface-secondary hover:border-strong'
-                      }`}
+                      className="flex items-center justify-between p-3 surface-secondary rounded-md border-subtle cursor-pointer hover:border-strong transition-all"
+                      style={{
+                        backgroundColor: isCompleted ? 'var(--surface-hover)' : 'var(--surface-secondary)',
+                        opacity: isCompleted ? 0.6 : 1,
+                      }}
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0 mr-2">
                         {/* Interactive Task Checkbox */}
@@ -909,41 +825,37 @@ export const CrmDashboard = () => {
                               type: isCompleted ? 'info' : 'success',
                             });
                           }}
-                          className={`flex items-center justify-center rounded-xs transition-colors ${
-                            isCompleted ? 'bg-success text-white' : 'border border-strong hover:border-primary'
-                          }`}
+                          className="flex items-center justify-center rounded-xs transition-colors"
                           style={{
-                            width: '20px',
-                            height: '20px',
+                            width: '18px',
+                            height: '18px',
                             cursor: 'pointer',
                             backgroundColor: isCompleted ? 'var(--success)' : 'var(--surface)',
-                            borderColor: isCompleted ? 'var(--success)' : 'var(--border-strong)',
+                            border: `1px solid ${isCompleted ? 'var(--success)' : 'var(--border-strong)'}`,
                             color: '#ffffff',
                             flexShrink: 0,
                           }}
                           title={isCompleted ? 'Mark as Pending' : 'Mark as Completed'}
                         >
-                          {isCompleted && <Check size={14} />}
+                          {isCompleted && <Check size={12} />}
                         </button>
 
                         <div
-                          className="flex flex-col gap-0.5 min-w-0 cursor-pointer"
+                          className="flex flex-col gap-0.5 min-w-0"
                           onClick={() => {
-                            addToast({ title: 'Task Details', message: `Viewing task for ${task.contact}`, type: 'info' });
                             navigate('/crm/tasks');
                           }}
                         >
                           <span
-                            className={`font-semibold text-xs text-primary truncate ${
-                              isCompleted ? 'line-through text-tertiary' : ''
-                            }`}
+                            className="font-semibold text-xs text-primary truncate"
+                            style={{ textDecoration: isCompleted ? 'line-through' : 'none' }}
                           >
                             {task.title}
                           </span>
-                          <div className="flex items-center gap-2 text-tertiary text-xs">
-                            <span>Related to: <strong className="text-secondary">{task.contact}</strong></span>
-                            {task.dueDate && <span>· Due {task.dueDate}</span>}
-                          </div>
+                          <span className="text-tertiary" style={{ fontSize: '11px' }}>
+                            Related to: <strong className="text-secondary">{task.contact}</strong>
+                            {task.dueDate && ` · Due ${task.dueDate}`}
+                          </span>
                         </div>
                       </div>
 
@@ -972,7 +884,7 @@ export const CrmDashboard = () => {
                             deleteTask(task.id);
                             addToast({
                               title: 'Task Removed',
-                              message: `Task "${task.title}" deleted from queue.`,
+                              message: `Task "${task.title}" deleted.`,
                               type: 'info',
                             });
                           }}
@@ -983,25 +895,23 @@ export const CrmDashboard = () => {
                   );
                 })
               )}
-            </CardBody>
-          </div>
-
-          <div
-            className="p-3 border-t border-subtle flex items-center justify-between text-xs text-secondary"
-            style={{ backgroundColor: 'var(--surface-secondary)' }}
-          >
-            <span>
-              Pending Action Items: <strong className="text-primary">{pendingTasksCount}</strong>
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsTaskModalOpen(true)}
-            >
-              + Quick Schedule
-            </Button>
+            </div>
           </div>
         </Card>
+      </div>
+
+      {/* 6. Page Security & Compliance Footer */}
+      <div
+        className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-4 pb-2 text-xs"
+        style={{ borderTop: '1px solid var(--border)', color: 'var(--text-tertiary)' }}
+      >
+        <div className="flex items-center gap-2">
+          <ShieldCheck size={16} className="text-secondary" />
+          <span>Your data is protected with 256-bit AES encryption</span>
+        </div>
+        <div>
+          <span>Secure &bull; Reliable &bull; Enterprise-Grade</span>
+        </div>
       </div>
 
       {/* =========================================================================

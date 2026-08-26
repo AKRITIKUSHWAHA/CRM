@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Minus, MoreVertical } from 'lucide-react';
 import { Skeleton } from './Skeleton';
 import { cx } from '../../utils/classNames';
 
@@ -8,8 +8,10 @@ export const KPICard = ({
   value,
   change,
   changeType = 'positive', // 'positive' | 'negative' | 'neutral'
-  changePeriod = 'vs last month',
+  changePeriod = 'vs last 7 days',
   icon: Icon,
+  iconBg = 'rgba(22, 163, 74, 0.1)',
+  iconColor = '#16a34a',
   isLoading = false,
   onClick,
   tooltip,
@@ -19,59 +21,156 @@ export const KPICard = ({
 }) => {
   if (isLoading) {
     return (
-      <div className={cx('kpi-card', className)} style={style} {...props}>
-        <Skeleton width="60%" height="14px" />
-        <Skeleton width="40%" height="28px" />
-        <Skeleton width="70%" height="14px" />
+      <div
+        className={cx('kpi-card', className)}
+        style={{
+          backgroundColor: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderRadius: '12px',
+          padding: '1.25rem',
+          ...style,
+        }}
+        {...props}
+      >
+        <Skeleton width="50%" height="12px" />
+        <Skeleton width="40%" height="26px" style={{ margin: '8px 0' }} />
+        <Skeleton width="60%" height="12px" />
       </div>
     );
   }
 
   const TrendIcon = changeType === 'positive' ? ArrowUpRight : changeType === 'negative' ? ArrowDownRight : Minus;
-  const trendColor = changeType === 'positive' ? 'var(--success)' : changeType === 'negative' ? 'var(--error)' : 'var(--text-tertiary)';
 
   return (
     <div
-      className={cx('kpi-card', onClick && 'cursor-pointer', className)}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       title={tooltip}
       onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(e); } } : undefined}
+      className={cx('kpi-card', onClick && 'cursor-pointer', className)}
       style={{
+        backgroundColor: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: '12px',
+        padding: '1.25rem',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        gap: '0.875rem',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.02)',
         transition: 'all var(--transition-fast)',
+        cursor: onClick ? 'pointer' : 'default',
+        position: 'relative',
         userSelect: 'none',
         ...style,
       }}
+      onMouseEnter={(e) => {
+        if (onClick) {
+          e.currentTarget.style.borderColor = 'var(--primary-border)';
+          e.currentTarget.style.boxShadow = '0 4px 12px 0 rgba(0, 0, 0, 0.05)';
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (onClick) {
+          e.currentTarget.style.borderColor = 'var(--border)';
+          e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.02)';
+        }
+      }}
       {...props}
     >
+      {/* Top Header: Custom Color Icon & 3 Vertical Dots */}
       <div className="flex items-center justify-between">
-        <span className="kpi-title">{title}</span>
-        {Icon && (
+        {Icon ? (
           <div
             style={{
-              padding: '8px',
-              borderRadius: 'var(--radius-sm)',
-              backgroundColor: 'var(--surface-secondary)',
-              color: 'var(--primary)',
+              width: '38px',
+              height: '38px',
+              borderRadius: '10px',
+              backgroundColor: iconBg,
+              color: iconColor,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
             }}
           >
             <Icon size={18} />
           </div>
-        )}
+        ) : <div />}
+
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); }}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-tertiary)',
+            cursor: 'pointer',
+            padding: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          title="More options"
+        >
+          <MoreVertical size={16} />
+        </button>
       </div>
 
-      <div className="kpi-value">{value}</div>
+      {/* Label & Value */}
+      <div className="flex flex-col gap-1">
+        <span
+          style={{
+            fontSize: '11px',
+            fontWeight: 700,
+            color: 'var(--text-tertiary)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+          }}
+        >
+          {title}
+        </span>
+        <div
+          style={{
+            fontSize: '1.75rem',
+            fontWeight: 800,
+            color: 'var(--text-primary)',
+            fontFamily: 'var(--font-display)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+          }}
+        >
+          {value}
+        </div>
+      </div>
 
+      {/* Contextual Growth Green Pill Line */}
       {(change || changePeriod) && (
-        <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+        <div className="flex items-center gap-2 text-xs">
           {change && (
-            <span className="flex items-center font-semibold" style={{ color: trendColor }}>
-              <TrendIcon size={14} />
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '2px',
+                padding: '2px 8px',
+                borderRadius: '9999px',
+                backgroundColor: changeType === 'positive' ? 'rgba(22, 163, 74, 0.1)' : changeType === 'negative' ? 'rgba(220, 38, 38, 0.1)' : 'var(--surface-secondary)',
+                color: changeType === 'positive' ? '#16a34a' : changeType === 'negative' ? '#dc2626' : 'var(--text-secondary)',
+                fontSize: '11px',
+                fontWeight: 700,
+              }}
+            >
+              <TrendIcon size={12} />
               {change}
             </span>
           )}
-          {changePeriod && <span>{changePeriod}</span>}
+          {changePeriod && (
+            <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 500 }}>
+              {changePeriod}
+            </span>
+          )}
         </div>
       )}
     </div>

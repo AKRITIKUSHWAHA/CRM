@@ -158,7 +158,7 @@ export const CrmContacts = () => {
   return (
     <div className="flex flex-col gap-6">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Contacts Directory' }]} />
           <h1 style={{ fontSize: 'var(--text-2xl)' }}>Contacts & Accounts</h1>
@@ -167,7 +167,7 @@ export const CrmContacts = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="header-actions-right">
           <Button
             variant="primary"
             size="sm"

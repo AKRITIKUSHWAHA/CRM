@@ -93,7 +93,7 @@ export const CrmPipeline = () => {
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* 1. Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Sales Pipeline Kanban' }]} />
           <h1
@@ -113,7 +113,7 @@ export const CrmPipeline = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="header-actions-right">
           <Button
             variant="primary"
             size="sm"

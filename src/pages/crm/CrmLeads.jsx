@@ -41,10 +41,20 @@ export const CrmLeads = () => {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Leads Directory' }]} />
           <h1 style={{ fontSize: 'var(--text-2xl)' }}>Commercial Sales Leads</h1>
+        </div>
+        <div className="header-actions-right">
+          <Button
+            variant="primary"
+            size="sm"
+            icon={Plus}
+            onClick={() => addToast({ title: 'Lead Acquisition', message: 'New lead form initialized.', type: 'info' })}
+          >
+            Add New Lead
+          </Button>
         </div>
       </div>
 

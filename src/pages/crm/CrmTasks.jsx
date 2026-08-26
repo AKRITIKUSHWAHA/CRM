@@ -61,7 +61,7 @@ export const CrmTasks = () => {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Tasks & Reminders' }]} />
           <h1 style={{ fontSize: 'var(--text-2xl)' }}>Tasks & Reminders</h1>
@@ -70,7 +70,7 @@ export const CrmTasks = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="header-actions-right">
           {/* View Switcher Buttons */}
           <div className="flex items-center border-subtle surface-secondary rounded-sm p-1 gap-1">
             <Button

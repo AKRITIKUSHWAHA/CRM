@@ -9,6 +9,33 @@ html, body, #root, .app-layout, .main-content {
 .visible-mobile { display: flex !important; }
 .hidden-mobile { display: none !important; }
 
+/* Page Header Action Buttons Right Alignment Global Rules */
+.page-header-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+  flex-wrap: wrap !important;
+}
+
+.header-actions-right {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 0.5rem !important;
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .header-actions-right button {
+    font-size: 11px !important;
+    padding: 0.35rem 0.65rem !important;
+    white-space: nowrap !important;
+  }
+}
+
 /* Grid Responsive Breakpoints — ALWAYS 4 CARDS IN A SINGLE ROW */
 .grid-responsive-kpi {
   display: grid;

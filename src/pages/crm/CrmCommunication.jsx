@@ -52,13 +52,23 @@ export const CrmCommunication = () => {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Communication Center' }]} />
           <h1 style={{ fontSize: 'var(--text-2xl)' }}>Omnichannel Communication Center</h1>
           <p className="text-xs text-secondary margin-0">
             Unified inbox for Corporate Email, SMS Alerts, and Internal Team Communication
           </p>
+        </div>
+        <div className="header-actions-right">
+          <Button
+            variant="primary"
+            size="sm"
+            icon={Plus}
+            onClick={() => addToast({ title: 'Compose Message', message: 'New message composer opened.', type: 'info' })}
+          >
+            Compose Message
+          </Button>
         </div>
       </div>
 

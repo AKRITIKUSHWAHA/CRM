@@ -8,7 +8,6 @@ import { ProtectedRoute } from './ProtectedRoute';
 // Unified Gateway Login
 import { UnifiedLogin } from '../pages/UnifiedLogin';
 
-import { CrmLogin } from '../pages/crm/CrmLogin';
 import { CrmSignup } from '../pages/crm/CrmSignup';
 import { CrmForgotPassword } from '../pages/crm/CrmForgotPassword';
 import { CrmVerify } from '../pages/crm/CrmVerify';
@@ -61,7 +60,6 @@ import { CrmSettings } from '../pages/crm/CrmSettings';
 
 // Phase 6 OAL Public Pages
 import { OalLanding } from '../pages/oal/OalLanding';
-import { OalLogin } from '../pages/oal/OalLogin';
 import { OalBorrowerSignup } from '../pages/oal/OalBorrowerSignup';
 import { OalLenderSignup } from '../pages/oal/OalLenderSignup';
 import { OalVerify } from '../pages/oal/OalVerify';
@@ -104,19 +102,20 @@ import { Showcase } from '../pages/Showcase';
 export const AppRoutes = () => {
   return (
     <Routes>
-      {/* Default Root opens Login Gateway FIRST */}
+      {/* Standalone Gateway Login Routes */}
       <Route path="/" element={<UnifiedLogin />} />
       <Route path="/login" element={<UnifiedLogin />} />
+      <Route path="/crm/login" element={<UnifiedLogin />} />
+      <Route path="/oal/login" element={<UnifiedLogin />} />
 
       <Route element={<CrmLayout />}>
         <Route path="/showcase" element={<Showcase />} />
       </Route>
 
-      {/* CRM Auth Routes */}
+      {/* CRM Auth Onboarding Routes */}
       <Route path="/crm" element={<Navigate to="/crm/dashboard" replace />} />
       
       <Route element={<AuthLayout />}>
-        <Route path="/crm/login" element={<UnifiedLogin />} />
         <Route path="/crm/signup" element={<CrmSignup />} />
         <Route path="/crm/forgot-password" element={<CrmForgotPassword />} />
         <Route path="/crm/verify" element={<CrmVerify />} />
@@ -183,7 +182,6 @@ export const AppRoutes = () => {
       <Route path="/oal" element={<OalLanding />} />
 
       <Route element={<AuthLayout />}>
-        <Route path="/oal/login" element={<UnifiedLogin />} />
         <Route path="/oal/borrower/signup" element={<OalBorrowerSignup />} />
         <Route path="/oal/lender/signup" element={<OalLenderSignup />} />
         <Route path="/oal/verify" element={<OalVerify />} />

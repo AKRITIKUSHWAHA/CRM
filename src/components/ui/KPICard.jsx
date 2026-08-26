@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight, Minus, MoreVertical } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { Skeleton } from './Skeleton';
 import { cx } from '../../utils/classNames';
 
@@ -47,6 +47,7 @@ export const KPICard = ({
         position: 'relative',
         boxSizing: 'border-box',
         minWidth: 0,
+        width: '100%',
       }}
       onMouseEnter={(e) => {
         if (onClick) {
@@ -61,7 +62,7 @@ export const KPICard = ({
         }
       }}
     >
-      {/* Top Header: Custom Color Icon & 3 Vertical Dots */}
+      {/* Top Header: Custom Color Icon Only (No 3 dots button) */}
       <div className="flex items-center justify-between">
         {Icon ? (
           <div
@@ -80,23 +81,6 @@ export const KPICard = ({
             <Icon size={14} />
           </div>
         ) : <div />}
-
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); }}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-tertiary)',
-            cursor: 'pointer',
-            padding: '2px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <MoreVertical size={14} />
-        </button>
       </div>
 
       {/* Label & Value */}

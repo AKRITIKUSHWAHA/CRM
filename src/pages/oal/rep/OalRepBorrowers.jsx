@@ -77,60 +77,58 @@ export const OalRepBorrowers = () => {
         </div>
       </div>
 
-      <div>
-        {/* Internal Underwriting Notes Feed */}
-        <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-4">
-          <div className="border-b border-subtle pb-3">
-            <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-              Rep Internal Underwriting Notes
-            </h3>
+      {/* Internal Underwriting Notes Feed */}
+      <div className="flex flex-col gap-4">
+        <div>
+          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+            Rep Internal Underwriting Notes
+          </h3>
+        </div>
+
+        <form onSubmit={handleAddNote} className="flex flex-col gap-2.5">
+          <Input
+            value={internalNote}
+            onChange={(e) => setInternalNote(e.target.value)}
+            placeholder="Add confidential agent note regarding DSCR or lender negotiation..."
+            style={{ height: '38px', fontSize: '13px' }}
+            required
+          />
+          <div className="flex justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              type="submit"
+              icon={Plus}
+              style={{ height: '34px', fontWeight: 600, fontSize: '12px', padding: '0 14px' }}
+            >
+              Add Internal Note
+            </Button>
           </div>
+        </form>
 
-          <form onSubmit={handleAddNote} className="flex flex-col gap-2.5">
-            <Input
-              value={internalNote}
-              onChange={(e) => setInternalNote(e.target.value)}
-              placeholder="Add confidential agent note regarding DSCR or lender negotiation..."
-              style={{ height: '38px', fontSize: '13px' }}
-              required
-            />
-            <div className="flex justify-end">
-              <Button
-                variant="outline"
-                size="sm"
-                type="submit"
-                icon={Plus}
-                style={{ height: '34px', fontWeight: 600, fontSize: '12px', padding: '0 14px' }}
-              >
-                Add Internal Note
-              </Button>
-            </div>
-          </form>
-
-          <div className="flex flex-col gap-2.5 mt-1 overflow-y-auto" style={{ maxHeight: '300px' }}>
-            {notesList.map((n) => (
-              <div
-                key={n.id}
-                style={{
-                  padding: '10px 14px',
-                  backgroundColor: 'var(--surface-secondary)',
-                  borderRadius: '8px',
-                  border: '1px solid var(--border)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '4px',
-                  fontSize: '12px',
-                }}
-              >
-                <div className="flex justify-between items-center font-bold text-primary">
-                  <span>{n.author}</span>
-                  <span className="text-tertiary font-normal" style={{ fontSize: '11px' }}>{n.date}</span>
-                </div>
-                <p className="margin-0 text-secondary" style={{ lineHeight: 1.45 }}>{n.note}</p>
+        <div className="flex flex-col gap-2.5 mt-1 overflow-y-auto" style={{ maxHeight: '400px' }}>
+          {notesList.map((n) => (
+            <div
+              key={n.id}
+              style={{
+                padding: '12px 14px',
+                backgroundColor: 'var(--surface)',
+                borderRadius: '10px',
+                border: '1px solid var(--border)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+                fontSize: '12px',
+              }}
+            >
+              <div className="flex justify-between items-center font-bold text-primary">
+                <span>{n.author}</span>
+                <span className="text-tertiary font-normal" style={{ fontSize: '11px' }}>{n.date}</span>
               </div>
-            ))}
-          </div>
-        </Card>
+              <p className="margin-0 text-secondary" style={{ lineHeight: 1.45 }}>{n.note}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Create Task Modal */}

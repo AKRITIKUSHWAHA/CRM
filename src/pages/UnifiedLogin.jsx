@@ -237,6 +237,7 @@ export const UnifiedLogin = ({ mode }) => {
             flexWrap: 'wrap',
             gap: '0.75rem',
           }}
+          className="login-top-header"
         >
           {/* Brand Identity */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
@@ -300,6 +301,7 @@ export const UnifiedLogin = ({ mode }) => {
               cursor: 'pointer',
               transition: 'all var(--transition-fast)',
             }}
+            className="login-switch-btn"
             onMouseEnter={(e) => { e.currentTarget.style.borderColor = primaryThemeColor; }}
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; }}
           >
@@ -343,6 +345,7 @@ export const UnifiedLogin = ({ mode }) => {
                   paddingBottom: '0.75rem',
                   borderBottom: '1px solid var(--border)',
                 }}
+                className="login-preset-header"
               >
                 <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
                   {currentPlatform === 'crm' ? 'CRM nErgy Roles (5 Presets)' : 'OAL Network Roles (4 Presets)'}
@@ -377,14 +380,12 @@ export const UnifiedLogin = ({ mode }) => {
                         border: '1px solid',
                         borderColor: isSelected ? primaryThemeColor : 'var(--border)',
                         backgroundColor: isSelected ? primaryLightBg : 'var(--surface)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
                         cursor: 'pointer',
                         transition: 'all var(--transition-fast)',
                       }}
+                      className="login-role-card"
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+                      <div className="login-role-card-left">
                         <div
                           style={{
                             width: '38px',
@@ -401,8 +402,8 @@ export const UnifiedLogin = ({ mode }) => {
                           <Icon size={18} />
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                             <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
                               {r.title}
                             </span>
@@ -410,13 +411,13 @@ export const UnifiedLogin = ({ mode }) => {
                               <CheckCircle2 size={14} style={{ color: primaryThemeColor }} />
                             )}
                           </div>
-                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px', wordBreak: 'break-word' }}>
                             {r.name} &bull; <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)' }}>{r.email}</span>
                           </span>
                         </div>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <div className="login-role-card-right">
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
@@ -427,6 +428,7 @@ export const UnifiedLogin = ({ mode }) => {
                             borderRadius: '4px',
                             border: '1px solid var(--border)',
                           }}
+                          className="login-role-card-pass"
                         >
                           Pass: {r.password}
                         </span>

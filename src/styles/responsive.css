@@ -23,6 +23,27 @@ html, body, #root, .app-layout, .main-content {
 }
 
 /* Mobile Login Gateway Responsiveness */
+.login-role-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.login-role-card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-width: 0;
+}
+
+.login-role-card-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
 @media (max-width: 900px) {
   .login-grid-wrapper {
     grid-template-columns: 1fr !important;
@@ -33,6 +54,57 @@ html, body, #root, .app-layout, .main-content {
   .login-left-card, .login-right-card {
     grid-column: span 12 / span 12 !important;
     width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-top-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+
+  .login-switch-btn {
+    width: 100% !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+
+  .login-preset-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  .login-role-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+    padding: 0.875rem !important;
+  }
+
+  .login-role-card-left {
+    width: 100% !important;
+  }
+
+  .login-role-card-right {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  .login-role-card-pass {
+    font-size: 10px !important;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-left-card, .login-right-card {
+    padding: 1rem !important;
   }
 }
 

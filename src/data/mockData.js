@@ -22,46 +22,49 @@ import {
 } from 'lucide-react';
 
 export const crmNavigation = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/crm/dashboard' },
-  { id: 'contacts', label: 'Contacts', icon: Users, path: '/crm/contacts' },
-  { id: 'leads', label: 'Leads', icon: Target, path: '/crm/leads' },
-  { id: 'pipeline', label: 'Sales Pipeline', icon: Kanban, path: '/crm/pipeline' },
-  { id: 'tasks', label: 'Tasks & Reminders', icon: CheckSquare, path: '/crm/tasks' },
-  { id: 'communication', label: 'Communication Hub', icon: MessageSquare, path: '/crm/communication' },
-  { id: 'erp', label: 'ERP & Operations', icon: Boxes, path: '/crm/erp' },
-  { id: 'hr', label: 'HR & Recruiting', icon: UserCheck, path: '/crm/hr' },
-  { id: 'support', label: 'Customer Support', icon: LifeBuoy, path: '/crm/support' },
-  { id: 'ai', label: 'AI Content Studio', icon: Sparkles, path: '/crm/ai-studio' },
-  { id: 'reports', label: 'Reports Hub', icon: FileText, path: '/crm/reports' },
-  { id: 'admin', label: 'Administration', icon: ShieldCheck, path: '/crm/admin' },
-  { id: 'settings', label: 'Settings', icon: Settings, path: '/crm/settings' },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/crm/dashboard', section: 'Core Modules' },
+  { id: 'contacts', label: 'Contacts', icon: Users, path: '/crm/contacts', section: 'Core Modules' },
+  { id: 'leads', label: 'Leads Directory', icon: Target, path: '/crm/leads', section: 'Core Modules' },
+  { id: 'pipeline', label: 'Sales Pipeline', icon: Kanban, path: '/crm/pipeline', section: 'Core Modules' },
+  { id: 'tasks', label: 'Tasks & Reminders', icon: CheckSquare, path: '/crm/tasks', section: 'Core Modules' },
+  { id: 'communication', label: 'Communication Hub', icon: MessageSquare, path: '/crm/communication', section: 'Core Modules' },
+
+  { id: 'erp', label: 'ERP & Operations', icon: Boxes, path: '/crm/erp', section: 'Enterprise Suites' },
+  { id: 'hr', label: 'HR & Recruiting', icon: UserCheck, path: '/crm/hr', section: 'Enterprise Suites' },
+  { id: 'support', label: 'Customer Support', icon: LifeBuoy, path: '/crm/support', section: 'Enterprise Suites' },
+
+  { id: 'ai', label: 'AI Content Studio', icon: Sparkles, path: '/crm/ai-studio', section: 'Intelligence & Data' },
+  { id: 'reports', label: 'Reports Hub', icon: FileText, path: '/crm/reports', section: 'Intelligence & Data' },
+
+  { id: 'admin', label: 'Administration', icon: ShieldCheck, path: '/crm/admin', section: 'System Governance' },
+  { id: 'settings', label: 'Settings', icon: Settings, path: '/crm/settings', section: 'System Governance' },
 ];
 
 export const oalNavigation = [
   // Borrower Persona Links
-  { id: 'borrower-dashboard', label: 'Borrower Overview', icon: LayoutDashboard, path: '/oal/borrower/dashboard' },
-  { id: 'borrower-kyc', label: 'KYC Vault', icon: ShieldCheck, path: '/oal/borrower/kyc' },
-  { id: 'borrower-app', label: 'Loan Application', icon: FileText, path: '/oal/borrower/application' },
-  { id: 'borrower-offers', label: 'Lender Offers', icon: CreditCard, path: '/oal/borrower/offers' },
-  { id: 'borrower-score', label: 'AI Risk Rating', icon: Sparkles, path: '/oal/borrower/score' },
-  { id: 'borrower-messages', label: 'Licensed Agent Chat', icon: MessageSquare, path: '/oal/borrower/messages' },
+  { id: 'borrower-dashboard', label: 'Borrower Overview', icon: LayoutDashboard, path: '/oal/borrower/dashboard', section: 'Borrower Portal' },
+  { id: 'borrower-kyc', label: 'KYC Vault', icon: ShieldCheck, path: '/oal/borrower/kyc', section: 'Borrower Portal' },
+  { id: 'borrower-app', label: 'Loan Application', icon: FileText, path: '/oal/borrower/application', section: 'Borrower Portal' },
+  { id: 'borrower-offers', label: 'Lender Offers', icon: CreditCard, path: '/oal/borrower/offers', section: 'Borrower Portal' },
+  { id: 'borrower-score', label: 'AI Risk Rating', icon: Sparkles, path: '/oal/borrower/score', section: 'Borrower Portal' },
+  { id: 'borrower-messages', label: 'Licensed Agent Chat', icon: MessageSquare, path: '/oal/borrower/messages', section: 'Borrower Portal' },
 
   // Lender Persona Links
-  { id: 'lender-dashboard', label: 'Lender Portal', icon: Landmark, path: '/oal/lender/dashboard' },
-  { id: 'lender-leads', label: 'Qualified Leads Pool', icon: Target, path: '/oal/lender/leads' },
-  { id: 'lender-applications', label: 'Active Underwriting', icon: FileText, path: '/oal/lender/applications' },
-  { id: 'lender-offers', label: 'Term Sheets Manager', icon: CreditCard, path: '/oal/lender/offers' },
+  { id: 'lender-dashboard', label: 'Lender Portal', icon: Landmark, path: '/oal/lender/dashboard', section: 'Institutional Lender' },
+  { id: 'lender-leads', label: 'Qualified Leads Pool', icon: Target, path: '/oal/lender/leads', section: 'Institutional Lender' },
+  { id: 'lender-applications', label: 'Active Underwriting', icon: FileText, path: '/oal/lender/applications', section: 'Institutional Lender' },
+  { id: 'lender-offers', label: 'Term Sheets Manager', icon: CreditCard, path: '/oal/lender/offers', section: 'Institutional Lender' },
 
   // OAL Rep Persona Links
-  { id: 'rep-dashboard', label: 'OAL Agent Desk', icon: UserCheck, path: '/oal/rep/dashboard' },
-  { id: 'rep-borrowers', label: 'Borrower Queue', icon: Users, path: '/oal/rep/borrowers' },
+  { id: 'rep-dashboard', label: 'OAL Agent Desk', icon: UserCheck, path: '/oal/rep/dashboard', section: 'OAL Licensed Agent' },
+  { id: 'rep-borrowers', label: 'Borrower Queue', icon: Users, path: '/oal/rep/borrowers', section: 'OAL Licensed Agent' },
 
   // Master Admin Links
-  { id: 'admin-dashboard', label: 'Platform Admin', icon: ShieldCheck, path: '/oal/admin/dashboard' },
-  { id: 'admin-lenders', label: 'Lender Governance', icon: Building2, path: '/oal/admin/lenders' },
-  { id: 'admin-scoring', label: 'AI Scoring Config', icon: TrendingUp, path: '/oal/admin/scoring' },
-  { id: 'admin-support', label: 'AI Support Desk', icon: LifeBuoy, path: '/oal/admin/support' },
-  { id: 'admin-audit', label: 'Audit Log Feed', icon: History, path: '/oal/admin/audit' },
+  { id: 'admin-dashboard', label: 'Platform Admin', icon: ShieldCheck, path: '/oal/admin/dashboard', section: 'Master Governance' },
+  { id: 'admin-lenders', label: 'Lender Governance', icon: Building2, path: '/oal/admin/lenders', section: 'Master Governance' },
+  { id: 'admin-scoring', label: 'AI Scoring Config', icon: TrendingUp, path: '/oal/admin/scoring', section: 'Master Governance' },
+  { id: 'admin-support', label: 'AI Support Desk', icon: LifeBuoy, path: '/oal/admin/support', section: 'Master Governance' },
+  { id: 'admin-audit', label: 'Audit Log Feed', icon: History, path: '/oal/admin/audit', section: 'Master Governance' },
 ];
 
 export const mockNotifications = [

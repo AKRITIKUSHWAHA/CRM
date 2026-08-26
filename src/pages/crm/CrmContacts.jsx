@@ -161,17 +161,18 @@ export const CrmContacts = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Contacts Directory' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>Contacts & Accounts</h1>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Contacts & Accounts</h1>
           <p className="text-xs text-secondary margin-0">
             Isolated multi-tenant contacts, accounts, and client relationships
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="dashboard-actions-grid w-full md:w-auto">
           <Button
             variant="primary"
             size="sm"
             icon={Plus}
+            className="w-full md:w-auto justify-center"
             onClick={() => {
               setFormData({ name: '', company: '', email: '', phone: '', type: 'Enterprise Client', owner: 'Alexander Wright', status: 'Active' });
               setIsAddModalOpen(true);
@@ -183,15 +184,17 @@ export const CrmContacts = () => {
       </div>
 
       {/* Filter & Search Bar */}
-      <Card className="p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        <Search
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onClear={() => setSearchQuery('')}
-          placeholder="Search by name, company, email..."
-        />
+      <div className="table-toolbar">
+        <div className="table-toolbar-search">
+          <Search
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onClear={() => setSearchQuery('')}
+            placeholder="Search by name, company, email..."
+          />
+        </div>
 
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="table-toolbar-actions">
           <Select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
@@ -228,7 +231,7 @@ export const CrmContacts = () => {
             Sort: <strong className="ml-1 capitalize">{sortField}</strong>
           </Button>
         </div>
-      </Card>
+      </div>
 
       {/* Bulk Action Bar */}
       {selectedIds.length > 0 && (

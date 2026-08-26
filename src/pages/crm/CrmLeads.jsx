@@ -49,31 +49,35 @@ export const CrmLeads = () => {
       </div>
 
       {/* Filter Bar */}
-      <Card className="p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search leads by contact or company name..."
-          startIcon={Search}
-          style={{ maxWidth: '340px', height: '36px' }}
-        />
+      <div className="table-toolbar">
+        <div className="table-toolbar-search">
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search leads by contact or company name..."
+            startIcon={Search}
+            style={{ height: '36px' }}
+          />
+        </div>
 
-        <Select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          options={[
-            { label: 'All Lead Statuses', value: 'all' },
-            { label: 'New', value: 'New' },
-            { label: 'Contacted', value: 'Contacted' },
-            { label: 'Qualified', value: 'Qualified' },
-            { label: 'Proposal', value: 'Proposal' },
-          ]}
-          style={{ height: '36px', fontSize: '13px' }}
-        />
-      </Card>
+        <div className="table-toolbar-actions">
+          <Select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            options={[
+              { label: 'All Lead Statuses', value: 'all' },
+              { label: 'New', value: 'New' },
+              { label: 'Contacted', value: 'Contacted' },
+              { label: 'Qualified', value: 'Qualified' },
+              { label: 'Proposal', value: 'Proposal' },
+            ]}
+            style={{ height: '36px', fontSize: '13px' }}
+          />
+        </div>
+      </div>
 
-      {/* Leads Table */}
-      <Card>
+      {/* Desktop Leads Table */}
+      <Card className="hidden-mobile">
         <CardBody className="p-0">
           <Table>
             <TableHeader>
@@ -115,6 +119,39 @@ export const CrmLeads = () => {
           </Table>
         </CardBody>
       </Card>
+
+      {/* Mobile Card List View */}
+      <div className="visible-mobile flex flex-col gap-3">
+        {filteredLeads.map((lead) => (
+          <Card key={lead.id} className="p-4 flex flex-col gap-3">
+            <div className="flex items-center justify-between border-b border-subtle pb-2">
+              <span className="font-mono text-xs text-tertiary">{lead.id}</span>
+              <Badge variant="primary">{lead.status}</Badge>
+            </div>
+            
+            <div>
+              <div className="font-bold text-base text-primary mb-1">{lead.name}</div>
+              <div className="text-xs text-secondary mb-2">{lead.company}</div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-success text-sm">{lead.value}</span>
+                <Badge variant="success" style={{ fontSize: '10px' }}>Score: {lead.score}</Badge>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-subtle mt-1">
+              <Button
+                variant="outline"
+                size="sm"
+                icon={Sparkles}
+                className="w-full justify-center"
+                onClick={() => handleOpenReferral(lead)}
+              >
+                Refer to OAL
+              </Button>
+            </div>
+          </Card>
+        ))}
+      </div>
 
       {/* OAL Referral Modal */}
       <Modal

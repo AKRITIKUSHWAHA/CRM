@@ -13,20 +13,23 @@ export const CrmAnalytics = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Analytics' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>Enterprise Analytics & Intelligence</h1>
+          <h1 style={{ fontSize: 'var(--text-2xl)', marginTop: '0.25rem', marginBottom: '0.25rem' }}>Enterprise Analytics & Intelligence</h1>
           <p className="text-xs text-secondary margin-0">
             Real-time business performance, revenue projections, and conversion funnels
           </p>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          icon={Download}
-          onClick={() => addToast({ title: 'Analytics Export', message: 'Exported executive metrics to PDF.', type: 'success' })}
-        >
-          Export Analytics PDF
-        </Button>
+        <div className="dashboard-actions-grid w-full md:w-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            icon={Download}
+            className="w-full md:w-auto justify-center"
+            onClick={() => addToast({ title: 'Analytics Export', message: 'Exported executive metrics to PDF.', type: 'success' })}
+          >
+            Export Analytics PDF
+          </Button>
+        </div>
       </div>
 
       {/* KPI Cards */}

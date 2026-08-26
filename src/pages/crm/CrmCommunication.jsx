@@ -82,9 +82,9 @@ export const CrmCommunication = () => {
       </Card>
 
       {/* Communication 2-Column Interface */}
-      <div className="grid-responsive-2col" style={{ gridTemplateColumns: '320px 1fr' }}>
+      <div className="flex flex-col md:grid md:grid-cols-3 gap-6">
         {/* Left Column: Messages List */}
-        <Card className="p-3 flex flex-col gap-2" style={{ maxHeight: '600px', overflowY: 'auto' }}>
+        <Card className="p-3 flex flex-col gap-2 col-span-1" style={{ maxHeight: '600px', overflowY: 'auto' }}>
           <div className="text-xs font-semibold text-tertiary uppercase tracking-wider mb-1 px-1">
             {activeChannel.toUpperCase()} Threads ({filteredMessages.length})
           </div>
@@ -105,8 +105,8 @@ export const CrmCommunication = () => {
                   }}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-xs text-primary truncate">{msg.sender}</span>
-                    <span className="text-tertiary text-xs">{msg.timestamp}</span>
+                    <span className="font-bold text-xs text-primary truncate pr-2">{msg.sender}</span>
+                    <span className="text-tertiary text-xs whitespace-nowrap">{msg.timestamp}</span>
                   </div>
                   <div className="font-semibold text-xs text-secondary truncate">{msg.subject}</div>
                   <p className="text-xs text-tertiary margin-0 truncate mt-1">{msg.body}</p>
@@ -117,24 +117,24 @@ export const CrmCommunication = () => {
         </Card>
 
         {/* Right Column: Message Thread Details & Reply Composer */}
-        <Card className="p-6 flex flex-col justify-between" style={{ minHeight: '500px' }}>
+        <Card className="p-4 sm:p-6 flex flex-col justify-between col-span-2" style={{ minHeight: '500px' }}>
           {activeMessage ? (
             <div className="flex flex-col gap-4 flex-1">
               <div className="border-b border-subtle pb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-base font-semibold">{activeMessage.subject}</h3>
-                  <Badge variant="primary" icon={CheckCheck}>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                  <h3 className="text-base font-semibold truncate">{activeMessage.subject}</h3>
+                  <Badge variant="primary" icon={CheckCheck} className="w-fit">
                     {activeMessage.type.toUpperCase()} Gateway
                   </Badge>
                 </div>
-                <div className="flex items-center justify-between text-xs text-secondary">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-secondary gap-1">
                   <span>From: <strong className="text-primary">{activeMessage.sender}</strong></span>
                   <span>{activeMessage.timestamp}</span>
                 </div>
               </div>
 
               {/* Message Body Content */}
-              <div className="p-4 surface-secondary rounded-md border-subtle text-sm text-primary flex-1">
+              <div className="p-4 surface-secondary rounded-md border-subtle text-sm text-primary flex-1 whitespace-pre-wrap">
                 {activeMessage.body}
               </div>
 
@@ -146,11 +146,11 @@ export const CrmCommunication = () => {
                   placeholder={`Type ${activeChannel.toUpperCase()} reply to ${activeMessage.sender}...`}
                   required
                 />
-                <div className="flex items-center justify-between">
-                  <Button variant="ghost" size="sm" icon={Paperclip} onClick={() => addToast({ title: 'Attachment', message: 'File attachment window opened.', type: 'info' })}>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <Button variant="ghost" size="sm" icon={Paperclip} className="w-full sm:w-auto justify-center" onClick={() => addToast({ title: 'Attachment', message: 'File attachment window opened.', type: 'info' })}>
                     Attach Document
                   </Button>
-                  <Button variant="primary" size="sm" type="submit" icon={Send}>
+                  <Button variant="primary" size="sm" type="submit" icon={Send} className="w-full sm:w-auto justify-center">
                     Send Message
                   </Button>
                 </div>

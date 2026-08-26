@@ -73,11 +73,16 @@ export const CrmLayout = () => {
 
         {/* Main Content Area — ONLY THIS AREA SCROLLS */}
         <main
+          className="main-content"
           style={{
             flex: 1,
             height: '100%',
             overflowY: 'auto',
-            padding: isMobile ? '1rem' : '1.5rem',
+            overflowX: 'hidden',
+            minWidth: 0,
+            maxWidth: '100%',
+            width: '100%',
+            padding: isMobile ? '0.875rem' : '1.5rem',
             backgroundColor: 'var(--background)',
             boxSizing: 'border-box',
           }}

@@ -207,10 +207,53 @@ html, body, #root, .app-layout, .main-content {
 /* 768px (Tablet Portrait & Large Mobile) */
 @media (min-width: 768px) {
   .visible-mobile { display: none !important; }
-  .hidden-mobile { display: flex !important; }
+  .hidden-mobile { display: flex !important; flex-direction: column !important; }
   
   .grid-responsive-2col {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Table Toolbar Single-Row Responsive Layout */
+.table-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.table-toolbar-search {
+  width: 100%;
+}
+
+.table-toolbar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .table-toolbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  .table-toolbar-search {
+    max-width: 320px;
+    width: 320px;
+  }
+  
+  .table-toolbar-actions {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
   }
 }
 
@@ -233,3 +276,55 @@ html, body, #root, .app-layout, .main-content {
     max-width: 1400px;
   }
 }
+
+/* Mobile KPI Card Compact Sizing */
+@media (max-width: 640px) {
+  .kpi-card {
+    padding: 0.875rem 0.75rem !important;
+    gap: 0.5rem !important;
+    border-radius: 10px !important;
+  }
+  
+  .kpi-card [style*="font-size: 1.75rem"],
+  .kpi-card .text-2xl {
+    font-size: 1.25rem !important;
+  }
+}
+
+/* Responsive 3-Column Grid */
+.grid-responsive-3col {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .grid-responsive-3col {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Profile Header Strip */
+.profile-header-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 640px) {
+  .profile-header-strip {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.profile-avatar-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+

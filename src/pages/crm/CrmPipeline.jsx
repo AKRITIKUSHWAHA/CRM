@@ -86,9 +86,23 @@ export const CrmPipeline = () => {
     }
   };
 
-  const visibleColumns = selectedMobileStage === 'All'
-    ? pipelineColumns
-    : pipelineColumns.filter((col) => col === selectedMobileStage);
+  const kanbanScrollRef = React.useRef(null);
+  const columnRefs = React.useRef({});
+
+  const handleSelectStage = (stage) => {
+    setSelectedMobileStage(stage);
+    if (stage === 'All') {
+      if (kanbanScrollRef.current) {
+        kanbanScrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+      }
+    } else if (columnRefs.current[stage]) {
+      columnRefs.current[stage].scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start',
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
@@ -113,11 +127,12 @@ export const CrmPipeline = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="dashboard-actions-grid w-full md:w-auto">
           <Button
             variant="primary"
             size="sm"
             icon={Plus}
+            className="w-full md:w-auto justify-center"
             onClick={() => setIsAddModalOpen(true)}
           >
             Add New Opportunity
@@ -125,8 +140,8 @@ export const CrmPipeline = () => {
         </div>
       </div>
 
-      {/* 2. Pipeline Summary Metrics Strip — ALWAYS 2 COLUMNS PER ROW ON MOBILE */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+      {/* 2. Pipeline Summary Metrics Strip */}
+      <div className="grid-responsive-kpi">
         <KPICard
           title="TOTAL PIPELINE VALUE"
           value={`$${(totalPipelineValue / 1000000).toFixed(2)}M`}
@@ -169,8 +184,11 @@ export const CrmPipeline = () => {
         />
       </div>
 
-      {/* 3. Mobile/Tablet Stage Quick Filter Selector */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 visible-mobile">
+      {/* 3. Mobile/Tablet Stage Quick Jump Selector */}
+      <div
+        className="flex items-center gap-2 overflow-x-auto pb-1 visible-mobile"
+        style={{ width: '100%', maxWidth: '100%', WebkitOverflowScrolling: 'touch' }}
+      >
         <span className="text-xs font-bold text-secondary flex items-center gap-1 flex-shrink-0">
           <Filter size={14} /> Stage:
         </span>
@@ -178,7 +196,7 @@ export const CrmPipeline = () => {
           <button
             key={stage}
             type="button"
-            onClick={() => setSelectedMobileStage(stage)}
+            onClick={() => handleSelectStage(stage)}
             style={{
               padding: '0.35rem 0.75rem',
               borderRadius: '9999px',
@@ -189,6 +207,8 @@ export const CrmPipeline = () => {
               color: selectedMobileStage === stage ? '#ffffff' : 'var(--text-secondary)',
               whiteSpace: 'nowrap',
               cursor: 'pointer',
+              flexShrink: 0,
+              transition: 'all 0.15s ease',
             }}
           >
             {stage}
@@ -196,18 +216,25 @@ export const CrmPipeline = () => {
         ))}
       </div>
 
-      {/* 4. 8-Column Responsive Kanban Board Grid */}
+      {/* 4. 8-Column Responsive Kanban Board Grid with Full Horizontal Scroll & Swipe */}
       <div
+        ref={kanbanScrollRef}
         style={{
           display: 'flex',
           gap: '1rem',
           overflowX: 'auto',
-          paddingBottom: '1rem',
-          minHeight: '620px',
+          overflowY: 'hidden',
+          paddingBottom: '1.25rem',
+          minHeight: '560px',
+          width: '100%',
+          maxWidth: '100%',
           WebkitOverflowScrolling: 'touch',
+          boxSizing: 'border-box',
+          scrollBehavior: 'smooth',
+          touchAction: 'pan-x',
         }}
       >
-        {visibleColumns.map((col) => {
+        {pipelineColumns.map((col) => {
           const colDeals = deals.filter((d) => d.stage === col);
           const totalColValue = colDeals.reduce((sum, d) => {
             const valNum = parseInt(d.value.replace(/[^0-9]/g, '')) || 0;
@@ -217,16 +244,22 @@ export const CrmPipeline = () => {
           return (
             <div
               key={col}
+              ref={(el) => { columnRefs.current[col] = el; }}
               style={{
-                width: '290px',
-                minWidth: '290px',
+                width: '285px',
+                minWidth: '285px',
+                maxWidth: '285px',
+                flexShrink: 0,
+                flexGrow: 0,
                 backgroundColor: 'var(--surface-secondary)',
                 borderRadius: '12px',
-                border: '1px solid var(--border)',
+                border: selectedMobileStage === col ? '2px solid var(--primary)' : '1px solid var(--border)',
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100%',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+                boxSizing: 'border-box',
+                transition: 'border-color 0.2s ease',
               }}
             >
               {/* Column Header */}

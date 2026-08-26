@@ -405,7 +405,7 @@ export const OalBorrowerDashboard = () => {
           <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col justify-between">
             <div>
               {/* Agent Profile Bar */}
-              <div className="flex items-center justify-between pb-3 border-b border-subtle mb-3">
+              <div className="flex items-center justify-between pb-3 border-b border-subtle mb-3.5">
                 <div className="flex items-center gap-2.5">
                   <div style={{ position: 'relative' }}>
                     <div
@@ -454,11 +454,12 @@ export const OalBorrowerDashboard = () => {
 
               {/* Chat Stream with Real Message Bubbles */}
               <div
-                className="flex flex-col gap-2.5 mb-3"
+                className="flex flex-col gap-3"
                 style={{
                   maxHeight: '160px',
                   overflowY: 'auto',
-                  padding: '2px 0',
+                  padding: '4px 0',
+                  marginBottom: '1rem',
                 }}
               >
                 {messages.slice(-2).map((msg, i) => {
@@ -471,7 +472,7 @@ export const OalBorrowerDashboard = () => {
                       <div
                         style={{
                           maxWidth: '85%',
-                          padding: '0.6rem 0.85rem',
+                          padding: '0.65rem 0.95rem',
                           borderRadius: isAgent ? '12px 12px 12px 2px' : '12px 12px 2px 12px',
                           backgroundColor: isAgent ? 'var(--surface-secondary)' : 'var(--accent)',
                           color: isAgent ? 'var(--text-primary)' : '#ffffff',
@@ -491,12 +492,12 @@ export const OalBorrowerDashboard = () => {
               </div>
 
               {/* Quick Reply Composer */}
-              <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 mb-3 w-full">
+              <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 w-full" style={{ marginBottom: '1rem' }}>
                 <Input
                   value={quickReplyText}
                   onChange={(e) => setQuickReplyText(e.target.value)}
                   placeholder="Type a message to Sarah..."
-                  style={{ height: '36px', fontSize: '12px' }}
+                  style={{ height: '38px', fontSize: '12px' }}
                   className="flex-1 min-w-0"
                 />
                 <Button
@@ -504,24 +505,26 @@ export const OalBorrowerDashboard = () => {
                   size="sm"
                   type="submit"
                   icon={Send}
-                  style={{ height: '36px', minWidth: '65px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
+                  style={{ height: '38px', minWidth: '70px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
                 >
                   Send
                 </Button>
               </form>
             </div>
 
-            {/* Dedicated Chat Portal CTA Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              icon={MessageSquare}
-              className="w-full justify-center"
-              onClick={() => navigate('/oal/borrower/messages')}
-              style={{ height: '36px', fontWeight: 600 }}
-            >
-              Open Dedicated Chat Portal
-            </Button>
+            {/* Dedicated Chat Portal CTA Button with clean top border */}
+            <div style={{ paddingTop: '0.85rem', borderTop: '1px solid var(--border)' }}>
+              <Button
+                variant="outline"
+                size="sm"
+                icon={MessageSquare}
+                className="w-full justify-center"
+                onClick={() => navigate('/oal/borrower/messages')}
+                style={{ height: '38px', fontWeight: 600 }}
+              >
+                Open Dedicated Chat Portal
+              </Button>
+            </div>
           </Card>
         </div>
       </div>

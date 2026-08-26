@@ -401,80 +401,115 @@ export const OalBorrowerDashboard = () => {
             </Badge>
           </div>
 
-          {/* Representative Content Card */}
-          <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-3.5">
-            {/* Representative Profile Box */}
-            <div className="p-3.5 surface-secondary rounded-lg border-subtle flex flex-col gap-3">
-              <div className="flex items-center gap-3">
-                <div
-                  style={{
-                    width: '42px',
-                    height: '42px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                    color: '#ffffff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 800,
-                    fontSize: '14px',
-                    flexShrink: 0,
-                    boxShadow: '0 2px 4px rgba(37, 99, 235, 0.2)',
-                  }}
-                >
-                  SJ
-                </div>
-                <div className="min-w-0">
-                  <div className="font-bold text-xs text-primary truncate" style={{ fontSize: '14px' }}>
-                    Sarah Jenkins
+          {/* Real Chat Message Box Card */}
+          <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col justify-between">
+            <div>
+              {/* Agent Profile Bar */}
+              <div className="flex items-center justify-between pb-3 border-b border-subtle mb-3">
+                <div className="flex items-center gap-2.5">
+                  <div style={{ position: 'relative' }}>
+                    <div
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+                        color: '#ffffff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 800,
+                        fontSize: '13px',
+                      }}
+                    >
+                      SJ
+                    </div>
+                    <span
+                      style={{
+                        position: 'absolute',
+                        bottom: '0',
+                        right: '0',
+                        width: '10px',
+                        height: '10px',
+                        backgroundColor: '#16a34a',
+                        border: '2px solid var(--surface)',
+                        borderRadius: '50%',
+                      }}
+                    />
                   </div>
-                  <div className="text-xs text-secondary truncate" style={{ fontSize: '11px' }}>
-                    Licensed Underwriting Officer &bull; NMLS #84920
+                  <div>
+                    <div className="font-bold text-xs text-primary" style={{ fontSize: '13px' }}>
+                      Sarah Jenkins
+                    </div>
+                    <div className="text-xs text-secondary" style={{ fontSize: '11px' }}>
+                      Licensed Underwriting Officer &bull; NMLS #84920
+                    </div>
                   </div>
                 </div>
+
+                <span className="text-tertiary text-xs" style={{ fontSize: '10px' }}>
+                  Avg Reply: &lt;5m
+                </span>
               </div>
 
-              {/* Speech Bubble */}
+              {/* Chat Stream with Real Message Bubbles */}
               <div
+                className="flex flex-col gap-2.5 mb-3"
                 style={{
-                  padding: '0.75rem 1rem',
-                  backgroundColor: 'var(--surface)',
-                  borderRadius: '8px',
-                  border: '1px solid var(--border)',
-                  borderLeft: '3px solid var(--accent)',
-                  fontSize: '12px',
-                  lineHeight: '1.5',
-                  color: 'var(--text-primary)',
+                  maxHeight: '160px',
+                  overflowY: 'auto',
+                  padding: '2px 0',
                 }}
               >
-                <p className="margin-0 italic">
-                  "{messages[messages.length - 1]?.text || 'I am negotiating directly with Vanguard’s underwriting team. I will update your offers tab shortly.'}"
-                </p>
-                <div className="flex justify-end text-tertiary mt-1" style={{ fontSize: '10px' }}>
-                  {messages[messages.length - 1]?.time || '10:45 AM'} &bull; Delivered
-                </div>
+                {messages.slice(-2).map((msg, i) => {
+                  const isAgent = msg.sender.includes('Sarah');
+                  return (
+                    <div
+                      key={msg.id || i}
+                      className={`flex flex-col ${isAgent ? 'items-start' : 'items-end'}`}
+                    >
+                      <div
+                        style={{
+                          maxWidth: '85%',
+                          padding: '0.6rem 0.85rem',
+                          borderRadius: isAgent ? '12px 12px 12px 2px' : '12px 12px 2px 12px',
+                          backgroundColor: isAgent ? 'var(--surface-secondary)' : 'var(--accent)',
+                          color: isAgent ? 'var(--text-primary)' : '#ffffff',
+                          fontSize: '12px',
+                          lineHeight: '1.4',
+                          border: isAgent ? '1px solid var(--border)' : 'none',
+                        }}
+                      >
+                        {msg.text}
+                      </div>
+                      <span className="text-tertiary mt-1" style={{ fontSize: '10px', padding: '0 4px' }}>
+                        {msg.time || 'Just now'}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
-            </div>
 
-            {/* Quick Reply Form */}
-            <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 w-full">
-              <Input
-                value={quickReplyText}
-                onChange={(e) => setQuickReplyText(e.target.value)}
-                placeholder="Type a quick message to Sarah..."
-                style={{ height: '38px', fontSize: '12px' }}
-                className="flex-1 min-w-0"
-              />
-              <Button
-                variant="primary"
-                size="sm"
-                type="submit"
-                icon={Send}
-                style={{ height: '38px', minWidth: '70px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
-              >
-                Send
-              </Button>
-            </form>
+              {/* Quick Reply Composer */}
+              <form onSubmit={handleSendQuickReply} className="flex items-center gap-2 mb-3 w-full">
+                <Input
+                  value={quickReplyText}
+                  onChange={(e) => setQuickReplyText(e.target.value)}
+                  placeholder="Type a message to Sarah..."
+                  style={{ height: '36px', fontSize: '12px' }}
+                  className="flex-1 min-w-0"
+                />
+                <Button
+                  variant="primary"
+                  size="sm"
+                  type="submit"
+                  icon={Send}
+                  style={{ height: '36px', minWidth: '65px', padding: '0 12px', flexShrink: 0, justifyContent: 'center' }}
+                >
+                  Send
+                </Button>
+              </form>
+            </div>
 
             {/* Dedicated Chat Portal CTA Button */}
             <Button
@@ -483,7 +518,7 @@ export const OalBorrowerDashboard = () => {
               icon={MessageSquare}
               className="w-full justify-center"
               onClick={() => navigate('/oal/borrower/messages')}
-              style={{ height: '38px', fontWeight: 600 }}
+              style={{ height: '36px', fontWeight: 600 }}
             >
               Open Dedicated Chat Portal
             </Button>

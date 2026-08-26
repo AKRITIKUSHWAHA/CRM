@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Mail,
   MessageSquare,
@@ -14,7 +14,9 @@ import {
   AlertCircle,
   FileText,
   PhoneCall,
-  ShieldCheck
+  ShieldCheck,
+  X,
+  File
 } from 'lucide-react';
 import {
   Breadcrumb,
@@ -25,6 +27,8 @@ import {
   Tabs,
   Badge,
   Input,
+  Modal,
+  Select,
   KPICard
 } from '../../components/ui';
 import { useCrm } from '../../context/CrmContext';
@@ -139,12 +143,25 @@ const initialMockMessages = [
 
 export const CrmCommunication = () => {
   const { addToast } = useToast();
+  const fileInputRef = useRef(null);
+  const chatScrollRef = useRef(null);
 
   const [messageList, setMessageList] = useState(initialMockMessages);
   const [activeChannel, setActiveChannel] = useState('email'); // 'email' | 'sms' | 'chat'
   const [activeThreadId, setActiveThreadId] = useState('MSG-501');
   const [searchQuery, setSearchQuery] = useState('');
   const [replyText, setReplyText] = useState('');
+  const [attachedFile, setAttachedFile] = useState(null);
+
+  // Compose Modal State
+  const [isComposeModalOpen, setIsComposeModalOpen] = useState(false);
+  const [composeData, setComposeData] = useState({
+    channel: 'email',
+    recipient: '',
+    recipientEmail: '',
+    subject: '',
+    body: '',
+  });
 
   // Filter by channel and search query
   const channelMessages = messageList.filter((m) => m.type === activeChannel);
@@ -156,14 +173,36 @@ export const CrmCommunication = () => {
 
   const activeMessage = messageList.find((m) => m.id === activeThreadId) || channelMessages[0] || messageList[0];
 
+  // Action 1: Handle File Attachment Selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAttachedFile(file);
+      addToast({
+        title: 'File Attached',
+        message: `Attached ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+        type: 'info',
+      });
+    }
+  };
+
+  // Action 2: Send Message / Reply Handler
   const handleSendReply = (e) => {
     e.preventDefault();
-    if (!replyText.trim() || !activeMessage) return;
+    if (!replyText.trim() && !attachedFile) {
+      addToast({ title: 'Input Required', message: 'Type a message or attach a file to send.', type: 'error' });
+      return;
+    }
+    if (!activeMessage) return;
+
+    const messageText = attachedFile
+      ? `${replyText} \n\n📎 Attached Document: ${attachedFile.name} (${(attachedFile.size / 1024).toFixed(1)} KB)`
+      : replyText;
 
     const newReply = {
       id: `h-${Date.now()}`,
       sender: 'Alexander Wright (Me)',
-      text: replyText,
+      text: messageText,
       time: 'Just now',
       isMe: true,
     };
@@ -177,16 +216,90 @@ export const CrmCommunication = () => {
     );
 
     addToast({
-      title: 'Message Dispatched',
-      message: `Sent reply to ${activeMessage.sender} via ${activeChannel.toUpperCase()} gateway.`,
+      title: 'Message Sent Successfully',
+      message: `Dispatched message to ${activeMessage.sender} via ${activeChannel.toUpperCase()} gateway.`,
       type: 'success',
     });
 
     setReplyText('');
+    setAttachedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+
+    // Scroll chat to bottom
+    setTimeout(() => {
+      if (chatScrollRef.current) {
+        chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+      }
+    }, 100);
+  };
+
+  // Action 3: Compose New Message Modal Submit Handler
+  const handleCreateNewThread = (e) => {
+    e.preventDefault();
+    if (!composeData.recipient || !composeData.subject || !composeData.body) {
+      addToast({ title: 'Validation Error', message: 'Recipient, subject, and message text are required.', type: 'error' });
+      return;
+    }
+
+    const newId = `MSG-${Date.now()}`;
+    const initials = composeData.recipient
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) || 'NC';
+
+    const newThread = {
+      id: newId,
+      type: composeData.channel,
+      sender: composeData.recipient,
+      senderEmail: composeData.recipientEmail || 'contact@enterprise.com',
+      senderInitials: initials,
+      senderBg: '#1d4ed8',
+      subject: composeData.subject,
+      timestamp: 'Just now',
+      unread: false,
+      history: [
+        {
+          id: `h-init`,
+          sender: 'Alexander Wright (Me)',
+          text: composeData.body,
+          time: 'Just now',
+          isMe: true,
+        },
+      ],
+    };
+
+    setMessageList((prev) => [newThread, ...prev]);
+    setActiveChannel(composeData.channel);
+    setActiveThreadId(newId);
+    setIsComposeModalOpen(false);
+
+    addToast({
+      title: 'New Conversation Started',
+      message: `Message dispatched to ${composeData.recipient} via ${composeData.channel.toUpperCase()}.`,
+      type: 'success',
+    });
+
+    setComposeData({
+      channel: 'email',
+      recipient: '',
+      recipientEmail: '',
+      subject: '',
+      body: '',
+    });
   };
 
   return (
     <div className="flex flex-col gap-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+      {/* Hidden File Input for Attach File Button */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+      />
+
       {/* 1. Header */}
       <div className="page-header-row">
         <div>
@@ -212,7 +325,7 @@ export const CrmCommunication = () => {
             variant="primary"
             size="sm"
             icon={Plus}
-            onClick={() => addToast({ title: 'New Conversation', message: 'Composer initialized.', type: 'info' })}
+            onClick={() => setIsComposeModalOpen(true)}
           >
             Compose Message
           </Button>
@@ -479,6 +592,7 @@ export const CrmCommunication = () => {
 
               {/* Chat Message History Flow */}
               <div
+                ref={chatScrollRef}
                 className="flex flex-col gap-3 p-4 surface-secondary rounded-lg border-subtle overflow-y-auto flex-1"
                 style={{ minHeight: '260px', maxHeight: '380px' }}
               >
@@ -498,6 +612,7 @@ export const CrmCommunication = () => {
                         fontSize: '13px',
                         lineHeight: 1.6,
                         boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+                        whiteSpace: 'pre-wrap',
                       }}
                     >
                       <div className="font-bold text-xs mb-1" style={{ opacity: 0.85, fontSize: '11px' }}>
@@ -509,30 +624,57 @@ export const CrmCommunication = () => {
                 ))}
               </div>
 
-              {/* Reply Form Composer & Responsive Action Buttons */}
+              {/* Attachment Preview Chip if File Attached */}
+              {attachedFile && (
+                <div
+                  className="flex items-center justify-between p-2 px-3 rounded-md border-subtle"
+                  style={{ backgroundColor: 'rgba(29, 78, 216, 0.08)', border: '1px solid var(--primary-border)' }}
+                >
+                  <div className="flex items-center gap-2 text-xs font-semibold text-primary truncate">
+                    <File size={14} className="text-primary" />
+                    <span className="truncate">{attachedFile.name}</span>
+                    <span className="text-tertiary">({(attachedFile.size / 1024).toFixed(1)} KB)</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAttachedFile(null);
+                      if (fileInputRef.current) fileInputRef.current.value = '';
+                    }}
+                    className="p-1 rounded-full text-tertiary hover:text-error cursor-pointer"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              )}
+
+              {/* Reply Form Composer & Interactive Buttons */}
               <form onSubmit={handleSendReply} className="flex flex-col gap-3 pt-3 border-t border-subtle">
                 <Input
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
                   placeholder={`Type ${activeChannel.toUpperCase()} reply to ${activeMessage.sender}...`}
-                  required
                   style={{ height: '42px', fontSize: '13px' }}
                 />
 
                 <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+                  {/* Attach File Action Button */}
                   <Button
+                    type="button"
                     variant="outline"
                     size="sm"
                     icon={Paperclip}
-                    onClick={() => addToast({ title: 'Attachment', message: 'File attachment window opened.', type: 'info' })}
+                    onClick={() => fileInputRef.current?.click()}
                     style={{ width: 'auto' }}
                   >
-                    Attach File
+                    {attachedFile ? 'Change File' : 'Attach File'}
                   </Button>
+
+                  {/* Send Message Action Button */}
                   <Button
+                    type="submit"
                     variant="primary"
                     size="sm"
-                    type="submit"
                     icon={Send}
                     style={{ width: 'auto' }}
                   >
@@ -549,6 +691,63 @@ export const CrmCommunication = () => {
           )}
         </Card>
       </div>
+
+      {/* Interactive Compose New Message Modal */}
+      <Modal
+        isOpen={isComposeModalOpen}
+        onClose={() => setIsComposeModalOpen(false)}
+        title="Compose New Message"
+        footer={
+          <>
+            <Button variant="outline" size="sm" onClick={() => setIsComposeModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" size="sm" onClick={handleCreateNewThread}>
+              Send Message
+            </Button>
+          </>
+        }
+      >
+        <form className="flex flex-col gap-4">
+          <Select
+            label="Communication Channel Gateway"
+            value={composeData.channel}
+            onChange={(e) => setComposeData({ ...composeData, channel: e.target.value })}
+            options={[
+              { label: 'Corporate Email Inbox', value: 'email' },
+              { label: 'SMS Messaging Gateway', value: 'sms' },
+              { label: 'Internal Team Chat', value: 'chat' },
+            ]}
+          />
+          <Input
+            label="Recipient Name"
+            value={composeData.recipient}
+            onChange={(e) => setComposeData({ ...composeData, recipient: e.target.value })}
+            placeholder="e.g. Marcus Vance"
+            required
+          />
+          <Input
+            label="Recipient Email / Phone Number"
+            value={composeData.recipientEmail}
+            onChange={(e) => setComposeData({ ...composeData, recipientEmail: e.target.value })}
+            placeholder="e.g. m.vance@apexglobal.com"
+          />
+          <Input
+            label="Subject Title"
+            value={composeData.subject}
+            onChange={(e) => setComposeData({ ...composeData, subject: e.target.value })}
+            placeholder="e.g. Q3 Partnership Scope Review"
+            required
+          />
+          <Input
+            label="Message Content"
+            value={composeData.body}
+            onChange={(e) => setComposeData({ ...composeData, body: e.target.value })}
+            placeholder="Type your message text..."
+            required
+          />
+        </form>
+      </Modal>
     </div>
   );
 };

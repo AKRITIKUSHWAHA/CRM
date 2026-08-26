@@ -254,9 +254,26 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
           }
         >
           <DropdownHeader>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1 py-0.5">
               <span className="font-bold text-xs text-primary">{currentUser?.name}</span>
-              <span className="text-tertiary text-xs">{currentUser?.company}</span>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span
+                  style={{
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    backgroundColor: 'var(--primary-light)',
+                    color: 'var(--primary)',
+                    padding: '2px 6px',
+                    borderRadius: '4px',
+                    border: '1px solid var(--border)',
+                  }}
+                >
+                  {currentUser?.role || 'Logged In Role'}
+                </span>
+              </div>
+              <span className="text-tertiary text-xs" style={{ fontSize: '11px', marginTop: '2px' }}>
+                {currentUser?.company}
+              </span>
             </div>
           </DropdownHeader>
 
@@ -266,33 +283,6 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
           <DropdownItem icon={Building2} onClick={() => addToast({ title: 'Tenant Vault', message: `Tenant ID: ${currentUser?.tenantId}`, type: 'info' })}>
             Workspace Settings
           </DropdownItem>
-
-          <DropdownDivider />
-
-          {/* Quick Role Switcher Header */}
-          <div className="px-3 py-1.5 text-xs font-bold text-tertiary uppercase tracking-wider flex items-center gap-1.5" style={{ fontSize: '10px' }}>
-            <UserCheck size={12} />
-            <span>Switch Role / Persona</span>
-          </div>
-
-          {availableRoles.map((r) => {
-            const isSelected = currentUser?.email === r.email;
-            return (
-              <DropdownItem
-                key={r.id}
-                onClick={() => handleSwitchRole(r)}
-                className={isSelected ? 'bg-primary-light font-semibold' : ''}
-              >
-                <div className="flex items-center justify-between w-full gap-2">
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-semibold text-primary">{r.name}</span>
-                    <span className="text-tertiary" style={{ fontSize: '10px' }}>{r.title}</span>
-                  </div>
-                  {isSelected && <Check size={14} className="text-primary flex-shrink-0" />}
-                </div>
-              </DropdownItem>
-            );
-          })}
 
           <DropdownDivider />
 

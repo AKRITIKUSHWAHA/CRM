@@ -188,44 +188,47 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
         </button>
       </div>
 
-      {/* Right Actions: Notifications (Badge 8), Help, Settings, User Profile */}
-      <div className="flex items-center gap-1.5 ml-auto" style={{ marginLeft: 'auto' }}>
-        {/* Theme Toggle Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          isIconOnly
-          icon={theme === 'light' ? Moon : Sun}
-          onClick={toggleTheme}
-          title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-        />
-
+      {/* Right Actions: Notifications, Theme Toggle, User Profile */}
+      <div className="flex items-center gap-2 ml-auto" style={{ marginLeft: 'auto' }}>
         {/* Notifications Dropdown (Badge 8) */}
         <Dropdown
           trigger={
-            <Button variant="ghost" size="sm" isIconOnly style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="flex items-center justify-center rounded-full transition-colors cursor-pointer"
+              style={{
+                width: '36px',
+                height: '36px',
+                position: 'relative',
+                backgroundColor: 'var(--surface-secondary)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-secondary)',
+              }}
+              title="Notifications"
+            >
               <Bell size={18} />
               <span
                 style={{
                   position: 'absolute',
-                  top: '2px',
-                  right: '2px',
+                  top: '-2px',
+                  right: '-2px',
                   backgroundColor: '#dc2626',
                   color: '#ffffff',
                   fontSize: '9px',
                   fontWeight: 800,
-                  width: '15px',
-                  height: '15px',
+                  width: '16px',
+                  height: '16px',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   lineHeight: 1,
+                  border: '2px solid var(--surface)',
                 }}
               >
                 8
               </span>
-            </Button>
+            </button>
           }
         >
           <DropdownHeader>Notifications (8 Unread)</DropdownHeader>
@@ -246,11 +249,33 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
           </DropdownItem>
         </Dropdown>
 
+        {/* Theme Toggle Button - Prominent & Right next to Profile */}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="flex items-center justify-center rounded-full transition-colors cursor-pointer"
+          style={{
+            width: '36px',
+            height: '36px',
+            backgroundColor: 'var(--surface-secondary)',
+            border: '1px solid var(--border)',
+            color: 'var(--text-primary)',
+            padding: 0,
+          }}
+          title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+        >
+          {theme === 'light' ? (
+            <Moon size={20} style={{ color: 'var(--text-primary)' }} />
+          ) : (
+            <Sun size={20} style={{ color: '#f59e0b' }} />
+          )}
+        </button>
+
         {/* User Profile Dropdown with Role Switcher */}
         <Dropdown
           trigger={
             <div
-              className="flex items-center gap-2 cursor-pointer px-2 py-1 rounded-full transition-colors ml-1"
+              className="flex items-center gap-2 cursor-pointer px-2.5 py-1 rounded-full transition-colors"
               style={{ backgroundColor: 'var(--surface-hover)', border: '1px solid var(--border)' }}
             >
               <Avatar name={currentUser?.name || 'Alexander Wright'} src={currentUser?.avatar} size="sm" status="online" />
@@ -260,7 +285,7 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
                   {currentUser?.role || 'Company Owner'}
                 </span>
               </div>
-              <ChevronDown size={14} className="text-tertiary hidden-mobile ml-1" />
+              <ChevronDown size={14} className="text-tertiary hidden-mobile ml-0.5" />
             </div>
           }
         >

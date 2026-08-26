@@ -264,7 +264,7 @@ export const CrmCommunication = () => {
       </div>
 
       {/* 3. Channel Switcher Tabs */}
-      <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }}>
+      <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)', overflowX: 'auto' }}>
         <CardBody className="p-2">
           <Tabs
             tabs={[
@@ -297,7 +297,7 @@ export const CrmCommunication = () => {
         </CardBody>
       </Card>
 
-      {/* 4. Communication 2-Column Interface Workspace */}
+      {/* 4. Communication Workspace (Responsive Grid) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5" style={{ minHeight: '560px' }}>
         {/* Left Column: Message Threads List (1 Column) */}
         <Card
@@ -419,41 +419,61 @@ export const CrmCommunication = () => {
           className="lg:col-span-2 p-6"
         >
           {activeMessage ? (
-            <div className="flex flex-col justify-between flex-1 gap-4">
-              {/* Thread Header Info */}
-              <div className="border-b border-subtle pb-4 flex flex-col gap-2">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <h2 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
+            <div className="flex flex-col justify-between flex-1 gap-5">
+              {/* Thread Header Info — Perfect Spacing & Responsive Alignment */}
+              <div
+                className="border-b border-subtle pb-4 flex flex-col gap-3"
+                style={{ width: '100%', boxSizing: 'border-box' }}
+              >
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                  <h2
+                    style={{
+                      fontSize: '17px',
+                      fontWeight: 800,
+                      color: 'var(--text-primary)',
+                      margin: 0,
+                      lineHeight: 1.3,
+                      flex: 1,
+                      minWidth: 0,
+                    }}
+                  >
                     {activeMessage.subject}
                   </h2>
-                  <Badge variant="primary" icon={CheckCheck}>
+                  <Badge variant="primary" icon={CheckCheck} style={{ flexShrink: 0 }}>
                     {activeMessage.type.toUpperCase()} Gateway Active
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-secondary">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between gap-3 text-xs flex-wrap">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <div
                       style={{
-                        width: '24px',
-                        height: '24px',
+                        width: '28px',
+                        height: '28px',
                         borderRadius: '50%',
                         backgroundColor: activeMessage.senderBg || '#1d4ed8',
                         color: '#ffffff',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '10px',
+                        fontSize: '11px',
                         fontWeight: 700,
+                        flexShrink: 0,
                       }}
                     >
                       {activeMessage.senderInitials}
                     </div>
-                    <span>
-                      From: <strong className="text-primary">{activeMessage.sender}</strong> ({activeMessage.senderEmail})
+                    <span className="truncate text-secondary">
+                      From: <strong className="text-primary">{activeMessage.sender}</strong>{' '}
+                      <span className="text-tertiary">({activeMessage.senderEmail})</span>
                     </span>
                   </div>
-                  <span className="text-tertiary">{activeMessage.timestamp}</span>
+                  <span
+                    className="text-tertiary font-medium flex-shrink-0"
+                    style={{ fontSize: '11px', backgroundColor: 'var(--surface-secondary)', padding: '2px 8px', borderRadius: '6px' }}
+                  >
+                    {activeMessage.timestamp}
+                  </span>
                 </div>
               </div>
 
@@ -474,9 +494,9 @@ export const CrmCommunication = () => {
                         color: h.isMe ? '#ffffff' : 'var(--text-primary)',
                         border: h.isMe ? 'none' : '1px solid var(--border)',
                         borderRadius: h.isMe ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
-                        padding: '0.75rem 1rem',
+                        padding: '0.875rem 1.125rem',
                         fontSize: '13px',
-                        lineHeight: 1.5,
+                        lineHeight: 1.6,
                         boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
                       }}
                     >
@@ -489,7 +509,7 @@ export const CrmCommunication = () => {
                 ))}
               </div>
 
-              {/* Reply Form Composer */}
+              {/* Reply Form Composer & Responsive Action Buttons */}
               <form onSubmit={handleSendReply} className="flex flex-col gap-3 pt-3 border-t border-subtle">
                 <Input
                   value={replyText}
@@ -499,16 +519,23 @@ export const CrmCommunication = () => {
                   style={{ height: '42px', fontSize: '13px' }}
                 />
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
                   <Button
                     variant="outline"
                     size="sm"
                     icon={Paperclip}
                     onClick={() => addToast({ title: 'Attachment', message: 'File attachment window opened.', type: 'info' })}
+                    style={{ width: 'auto' }}
                   >
                     Attach File
                   </Button>
-                  <Button variant="primary" size="sm" type="submit" icon={Send}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    type="submit"
+                    icon={Send}
+                    style={{ width: 'auto' }}
+                  >
                     Send Message
                   </Button>
                 </div>

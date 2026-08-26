@@ -160,13 +160,9 @@ export const OalBorrowerMessages = () => {
       {/* 2. Unified Two-Panel Systematic Messaging Portal */}
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: '320px minmax(0, 1fr)',
           border: '1px solid var(--border)',
           borderRadius: '16px',
           backgroundColor: 'var(--surface)',
-          minHeight: '660px',
-          overflow: 'hidden',
           boxShadow: 'var(--shadow-sm)',
         }}
         className="chat-master-grid"
@@ -497,12 +493,12 @@ export const OalBorrowerMessages = () => {
 
           {/* Chat Stream with Authentic Speech Bubbles */}
           <div
-            className="flex flex-col gap-3.5 pr-2 overflow-y-auto"
+            className="chat-messages-stream flex flex-col gap-3 pr-1"
             style={{
               padding: '1.25rem 1.5rem',
               flex: 1,
-              maxHeight: '440px',
-              minHeight: '340px',
+              overflowY: 'auto',
+              WebkitOverflowScrolling: 'touch',
             }}
           >
             {/* System Session Banner */}

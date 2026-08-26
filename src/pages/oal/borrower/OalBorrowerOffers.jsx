@@ -194,36 +194,44 @@ export const OalBorrowerOffers = () => {
         </Card>
       )}
 
-      {/* 3. Marketplace Highlights KPI Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-        <Card style={{ padding: '1rem', borderRadius: '10px' }} className="flex flex-col gap-1">
-          <span className="text-xs text-tertiary font-medium">LOWEST MARKET APR</span>
-          <div className="flex items-center gap-2">
-            <span style={{ fontSize: '18px', fontWeight: 800, color: 'var(--success)' }}>4.8% APR</span>
+      {/* 3. Marketplace Highlights KPI Strip (Compact 4 in 1 Line) */}
+      <div className="kpi-strip-4col">
+        <Card style={{ padding: '0.75rem 1rem', borderRadius: '10px' }} className="flex flex-col gap-0.5">
+          <span className="text-tertiary" style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.02em' }}>
+            LOWEST MARKET APR
+          </span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--success)' }}>4.8% APR</span>
             <span className="text-xs text-secondary">Apex Global</span>
           </div>
         </Card>
 
-        <Card style={{ padding: '1rem', borderRadius: '10px' }} className="flex flex-col gap-1">
-          <span className="text-xs text-tertiary font-medium">MAX CAPITAL FACILITY</span>
-          <div className="flex items-center gap-2">
-            <span style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>$1,000,000</span>
+        <Card style={{ padding: '0.75rem 1rem', borderRadius: '10px' }} className="flex flex-col gap-0.5">
+          <span className="text-tertiary" style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.02em' }}>
+            MAX CAPITAL FACILITY
+          </span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>$1,000,000</span>
             <span className="text-xs text-secondary">Hyperion Debt</span>
           </div>
         </Card>
 
-        <Card style={{ padding: '1rem', borderRadius: '10px' }} className="flex flex-col gap-1">
-          <span className="text-xs text-tertiary font-medium">AVERAGE CLOSE TIME</span>
-          <div className="flex items-center gap-2">
-            <span style={{ fontSize: '18px', fontWeight: 800, color: 'var(--accent)' }}>24-48 Hours</span>
+        <Card style={{ padding: '0.75rem 1rem', borderRadius: '10px' }} className="flex flex-col gap-0.5">
+          <span className="text-tertiary" style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.02em' }}>
+            AVERAGE CLOSE TIME
+          </span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--accent)' }}>24-48 Hours</span>
             <span className="text-xs text-secondary">Direct Wire</span>
           </div>
         </Card>
 
-        <Card style={{ padding: '1rem', borderRadius: '10px' }} className="flex flex-col gap-1">
-          <span className="text-xs text-tertiary font-medium">COMPETING LENDERS</span>
-          <div className="flex items-center gap-2">
-            <span style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>3 Verified Bids</span>
+        <Card style={{ padding: '0.75rem 1rem', borderRadius: '10px' }} className="flex flex-col gap-0.5">
+          <span className="text-tertiary" style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.02em' }}>
+            COMPETING LENDERS
+          </span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>3 Verified Bids</span>
             <span className="text-xs text-secondary">Grade A+ Match</span>
           </div>
         </Card>

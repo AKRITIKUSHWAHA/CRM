@@ -238,15 +238,10 @@ export const OalBorrowerDashboard = () => {
       {/* 4. Section: Active Marketplace Offers (Static Executive Summary) */}
       <div className="flex flex-col gap-3">
         {/* Section Heading Outside the Card */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-              Active Marketplace Offers
-            </h2>
-            <span className="text-xs text-secondary">
-              3 Institutional lenders competing for your commercial debt facility
-            </span>
-          </div>
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+            Active Marketplace Offers
+          </h2>
           <Button
             variant="ghost"
             size="sm"

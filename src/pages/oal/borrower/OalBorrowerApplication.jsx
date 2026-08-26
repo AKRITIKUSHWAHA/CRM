@@ -97,22 +97,32 @@ export const OalBorrowerApplication = () => {
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '920px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* 1. Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <Breadcrumb items={[{ label: 'OAL Borrower' }, { label: 'Commercial Loan Application' }]} />
-          <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             Commercial Loan Application
           </h1>
         </div>
 
-        <Button variant="outline" size="sm" icon={Save} onClick={handleSaveDraft}>
+        <Button variant="outline" size="sm" icon={Save} onClick={handleSaveDraft} style={{ fontSize: '12px' }}>
           Save Draft
         </Button>
       </div>
 
-      {/* 2. Stepper Progress Bar */}
-      <div className="overflow-x-auto py-1">
-        <Stepper steps={steps} currentStep={currentStep} />
+      {/* 2. Stepper Progress Bar - Smooth Horizontal Touch Scrolling on Mobile */}
+      <div
+        className="w-full pb-2"
+        style={{
+          overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          touchAction: 'pan-x',
+          scrollbarWidth: 'none',
+        }}
+      >
+        <div style={{ minWidth: '580px', padding: '0.25rem 0' }}>
+          <Stepper steps={steps} currentStep={currentStep} />
+        </div>
       </div>
 
       {/* 3. STEP 1: PERSONAL INFORMATION */}

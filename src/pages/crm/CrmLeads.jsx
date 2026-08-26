@@ -13,6 +13,17 @@ export const CrmLeads = () => {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
+  // Add Lead Modal State
+  const [isAddLeadOpen, setIsAddLeadOpen] = useState(false);
+  const [leadFormData, setLeadFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    value: '$250,000',
+    score: 85,
+    status: 'New',
+  });
+
   // Referral Modal State
   const [selectedLead, setSelectedLead] = useState(null);
   const [isReferralOpen, setIsReferralOpen] = useState(false);
@@ -22,6 +33,19 @@ export const CrmLeads = () => {
     const matchStatus = statusFilter === 'all' || l.status === statusFilter;
     return matchSearch && matchStatus;
   });
+
+  const handleCreateLead = (e) => {
+    e.preventDefault();
+    if (!leadFormData.name || !leadFormData.company) {
+      addToast({ title: 'Validation Error', message: 'Name and company name are required.', type: 'error' });
+      return;
+    }
+
+    addLead(leadFormData);
+    addToast({ title: 'Lead Created', message: `Added Commercial Lead: ${leadFormData.company}`, type: 'success' });
+    setIsAddLeadOpen(false);
+    setLeadFormData({ name: '', company: '', email: '', value: '$250,000', score: 85, status: 'New' });
+  };
 
   const handleOpenReferral = (lead) => {
     setSelectedLead(lead);
@@ -39,19 +63,21 @@ export const CrmLeads = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
       <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'Leads Directory' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>Commercial Sales Leads</h1>
+          <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 800, color: 'var(--text-primary)', margin: '2px 0 0 0' }}>
+            Commercial Sales Leads
+          </h1>
         </div>
         <div className="header-actions-right">
           <Button
             variant="primary"
             size="sm"
             icon={Plus}
-            onClick={() => addToast({ title: 'Lead Acquisition', message: 'New lead form initialized.', type: 'info' })}
+            onClick={() => setIsAddLeadOpen(true)}
           >
             Add New Lead
           </Button>
@@ -59,7 +85,7 @@ export const CrmLeads = () => {
       </div>
 
       {/* Filter Bar */}
-      <Card className="p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <Card className="p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4" style={{ borderRadius: '12px' }}>
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -83,7 +109,7 @@ export const CrmLeads = () => {
       </Card>
 
       {/* Leads Table */}
-      <Card>
+      <Card style={{ borderRadius: '12px', overflow: 'hidden' }}>
         <CardBody className="p-0">
           <Table>
             <TableHeader>
@@ -100,10 +126,10 @@ export const CrmLeads = () => {
             <TableBody>
               {filteredLeads.map((lead) => (
                 <TableRow key={lead.id}>
-                  <TableCell><span className="font-mono text-xs">{lead.id}</span></TableCell>
-                  <TableCell><span className="font-semibold text-primary">{lead.name}</span></TableCell>
-                  <TableCell>{lead.company}</TableCell>
-                  <TableCell><span className="font-bold text-success">{lead.value}</span></TableCell>
+                  <TableCell><span className="font-mono text-xs text-tertiary">{lead.id}</span></TableCell>
+                  <TableCell><span className="font-bold text-xs text-primary">{lead.name}</span></TableCell>
+                  <TableCell><span className="text-xs text-secondary">{lead.company}</span></TableCell>
+                  <TableCell><span className="font-bold text-xs text-success">{lead.value}</span></TableCell>
                   <TableCell><Badge variant="success">{lead.score} / 100</Badge></TableCell>
                   <TableCell><Badge variant="primary">{lead.status}</Badge></TableCell>
                   <TableCell align="right">
@@ -125,6 +151,59 @@ export const CrmLeads = () => {
           </Table>
         </CardBody>
       </Card>
+
+      {/* Add Lead Modal */}
+      <Modal
+        isOpen={isAddLeadOpen}
+        onClose={() => setIsAddLeadOpen(false)}
+        title="Add Commercial Lead"
+        footer={
+          <>
+            <Button variant="outline" size="sm" onClick={() => setIsAddLeadOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" size="sm" onClick={handleCreateLead}>
+              Create Lead
+            </Button>
+          </>
+        }
+      >
+        <form className="flex flex-col gap-4">
+          <Input
+            label="Contact Full Name"
+            value={leadFormData.name}
+            onChange={(e) => setLeadFormData({ ...leadFormData, name: e.target.value })}
+            placeholder="e.g. Marcus Vance"
+            required
+          />
+          <Input
+            label="Company Entity Name"
+            value={leadFormData.company}
+            onChange={(e) => setLeadFormData({ ...leadFormData, company: e.target.value })}
+            placeholder="e.g. TechNova Global Logistics"
+            required
+          />
+          <Input
+            label="Corporate Email Address"
+            type="email"
+            value={leadFormData.email}
+            onChange={(e) => setLeadFormData({ ...leadFormData, email: e.target.value })}
+            placeholder="e.g. m.vance@technova.com"
+          />
+          <Input
+            label="Estimated Deal Value ($)"
+            value={leadFormData.value}
+            onChange={(e) => setLeadFormData({ ...leadFormData, value: e.target.value })}
+            placeholder="e.g. $450,000"
+          />
+          <Select
+            label="Initial Lead Status"
+            value={leadFormData.status}
+            onChange={(e) => setLeadFormData({ ...leadFormData, status: e.target.value })}
+            options={['New', 'Contacted', 'Qualified', 'Proposal']}
+          />
+        </form>
+      </Modal>
 
       {/* OAL Referral Modal */}
       <Modal

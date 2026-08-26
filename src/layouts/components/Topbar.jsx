@@ -11,12 +11,10 @@ import {
   Sparkles,
   ChevronDown,
   Building2,
-  ExternalLink,
-  Check,
-  UserCheck
+  ExternalLink
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-import { useAuth, crmRoles, oalRoles } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { Button } from '../../components/ui/Button';
 import { Dropdown, DropdownItem, DropdownDivider, DropdownHeader } from '../../components/ui/Dropdown';
@@ -28,12 +26,11 @@ import { useNavigate } from 'react-router-dom';
 
 export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
   const { theme, toggleTheme } = useTheme();
-  const { crmUser, oalUser, switchRole, logout } = useAuth();
+  const { crmUser, oalUser, logout } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
   const currentUser = product === 'crm' ? crmUser : oalUser;
-  const availableRoles = product === 'crm' ? crmRoles : oalRoles;
 
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);

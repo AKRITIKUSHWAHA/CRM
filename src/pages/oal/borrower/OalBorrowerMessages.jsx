@@ -121,8 +121,8 @@ export const OalBorrowerMessages = () => {
 
   return (
     <div className="flex flex-col gap-5" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-      {/* 1. Header Row */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* 1. Systematic Top Header Row */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <Breadcrumb items={[{ label: 'OAL Network' }, { label: 'Messages & Underwriter Chat' }]} />
           <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
@@ -130,7 +130,25 @@ export const OalBorrowerMessages = () => {
           </h1>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <Button
+            variant="outline"
+            size="sm"
+            icon={FileText}
+            onClick={() => navigate('/oal/borrower/offers')}
+          >
+            View Offers
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            icon={Sparkles}
+            onClick={() => navigate('/oal/borrower/score')}
+          >
+            AI Risk Score
+          </Button>
+
           <Badge variant="success" icon={ShieldCheck}>
             Encrypted 256-Bit Channel
           </Badge>
@@ -401,26 +419,11 @@ export const OalBorrowerMessages = () => {
               </div>
             </div>
 
-            {/* Fast Action Links */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <Button
-                variant="outline"
-                size="sm"
-                icon={FileText}
-                onClick={() => navigate('/oal/borrower/offers')}
-                style={{ fontSize: '11px', height: '32px' }}
-              >
-                View Offers
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                icon={Sparkles}
-                onClick={() => navigate('/oal/borrower/score')}
-                style={{ fontSize: '11px', height: '32px' }}
-              >
-                AI Risk Score
-              </Button>
+            {/* Direct Desk Badge */}
+            <div className="flex items-center gap-2">
+              <Badge variant="neutral" style={{ fontSize: '11px' }}>
+                Direct Desk
+              </Badge>
             </div>
           </div>
 

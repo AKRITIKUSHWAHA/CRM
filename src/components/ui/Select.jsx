@@ -45,7 +45,14 @@ export const Select = React.forwardRef(
               errorMessage && 'form-control-error',
               className
             )}
-            style={{ appearance: 'none', cursor: disabled ? 'not-allowed' : 'pointer' }}
+            style={{
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              backgroundImage: 'none',
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              ...props.style
+            }}
             {...props}
           >
             {placeholder && (

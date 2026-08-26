@@ -277,25 +277,6 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
           <DropdownItem icon={User} onClick={() => navigate(product === 'crm' ? '/crm/settings' : '/oal/borrower/settings')}>
             Account Profile
           </DropdownItem>
-          <DropdownItem icon={Building2} onClick={() => addToast({ title: 'Tenant Vault', message: `Tenant ID: ${currentUser?.tenantId}`, type: 'info' })}>
-            Workspace Settings
-          </DropdownItem>
-
-          <DropdownDivider />
-
-          {product === 'crm' ? (
-            <DropdownItem icon={Sparkles} onClick={() => navigate('/oal/dashboard')}>
-              Switch to OAL Network Marketplace
-            </DropdownItem>
-          ) : (
-            <DropdownItem icon={Building2} onClick={() => navigate('/crm/dashboard')}>
-              Switch to CRM nErgy Enterprise
-            </DropdownItem>
-          )}
-
-          <DropdownItem icon={ExternalLink} onClick={() => navigate('/showcase')}>
-            Component Gallery Showcase
-          </DropdownItem>
 
           <DropdownDivider />
 

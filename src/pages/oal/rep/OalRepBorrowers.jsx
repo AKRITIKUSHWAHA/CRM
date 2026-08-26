@@ -80,11 +80,10 @@ export const OalRepBorrowers = () => {
       <div>
         {/* Internal Underwriting Notes Feed */}
         <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-4">
-          <div className="flex items-center justify-between border-b border-subtle pb-3">
+          <div className="border-b border-subtle pb-3">
             <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
               Rep Internal Underwriting Notes
             </h3>
-            <span className="text-xs text-tertiary font-mono">Confidential Ledger</span>
           </div>
 
           <form onSubmit={handleAddNote} className="flex flex-col gap-2.5">

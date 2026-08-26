@@ -410,31 +410,7 @@ export const OalBorrowerMessages = () => {
               backgroundColor: 'var(--surface)',
             }}
           >
-            <div className="flex items-center gap-2.5 min-w-0">
-              {/* Mobile Back Button - visible only on mobile screens <= 860px */}
-              <button
-                type="button"
-                onClick={() => setShowMobileChat(false)}
-                className="chat-back-btn"
-                style={{
-                  backgroundColor: 'var(--surface-secondary)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '8px',
-                  padding: '6px 9px',
-                  cursor: 'pointer',
-                  color: 'var(--text-primary)',
-                  alignItems: 'center',
-                  gap: '4px',
-                  fontSize: '11.5px',
-                  fontWeight: 700,
-                  flexShrink: 0,
-                }}
-                title="Back to Conversations"
-              >
-                <ArrowLeft size={15} />
-                <span>Channels</span>
-              </button>
-
+            <div className="flex items-center gap-3 min-w-0">
               <div style={{ position: 'relative', flexShrink: 0 }}>
                 <div
                   style={{

@@ -1,9 +1,10 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, LogOut, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LogOut, Sparkles, Shield, UserCheck } from 'lucide-react';
 import { crmNavigation, oalNavigation } from '../../data/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { getFilteredNavigation, getRoleConfig } from '../../utils/rbac';
 
 export const Sidebar = ({
   isCollapsed = false,
@@ -13,13 +14,18 @@ export const Sidebar = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, crmUser, oalUser } = useAuth();
   const { addToast } = useToast();
 
+  const currentUser = product === 'crm' ? crmUser : oalUser;
+  const roleConfig = getRoleConfig(currentUser, product);
   const rawNavItems = product === 'crm' ? crmNavigation : oalNavigation;
 
-  // Group items by section
-  const groupedSections = rawNavItems.reduce((acc, item) => {
+  // Filter items permitted for the active role
+  const permittedNavItems = getFilteredNavigation(rawNavItems, product, currentUser);
+
+  // Group filtered items by section
+  const groupedSections = permittedNavItems.reduce((acc, item) => {
     const sec = item.section || 'General';
     if (!acc[sec]) acc[sec] = [];
     acc[sec].push(item);
@@ -57,6 +63,25 @@ export const Sidebar = ({
     >
       {/* Navigation Scrollable Body (Only this middle section scrolls internally) */}
       <div className="flex flex-col gap-4 p-3" style={{ overflowY: 'auto', flex: 1 }}>
+        {!isCollapsed && (
+          <div
+            className="p-2.5 surface-secondary rounded-sm border-subtle flex items-center justify-between gap-2"
+            style={{ marginBottom: '0.125rem' }}
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <Shield size={14} className="text-primary flex-shrink-0" />
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-bold text-primary truncate leading-tight">
+                  {roleConfig.title}
+                </span>
+                <span className="text-tertiary truncate" style={{ fontSize: '10px' }}>
+                  {roleConfig.badge}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {Object.entries(groupedSections).map(([sectionTitle, items]) => (
           <div key={sectionTitle} className="flex flex-col gap-1">
             {!isCollapsed && (

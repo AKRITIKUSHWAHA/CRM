@@ -24,13 +24,15 @@ import { Modal } from '../../components/ui/Modal';
 import { Badge } from '../../components/ui/Badge';
 import { Avatar } from '../../components/ui/Avatar';
 import { mockNotifications } from '../../data/mockData';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { isRouteAllowed, getDefaultRouteForRole } from '../../utils/rbac';
 
 export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
   const { theme, toggleTheme } = useTheme();
   const { crmUser, oalUser, switchRole, logout } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const currentUser = product === 'crm' ? crmUser : oalUser;
   const availableRoles = product === 'crm' ? crmRoles : oalRoles;
@@ -51,9 +53,16 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
 
   const handleSwitchRole = (roleObj) => {
     const updated = switchRole(roleObj, product);
+
+    // Check if the current page is allowed for the newly switched role
+    if (!isRouteAllowed(location.pathname, product, updated)) {
+      const defaultRoute = getDefaultRouteForRole(product, updated);
+      navigate(defaultRoute);
+    }
+
     addToast({
       title: 'Role Switched Successfully',
-      message: `Switched active profile to ${updated.name} (${updated.role})`,
+      message: `Active profile: ${updated.name} (${updated.role})`,
       type: 'success',
     });
   };

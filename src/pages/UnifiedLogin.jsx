@@ -173,6 +173,7 @@ export const UnifiedLogin = ({ mode }) => {
     setTimeout(() => {
       login(
         {
+          id: roleObj.id,
           name: roleObj.name,
           email: roleObj.email,
           role: roleObj.role,

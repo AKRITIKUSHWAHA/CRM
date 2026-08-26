@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { isRouteAllowed, getRoleConfig, getDefaultRouteForRole, normalizeRoleId } from '../utils/rbac';
 
 const AuthContext = createContext();
 
@@ -193,17 +194,27 @@ export const AuthProvider = ({ children }) => {
   }, [rolesPermissions]);
 
   const login = (userData, mode = 'crm') => {
+    let finalUser = userData;
+    if (userData && !userData.id) {
+      const list = mode === 'crm' ? crmRoles : oalRoles;
+      const matched = list.find((r) => r.email === userData.email || r.name === userData.name);
+      if (matched) {
+        finalUser = { ...matched, ...userData, id: matched.id };
+      }
+    }
+
     if (mode === 'crm') {
-      setCrmUser(userData || defaultCrmUser);
+      setCrmUser(finalUser || defaultCrmUser);
       setIsCrmAuthenticated(true);
     } else {
-      setOalUser(userData || defaultOalUser);
+      setOalUser(finalUser || defaultOalUser);
       setIsOalAuthenticated(true);
     }
   };
 
   const switchRole = (roleObj, mode = 'crm') => {
     const newUser = {
+      id: roleObj.id || (mode === 'crm' ? 'owner' : 'borrower'),
       name: roleObj.name,
       email: roleObj.email,
       role: roleObj.role || roleObj.title,
@@ -241,6 +252,21 @@ export const AuthProvider = ({ children }) => {
     setRolesPermissions(matrix);
   };
 
+  const canAccess = (path, mode = 'crm') => {
+    const targetUser = mode === 'crm' ? crmUser : oalUser;
+    return isRouteAllowed(path, mode, targetUser);
+  };
+
+  const getActiveRoleConfig = (mode = 'crm') => {
+    const targetUser = mode === 'crm' ? crmUser : oalUser;
+    return getRoleConfig(targetUser, mode);
+  };
+
+  const getDefaultRoute = (mode = 'crm') => {
+    const targetUser = mode === 'crm' ? crmUser : oalUser;
+    return getDefaultRouteForRole(mode, targetUser);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -261,6 +287,10 @@ export const AuthProvider = ({ children }) => {
         login,
         switchRole,
         logout,
+        canAccess,
+        getActiveRoleConfig,
+        getDefaultRoute,
+        normalizeRoleId,
       }}
     >
       {children}

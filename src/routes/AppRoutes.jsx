@@ -98,6 +98,17 @@ import { OalAdminSupport } from '../pages/oal/admin/OalAdminSupport';
 import { OalAdminCms, OalAdminAudit } from '../pages/oal/admin/OalAdminCms';
 
 import { Showcase } from '../pages/Showcase';
+import { useAuth } from '../context/AuthContext';
+import { normalizeRoleId } from '../utils/rbac';
+
+const OalDashboardDispatcher = () => {
+  const { oalUser } = useAuth();
+  const roleId = normalizeRoleId(oalUser, 'oal');
+  if (roleId === 'lender') return <OalLenderDashboard />;
+  if (roleId === 'rep') return <OalRepDashboard />;
+  if (roleId === 'admin') return <OalAdminDashboard />;
+  return <OalBorrowerDashboard />;
+};
 
 export const AppRoutes = () => {
   return (
@@ -192,7 +203,7 @@ export const AppRoutes = () => {
       <Route element={<ProtectedRoute product="oal" />}>
         <Route element={<OalLayout />}>
           {/* Borrower Routes */}
-          <Route path="/oal/dashboard" element={<OalBorrowerDashboard />} />
+          <Route path="/oal/dashboard" element={<OalDashboardDispatcher />} />
           <Route path="/oal/borrower/dashboard" element={<OalBorrowerDashboard />} />
           <Route path="/oal/borrower/kyc" element={<OalBorrowerKyc />} />
           <Route path="/oal/borrower/application" element={<OalBorrowerApplication />} />
@@ -241,7 +252,7 @@ export const AppRoutes = () => {
           <Route path="/oal/admin/audit" element={<OalAdminAudit />} />
           <Route path="/oal/admin/settings" element={<OalAdminDashboard />} />
 
-          <Route path="/oal/*" element={<OalBorrowerDashboard />} />
+          <Route path="/oal/*" element={<OalDashboardDispatcher />} />
         </Route>
       </Route>
 

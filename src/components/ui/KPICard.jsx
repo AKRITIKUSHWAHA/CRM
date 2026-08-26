@@ -11,11 +11,15 @@ export const KPICard = ({
   changePeriod = 'vs last month',
   icon: Icon,
   isLoading = false,
+  onClick,
+  tooltip,
   className = '',
+  style,
+  ...props
 }) => {
   if (isLoading) {
     return (
-      <div className={cx('kpi-card', className)}>
+      <div className={cx('kpi-card', className)} style={style} {...props}>
         <Skeleton width="60%" height="14px" />
         <Skeleton width="40%" height="28px" />
         <Skeleton width="70%" height="14px" />
@@ -27,7 +31,20 @@ export const KPICard = ({
   const trendColor = changeType === 'positive' ? 'var(--success)' : changeType === 'negative' ? 'var(--error)' : 'var(--text-tertiary)';
 
   return (
-    <div className={cx('kpi-card', className)}>
+    <div
+      className={cx('kpi-card', onClick && 'cursor-pointer', className)}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      title={tooltip}
+      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(e); } } : undefined}
+      style={{
+        transition: 'all var(--transition-fast)',
+        userSelect: 'none',
+        ...style,
+      }}
+      {...props}
+    >
       <div className="flex items-center justify-between">
         <span className="kpi-title">{title}</span>
         {Icon && (

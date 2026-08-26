@@ -82,9 +82,6 @@ export const OalBorrowerDashboard = () => {
           <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', margin: '0.25rem 0 0 0', letterSpacing: '-0.02em' }}>
             Borrower Overview
           </h1>
-          <p className="text-xs text-secondary margin-0" style={{ marginTop: '3px' }}>
-            Track loan application lifecycle, AI Risk score, and competing lender term sheets
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">

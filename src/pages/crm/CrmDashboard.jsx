@@ -15,7 +15,10 @@ import {
   CheckSquare,
   Globe,
   Share2,
-  Award
+  Award,
+  TrendingUp,
+  PieChart,
+  BarChart2
 } from 'lucide-react';
 import {
   Breadcrumb,
@@ -64,7 +67,7 @@ export const CrmDashboard = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+    <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* 1. Top Breadcrumb & Executive Header Controls */}
       <div className="flex flex-col gap-2">
         <Breadcrumb items={[{ label: 'Enterprise SaaS Portal' }, { label: 'CRM nErgy' }, { label: 'Executive Dashboard' }]} />
@@ -89,7 +92,7 @@ export const CrmDashboard = () => {
           </div>
 
           {/* Right Header Action Controls */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             {/* Segmented Control Switcher */}
             <div
               style={{
@@ -106,7 +109,7 @@ export const CrmDashboard = () => {
                   type="button"
                   onClick={() => setActiveRange(r)}
                   style={{
-                    padding: '0.35rem 0.875rem',
+                    padding: '0.35rem 0.75rem',
                     borderRadius: '6px',
                     fontSize: '12px',
                     fontWeight: 600,
@@ -327,6 +330,40 @@ export const CrmDashboard = () => {
               >
                 View Kanban
               </button>
+            </div>
+
+            {/* Visual SVG Trend Graph Sparkline */}
+            <div className="p-3 surface-secondary rounded-lg border-subtle flex flex-col gap-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-secondary flex items-center gap-1.5">
+                  <TrendingUp size={14} className="text-primary" />
+                  Monthly Pipeline Velocity & Trend
+                </span>
+                <span className="font-bold text-success">+24.5% Conversion</span>
+              </div>
+              
+              {/* Responsive SVG Area Curve Chart */}
+              <div style={{ height: '54px', width: '100%' }}>
+                <svg viewBox="0 0 500 60" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+                  <defs>
+                    <linearGradient id="pipelineGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#1d4ed8" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 0,45 Q 60,15 120,30 T 240,10 T 360,25 T 500,5 L 500,60 L 0,60 Z"
+                    fill="url(#pipelineGrad)"
+                  />
+                  <path
+                    d="M 0,45 Q 60,15 120,30 T 240,10 T 360,25 T 500,5"
+                    fill="none"
+                    stroke="#1d4ed8"
+                    strokeWidth="2.5"
+                  />
+                  <circle cx="500" cy="5" r="4" fill="#1d4ed8" />
+                </svg>
+              </div>
             </div>
 
             {/* Stages Progress Bars */}

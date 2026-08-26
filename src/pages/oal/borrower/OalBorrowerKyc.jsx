@@ -587,84 +587,122 @@ export const OalBorrowerKyc = () => {
           {/* Section 2: List of Verified Documents */}
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center justify-between">
-              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
                 Verified Corporate Documents ({documents.length})
-              </h3>
+              </h2>
             </div>
 
-            <div className="flex flex-col gap-3">
-            {documents.map((doc) => (
-              <Card
-                key={doc.id}
-                style={{ padding: '1rem 1.25rem', borderRadius: '10px' }}
-                className="flex flex-col md:flex-row md:items-center justify-between gap-3 hover:surface-secondary transition-all"
-              >
-                <div className="flex items-center gap-3.5 min-w-0">
-                  <div
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '8px',
-                      backgroundColor: 'rgba(37, 99, 235, 0.08)',
-                      color: 'var(--accent)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <FileText size={20} />
-                  </div>
+            <Card style={{ padding: '0', borderRadius: '12px', overflow: 'hidden' }}>
+              <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
+                  <thead>
+                    <tr style={{ backgroundColor: 'var(--surface-secondary)', borderBottom: '1px solid var(--border)' }}>
+                      <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        Document Name
+                      </th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        Category
+                      </th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        File Size
+                      </th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        Verification Date
+                      </th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        Status
+                      </th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'right' }}>
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {documents.map((doc, idx) => (
+                      <tr
+                        key={doc.id}
+                        style={{
+                          borderBottom: idx === documents.length - 1 ? 'none' : '1px solid var(--border)',
+                          transition: 'background-color 0.15s ease',
+                        }}
+                        className="hover:surface-secondary"
+                      >
+                        <td style={{ padding: '12px 16px' }}>
+                          <div className="flex items-center gap-3">
+                            <div
+                              style={{
+                                width: '34px',
+                                height: '34px',
+                                borderRadius: '8px',
+                                backgroundColor: 'rgba(37, 99, 235, 0.08)',
+                                color: 'var(--accent)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                              }}
+                            >
+                              <FileText size={18} />
+                            </div>
+                            <div>
+                              <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{doc.title}</span>
+                              <div style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>SHA-256 Verified</div>
+                            </div>
+                          </div>
+                        </td>
 
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-sm text-primary truncate">
-                        {doc.title}
-                      </span>
-                      <Badge variant="success" style={{ fontSize: '10px', padding: '1px 6px' }}>
-                        Verified
-                      </Badge>
-                    </div>
+                        <td style={{ padding: '12px 16px', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                          {doc.type}
+                        </td>
 
-                    <div className="flex items-center gap-3 text-xs text-secondary mt-0.5 flex-wrap">
-                      <span>Category: <strong>{doc.type}</strong></span>
-                      <span>&bull;</span>
-                      <span>Size: <strong>{doc.size}</strong></span>
-                      <span>&bull;</span>
-                      <span>Uploaded: <strong>{doc.date}</strong></span>
-                    </div>
-                  </div>
-                </div>
+                        <td style={{ padding: '12px 16px', color: 'var(--text-secondary)', fontFamily: 'monospace' }}>
+                          {doc.size}
+                        </td>
 
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={Eye}
-                    onClick={() => setSelectedDoc(doc)}
-                    style={{ fontSize: '11px', height: '32px' }}
-                  >
-                    Inspect Hash
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={Download}
-                    onClick={() => {
-                      addToast({
-                        title: 'Document Downloaded',
-                        message: `Downloaded ${doc.title} (${doc.size}).`,
-                        type: 'info'
-                      });
-                    }}
-                    style={{ fontSize: '11px', height: '32px' }}
-                  >
-                    Download
-                  </Button>
-                </div>
-              </Card>
-            ))}
-            </div>
+                        <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>
+                          {doc.date}
+                        </td>
+
+                        <td style={{ padding: '12px 16px' }}>
+                          <Badge variant="success" style={{ fontSize: '11px', padding: '2px 8px' }}>
+                            ● Verified
+                          </Badge>
+                        </td>
+
+                        <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                          <div className="flex items-center justify-end gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              icon={Eye}
+                              onClick={() => setSelectedDoc(doc)}
+                              style={{ fontSize: '11px', height: '30px', padding: '0 10px' }}
+                            >
+                              Inspect Hash
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              icon={Download}
+                              onClick={() => {
+                                addToast({
+                                  title: 'Document Downloaded',
+                                  message: `Downloaded ${doc.title} (${doc.size}).`,
+                                  type: 'info'
+                                });
+                              }}
+                              style={{ fontSize: '11px', height: '30px', padding: '0 10px' }}
+                            >
+                              Download
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
           </div>
         </div>
       )}

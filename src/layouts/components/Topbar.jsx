@@ -286,25 +286,6 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
               Search modules, lenders, offers, docs...
             </span>
           </div>
-          <div className="flex items-center gap-1 flex-shrink-0">
-            <span
-              style={{
-                fontSize: '11px',
-                backgroundColor: 'var(--surface)',
-                color: 'var(--text-tertiary)',
-                padding: '2px 7px',
-                borderRadius: '6px',
-                border: '1px solid var(--border)',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 600,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '2px',
-              }}
-            >
-              ⌘K
-            </span>
-          </div>
         </button>
       </div>
 

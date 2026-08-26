@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight, Minus, MoreVertical } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { Skeleton } from './Skeleton';
 import { cx } from '../../utils/classNames';
 
@@ -47,6 +47,7 @@ export const KPICard = ({
         position: 'relative',
         boxSizing: 'border-box',
         minWidth: 0,
+        width: '100%',
       }}
       onMouseEnter={(e) => {
         if (onClick) {

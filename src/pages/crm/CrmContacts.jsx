@@ -189,6 +189,7 @@ export const CrmContacts = () => {
             variant="primary"
             size="md"
             icon={Plus}
+            className="w-full md:w-auto justify-center"
             onClick={() => {
               setFormData({ name: '', company: '', email: '', phone: '', type: 'Enterprise Client', owner: 'Alexander Wright', status: 'Active' });
               setIsAddModalOpen(true);
@@ -199,9 +200,9 @@ export const CrmContacts = () => {
         </div>
       </div>
 
-      {/* Search & Filter Bar (Clean Direct Layout - No Outer Box Container) */}
-      <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-3 w-full">
-        <div className="flex-1 min-w-[200px]" style={{ flex: '1 1 240px' }}>
+      {/* Search & Filter Bar (Clean Direct Layout) */}
+      <div className="table-toolbar">
+        <div className="table-toolbar-search">
           <Search
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -210,37 +211,33 @@ export const CrmContacts = () => {
           />
         </div>
 
-        <div className="flex items-center gap-3 flex-wrap md:flex-nowrap" style={{ flexShrink: 0 }}>
-          <div style={{ width: '185px' }}>
-            <Select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              options={[
-                { label: 'All Contact Types', value: 'all' },
-                { label: 'Enterprise Client', value: 'Enterprise Client' },
-                { label: 'Commercial Lead', value: 'Commercial Lead' },
-                { label: 'Investor', value: 'Investor' },
-                { label: 'Borrower Partner', value: 'Borrower Partner' },
-                { label: 'Supplier', value: 'Supplier' },
-              ]}
-              style={{ height: '38px', fontSize: '13px' }}
-            />
-          </div>
+        <div className="table-toolbar-actions">
+          <Select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            options={[
+              { label: 'All Contact Types', value: 'all' },
+              { label: 'Enterprise Client', value: 'Enterprise Client' },
+              { label: 'Commercial Lead', value: 'Commercial Lead' },
+              { label: 'Investor', value: 'Investor' },
+              { label: 'Borrower Partner', value: 'Borrower Partner' },
+              { label: 'Supplier', value: 'Supplier' },
+            ]}
+            style={{ height: '38px', fontSize: '13px' }}
+          />
 
-          <div style={{ width: '160px' }}>
-            <Select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              options={[
-                { label: 'All Statuses', value: 'all' },
-                { label: 'Active', value: 'Active' },
-                { label: 'Qualified', value: 'Qualified' },
-                { label: 'Pending KYC', value: 'Pending KYC' },
-                { label: 'Inactive', value: 'Inactive' },
-              ]}
-              style={{ height: '38px', fontSize: '13px' }}
-            />
-          </div>
+          <Select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            options={[
+              { label: 'All Statuses', value: 'all' },
+              { label: 'Active', value: 'Active' },
+              { label: 'Qualified', value: 'Qualified' },
+              { label: 'Pending KYC', value: 'Pending KYC' },
+              { label: 'Inactive', value: 'Inactive' },
+            ]}
+            style={{ height: '38px', fontSize: '13px' }}
+          />
 
           <Button
             variant="outline"

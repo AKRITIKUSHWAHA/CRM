@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Sparkles,
   Video,
@@ -14,7 +14,13 @@ import {
   Save,
   Loader2,
   Wand2,
-  CheckCircle2
+  CheckCircle2,
+  Zap,
+  Cpu,
+  Clock,
+  Layers,
+  X,
+  FileImage
 } from 'lucide-react';
 import {
   Breadcrumb,
@@ -25,7 +31,8 @@ import {
   Input,
   Select,
   Badge,
-  ProgressBar
+  ProgressBar,
+  KPICard
 } from '../../components/ui';
 import { useToast } from '../../context/ToastContext';
 
@@ -46,11 +53,13 @@ const aiTools = [
 
 export const CrmAiStudio = () => {
   const { addToast } = useToast();
+  const fileInputRef = useRef(null);
 
   const [activeTool, setActiveTool] = useState('text-to-image');
   const [prompt, setPrompt] = useState('Photorealistic corporate enterprise logistics warehouse with autonomous drones, 8k resolution, cinematic lighting');
   const [aspectRatio, setAspectRatio] = useState('16:9');
   const [modelPreset, setModelPreset] = useState('UltraReal v2.6');
+  const [referenceFile, setReferenceFile] = useState(null);
 
   // Generation state
   const [isGenerating, setIsGenerating] = useState(false);
@@ -60,6 +69,18 @@ export const CrmAiStudio = () => {
     { id: '1', title: 'Corporate Logistics Fleet Rendering', type: 'Image', date: '2 hours ago', url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&auto=format&fit=crop&q=80' },
     { id: '2', title: 'AI Executive Spokesperson Pitch', type: 'Video', date: '1 day ago', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80' },
   ]);
+
+  const handleReferenceFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setReferenceFile(file);
+      addToast({
+        title: 'Reference Image Uploaded',
+        message: `Loaded ${file.name} (${(file.size / 1024).toFixed(1)} KB) for style guiding.`,
+        type: 'info',
+      });
+    }
+  };
 
   const handleGenerate = (e) => {
     e.preventDefault();
@@ -89,7 +110,7 @@ export const CrmAiStudio = () => {
 
       const mockResult = {
         id: Date.now().toString(),
-        title: prompt.slice(0, 32) + '...',
+        title: prompt.slice(0, 36) + '...',
         type: activeTool.includes('video') ? 'Video' : activeTool.includes('audio') || activeTool === 'voice' ? 'Audio' : 'Image',
         date: 'Just now',
         url: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&auto=format&fit=crop&q=80',
@@ -99,7 +120,7 @@ export const CrmAiStudio = () => {
       setGeneratedAsset(mockResult);
       addToast({
         title: 'AI Generation Complete!',
-        message: `Rendered high-fidelity ${mockResult.type} asset.`,
+        message: `Rendered high-fidelity ${mockResult.type} asset with ${modelPreset}.`,
         type: 'success',
       });
     }, 2200);
@@ -113,63 +134,152 @@ export const CrmAiStudio = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-6" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+      {/* Hidden File Input for Reference Upload */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleReferenceFileChange}
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
+
+      {/* 1. Header */}
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'CRM nErgy' }, { label: 'AI Content Studio' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>AI Content & Media Studio</h1>
-          <p className="text-xs text-secondary margin-0">
-            Next-gen generative AI engine for enterprise branding, video production, and voice models
+          <h1
+            style={{
+              fontSize: '24px',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              margin: '2px 0 0 0',
+              fontFamily: 'var(--font-display)',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            AI Content & Media Studio
+          </h1>
+          <p className="text-xs text-secondary margin-0" style={{ marginTop: '2px' }}>
+            Generative AI engine for enterprise branding, video production, and synthetic voice models.
           </p>
         </div>
 
-        <Badge variant="primary" icon={Sparkles}>
-          AI Model Gateway Online
-        </Badge>
+        <div className="header-actions-right">
+          <Badge variant="primary" icon={Sparkles}>
+            AI Model Gateway Online
+          </Badge>
+        </div>
       </div>
 
-      {/* Main Studio Grid Layout */}
-      <div className="grid-responsive-2col" style={{ gridTemplateColumns: '260px 1fr' }}>
-        {/* Left Sidebar: 12 AI Tools */}
-        <Card className="p-2 flex flex-col gap-1" style={{ maxHeight: '650px', overflowY: 'auto' }}>
-          <div className="text-xs font-semibold text-tertiary uppercase tracking-wider p-2">
+      {/* 2. Top Summary KPI Strip */}
+      <div className="grid-responsive-kpi">
+        <KPICard
+          title="TOTAL AI ASSETS"
+          value="1,284"
+          change="28.4%"
+          changeType="positive"
+          changePeriod="this month"
+          icon={Layers}
+          iconBg="rgba(29, 78, 216, 0.1)"
+          iconColor="#1d4ed8"
+        />
+        <KPICard
+          title="ACTIVE MODEL SUITE"
+          value="12 Tools"
+          change="Multi-Modal"
+          changeType="positive"
+          changePeriod="generative suite"
+          icon={Cpu}
+          iconBg="rgba(147, 51, 234, 0.1)"
+          iconColor="#9333ea"
+        />
+        <KPICard
+          title="AVG RENDER SPEED"
+          value="2.2 Secs"
+          change="High Speed"
+          changeType="positive"
+          changePeriod="render latency"
+          icon={Clock}
+          iconBg="rgba(22, 163, 74, 0.1)"
+          iconColor="#16a34a"
+        />
+        <KPICard
+          title="GPU COMPUTE SLA"
+          value="99.98%"
+          change="Optimal"
+          changeType="positive"
+          changePeriod="uptime SLA"
+          icon={Zap}
+          iconBg="rgba(234, 88, 12, 0.1)"
+          iconColor="#ea580c"
+        />
+      </div>
+
+      {/* 3. Main Studio Responsive Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6" style={{ minHeight: '620px' }}>
+        {/* Left Sidebar: 12 AI Tools (1 Column) */}
+        <Card
+          style={{
+            borderRadius: '12px',
+            boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+          }}
+          className="lg:col-span-1 p-3"
+        >
+          <div className="text-xs font-bold text-tertiary uppercase tracking-wider p-2 mb-1 border-b border-subtle">
             AI Toolset Suite (12)
           </div>
-          {aiTools.map((tool) => {
-            const Icon = tool.icon;
-            const isActive = activeTool === tool.id;
-            return (
-              <button
-                key={tool.id}
-                onClick={() => setActiveTool(tool.id)}
-                className="flex items-center gap-2.5 p-2.5 rounded-sm text-xs font-medium cursor-pointer transition-all"
-                style={{
-                  backgroundColor: isActive ? 'var(--primary-light)' : 'transparent',
-                  color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
-                  border: 'none',
-                  textAlign: 'left',
-                }}
-              >
-                <Icon size={16} className="flex-shrink-0" />
-                <span>{tool.label}</span>
-              </button>
-            );
-          })}
+
+          <div className="flex flex-col gap-1.5 overflow-y-auto flex-1 p-1" style={{ maxHeight: '580px' }}>
+            {aiTools.map((tool) => {
+              const Icon = tool.icon;
+              const isActive = activeTool === tool.id;
+              return (
+                <button
+                  key={tool.id}
+                  type="button"
+                  onClick={() => setActiveTool(tool.id)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    padding: '0.75rem 0.875rem',
+                    borderRadius: '8px',
+                    fontSize: '13px',
+                    fontWeight: isActive ? 700 : 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                    backgroundColor: isActive ? 'rgba(29, 78, 216, 0.1)' : 'transparent',
+                    color: isActive ? '#1d4ed8' : 'var(--text-secondary)',
+                    border: isActive ? '1px solid var(--primary-border)' : '1px solid transparent',
+                    textAlign: 'left',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  <Icon size={16} className="flex-shrink-0" style={{ color: isActive ? '#1d4ed8' : 'var(--text-tertiary)' }} />
+                  <span className="truncate">{tool.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </Card>
 
-        {/* Right Canvas: Controls, Prompt Input, Generation & Preview */}
-        <div className="flex flex-col gap-6">
+        {/* Right Canvas: Controls, Prompt Input, Generation & Preview (3 Columns) */}
+        <div className="lg:col-span-3 flex flex-col gap-6">
           {/* TOOL = LIBRARY VIEW */}
           {activeTool === 'library' ? (
-            <Card className="p-6 flex flex-col gap-4">
+            <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }} className="p-6 flex flex-col gap-4">
               <CardHeader title="My AI Asset Library" subtitle="Saved renderings, audio tracks, and video clips" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {savedLibrary.map((item) => (
-                  <Card key={item.id} className="p-3 flex flex-col gap-2 surface-secondary">
-                    <img src={item.url} alt={item.title} className="w-full rounded-sm" style={{ height: '140px', objectFit: 'cover' }} />
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-primary truncate">{item.title}</span>
+                  <Card key={item.id} className="p-3 flex flex-col gap-2 surface-secondary" style={{ borderRadius: '10px' }}>
+                    <img src={item.url} alt={item.title} className="w-full rounded-md" style={{ height: '150px', objectFit: 'cover' }} />
+                    <div className="flex items-center justify-between text-xs pt-1">
+                      <span className="font-bold text-primary truncate" style={{ fontSize: '13px' }}>{item.title}</span>
                       <Badge variant="primary">{item.type}</Badge>
                     </div>
                     <div className="flex items-center justify-between text-xs text-tertiary border-t border-subtle pt-2">
@@ -184,57 +294,120 @@ export const CrmAiStudio = () => {
             </Card>
           ) : (
             /* CANVAS GENERATOR VIEW */
-            <Card className="p-6 flex flex-col gap-6">
-              <div className="flex items-center justify-between border-b border-subtle pb-3">
-                <div className="flex items-center gap-2">
-                  <Wand2 className="text-primary" size={20} />
-                  <h3 className="text-base font-semibold capitalize">
+            <Card style={{ borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.02)' }} className="p-6 flex flex-col gap-6">
+              {/* Controls Bar */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-subtle pb-4">
+                <div className="flex items-center gap-2.5">
+                  <div
+                    style={{
+                      width: '34px',
+                      height: '34px',
+                      borderRadius: '8px',
+                      backgroundColor: 'rgba(29, 78, 216, 0.1)',
+                      color: '#1d4ed8',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Wand2 size={18} />
+                  </div>
+                  <h3 style={{ fontSize: '17px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
                     {aiTools.find((t) => t.id === activeTool)?.label || 'AI Generator'}
                   </h3>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Select
-                    value={aspectRatio}
-                    onChange={(e) => setAspectRatio(e.target.value)}
-                    options={['16:9 (Widescreen)', '9:16 (Vertical/Reels)', '1:1 (Square)', '4:3 (Classic)']}
-                    style={{ height: '32px', fontSize: '12px' }}
-                  />
+                <div className="flex items-center gap-3 flex-wrap">
+                  <div style={{ width: '165px' }}>
+                    <Select
+                      value={aspectRatio}
+                      onChange={(e) => setAspectRatio(e.target.value)}
+                      options={['16:9 (Widescreen)', '9:16 (Vertical/Reels)', '1:1 (Square)', '4:3 (Classic)']}
+                      style={{ height: '36px', fontSize: '12px' }}
+                    />
+                  </div>
 
-                  <Select
-                    value={modelPreset}
-                    onChange={(e) => setModelPreset(e.target.value)}
-                    options={['UltraReal v2.6', 'CinemaDiffusion 8K', 'Bestie Enterprise LLM']}
-                    style={{ height: '32px', fontSize: '12px' }}
-                  />
+                  <div style={{ width: '175px' }}>
+                    <Select
+                      value={modelPreset}
+                      onChange={(e) => setModelPreset(e.target.value)}
+                      options={['UltraReal v2.6', 'CinemaDiffusion 8K', 'Bestie Enterprise LLM']}
+                      style={{ height: '36px', fontSize: '12px' }}
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Prompt Input Form */}
               <form onSubmit={handleGenerate} className="flex flex-col gap-4">
-                <div className="form-group">
-                  <label className="form-label">Generation Prompt & Style Instructions</label>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold text-secondary uppercase tracking-wider">
+                    Generation Prompt & Style Instructions
+                  </label>
                   <textarea
-                    rows={3}
+                    rows={4}
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder="Describe the media, style, lighting, camera angles, or text details to generate..."
-                    className="form-control"
-                    style={{ height: 'auto', padding: '0.75rem' }}
+                    style={{
+                      width: '100%',
+                      padding: '0.875rem 1rem',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border)',
+                      backgroundColor: 'var(--surface)',
+                      color: 'var(--text-primary)',
+                      fontSize: '13px',
+                      lineHeight: 1.6,
+                      fontFamily: 'inherit',
+                      boxSizing: 'border-box',
+                      outline: 'none',
+                    }}
                   />
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <Button variant="outline" size="sm" icon={UploadCloud} onClick={() => addToast({ title: 'Reference File', message: 'Uploaded reference image asset.', type: 'info' })}>
-                    Upload Reference Image
+                {/* Reference Image Attachment Chip Preview */}
+                {referenceFile && (
+                  <div
+                    className="flex items-center justify-between p-2.5 px-3 rounded-md border-subtle"
+                    style={{ backgroundColor: 'rgba(29, 78, 216, 0.08)', border: '1px solid var(--primary-border)' }}
+                  >
+                    <div className="flex items-center gap-2 text-xs font-semibold text-primary truncate">
+                      <FileImage size={16} className="text-primary" />
+                      <span className="truncate">{referenceFile.name}</span>
+                      <span className="text-tertiary">({(referenceFile.size / 1024).toFixed(1)} KB)</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setReferenceFile(null);
+                        if (fileInputRef.current) fileInputRef.current.value = '';
+                      }}
+                      className="p-1 rounded-full text-tertiary hover:text-error cursor-pointer"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap pt-1">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    icon={UploadCloud}
+                    onClick={() => fileInputRef.current?.click()}
+                    style={{ width: 'auto' }}
+                  >
+                    {referenceFile ? 'Change Reference Image' : 'Upload Reference Image'}
                   </Button>
 
                   <Button
-                    variant="primary"
-                    size="lg"
                     type="submit"
+                    variant="primary"
+                    size="md"
                     isLoading={isGenerating}
                     icon={Sparkles}
+                    style={{ width: 'auto' }}
                   >
                     Generate AI Asset
                   </Button>
@@ -243,8 +416,8 @@ export const CrmAiStudio = () => {
 
               {/* Loading Progress State */}
               {isGenerating && (
-                <div className="p-6 surface-secondary rounded-md border-subtle flex flex-col gap-3 text-center">
-                  <div className="flex items-center justify-center gap-2 text-primary font-semibold text-xs">
+                <div className="p-6 surface-secondary rounded-lg border-subtle flex flex-col gap-3 text-center">
+                  <div className="flex items-center justify-center gap-2 text-primary font-bold text-xs">
                     <Loader2 className="animate-spin" size={18} />
                     <span>Rendering AI Model ({generationProgress}%)...</span>
                   </div>
@@ -254,8 +427,8 @@ export const CrmAiStudio = () => {
 
               {/* Result Preview Canvas */}
               {generatedAsset && (
-                <div className="p-4 surface-secondary rounded-md border-subtle flex flex-col gap-4">
-                  <div className="flex items-center justify-between">
+                <div className="p-4 surface-secondary rounded-lg border-subtle flex flex-col gap-4">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
                     <span className="font-bold text-xs text-primary flex items-center gap-1.5">
                       <CheckCircle2 size={16} className="text-success" /> Generated Asset Preview ({generatedAsset.type})
                     </span>
@@ -269,7 +442,7 @@ export const CrmAiStudio = () => {
                     </div>
                   </div>
 
-                  <div className="relative rounded-md overflow-hidden border-subtle flex items-center justify-center background-surface" style={{ maxHeight: '380px' }}>
+                  <div className="relative rounded-lg overflow-hidden border-subtle flex items-center justify-center background-surface" style={{ maxHeight: '380px' }}>
                     <img src={generatedAsset.url} alt="AI Generated Preview" className="w-full object-cover" style={{ maxHeight: '380px' }} />
                     {generatedAsset.type === 'Video' && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/40">

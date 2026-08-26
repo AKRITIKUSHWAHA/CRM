@@ -346,9 +346,6 @@ export const OalBorrowerKyc = () => {
                   Good Standing: Active
                 </Badge>
               </div>
-              <span className="text-xs text-secondary">
-                Delaware Division of Corporations &bull; Entity File #7749201
-              </span>
             </div>
 
             <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
@@ -413,9 +410,6 @@ export const OalBorrowerKyc = () => {
                   Identity Verified
                 </Badge>
               </div>
-              <span className="text-xs text-secondary">
-                Authorized corporate representative legally permitted to execute debt facilities
-              </span>
             </div>
 
             <Card style={{ padding: '1.25rem', borderRadius: '12px' }} className="flex flex-col gap-3.5">

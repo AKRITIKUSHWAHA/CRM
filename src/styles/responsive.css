@@ -97,6 +97,21 @@ html, body, #root, .app-layout, .main-content {
   }
 }
 
+/* 2-Panel Chat Layout */
+.chat-master-grid {
+  display: grid !important;
+  grid-template-columns: 320px minmax(0, 1fr) !important;
+  gap: 1rem !important;
+  min-height: 640px !important;
+  width: 100% !important;
+}
+
+@media (max-width: 860px) {
+  .chat-master-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
 .grid-responsive-health {
   display: grid !important;
   grid-template-columns: repeat(1, minmax(0, 1fr)) !important;

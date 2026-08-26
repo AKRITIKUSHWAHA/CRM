@@ -128,9 +128,6 @@ export const OalBorrowerMessages = () => {
           <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             Underwriting & Lender Communications
           </h1>
-          <p className="text-xs text-secondary margin-0" style={{ marginTop: '3px' }}>
-            Encrypted direct channel with your dedicated OAL licensed representative and lender desks
-          </p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -149,15 +146,7 @@ export const OalBorrowerMessages = () => {
       </Card>
 
       {/* 3. Two-Panel Systematic Messaging Layout */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(280px, 340px) 1fr',
-          gap: '1rem',
-          minHeight: '620px',
-        }}
-        className="chat-master-grid"
-      >
+      <div className="chat-master-grid">
         {/* LEFT PANEL: Contacts / Chat Participants */}
         <Card
           style={{
@@ -167,11 +156,13 @@ export const OalBorrowerMessages = () => {
             flexDirection: 'column',
             gap: '1rem',
             height: '100%',
+            overflow: 'hidden',
+            boxSizing: 'border-box',
           }}
           className={`${showMobileChat ? 'hidden md:flex' : 'flex'}`}
         >
           {/* Panel Header & Search */}
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5" style={{ width: '100%', minWidth: 0 }}>
             <div className="flex items-center justify-between">
               <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary)' }}>
                 Conversations ({contacts.length})
@@ -181,19 +172,19 @@ export const OalBorrowerMessages = () => {
               </Badge>
             </div>
 
-            <div style={{ position: 'relative' }}>
+            <div style={{ position: 'relative', width: '100%' }}>
               <Search size={15} style={{ position: 'absolute', left: '10px', top: '11px', color: 'var(--text-tertiary)' }} />
               <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search desks, agents..."
-                style={{ paddingLeft: '32px', height: '36px', fontSize: '12px' }}
+                style={{ paddingLeft: '32px', height: '36px', fontSize: '12px', width: '100%' }}
               />
             </div>
           </div>
 
           {/* Contact List */}
-          <div className="flex flex-col gap-1.5 flex-1 overflow-y-auto pr-1">
+          <div className="flex flex-col gap-1.5 flex-1 overflow-y-auto pr-1" style={{ minWidth: 0, width: '100%' }}>
             {filteredContacts.map((contact) => {
               const isSelected = activeContactId === contact.id;
 
@@ -205,21 +196,27 @@ export const OalBorrowerMessages = () => {
                     setShowMobileChat(true);
                   }}
                   style={{
-                    padding: '0.85rem',
-                    borderRadius: '8px',
+                    padding: '0.75rem 0.85rem',
+                    borderRadius: '10px',
                     cursor: 'pointer',
                     backgroundColor: isSelected ? 'var(--surface-secondary)' : 'transparent',
                     border: isSelected ? '1px solid var(--accent)' : '1px solid transparent',
                     transition: 'all 0.15s ease',
+                    width: '100%',
+                    minWidth: 0,
+                    boxSizing: 'border-box',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.75rem',
                   }}
-                  className="flex items-start gap-3 hover:surface-secondary transition-all"
+                  className="hover:surface-secondary transition-all"
                 >
                   {/* Avatar with Online Status */}
                   <div style={{ position: 'relative', flexShrink: 0 }}>
                     <div
                       style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '38px',
+                        height: '38px',
                         borderRadius: '50%',
                         background: contact.avatarBg,
                         color: '#ffffff',
@@ -227,7 +224,7 @@ export const OalBorrowerMessages = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontWeight: 800,
-                        fontSize: '13px',
+                        fontSize: '12px',
                       }}
                     >
                       {contact.avatarText}
@@ -238,8 +235,8 @@ export const OalBorrowerMessages = () => {
                           position: 'absolute',
                           bottom: '0',
                           right: '0',
-                          width: '10px',
-                          height: '10px',
+                          width: '9px',
+                          height: '9px',
                           backgroundColor: '#16a34a',
                           border: '2px solid var(--surface)',
                           borderRadius: '50%',
@@ -248,24 +245,56 @@ export const OalBorrowerMessages = () => {
                     )}
                   </div>
 
-                  {/* Name & Preview */}
-                  <div className="flex flex-col min-w-0 flex-1">
-                    <div className="flex items-center justify-between gap-1">
-                      <span className="font-bold text-xs text-primary truncate" style={{ fontSize: '13px' }}>
+                  {/* Name & Preview - strictly constrained inside card */}
+                  <div style={{ minWidth: 0, flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4px', minWidth: 0, width: '100%' }}>
+                      <span
+                        style={{
+                          fontSize: '13px',
+                          fontWeight: 700,
+                          color: 'var(--text-primary)',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          minWidth: 0,
+                          flex: 1,
+                        }}
+                      >
                         {contact.name}
                       </span>
-                      <span className="text-tertiary" style={{ fontSize: '10px', flexShrink: 0 }}>
+                      <span className="text-tertiary" style={{ fontSize: '10px', flexShrink: 0, whiteSpace: 'nowrap' }}>
                         {contact.lastTime}
                       </span>
                     </div>
 
-                    <span className="text-secondary truncate" style={{ fontSize: '11px', marginTop: '1px' }}>
+                    <span
+                      style={{
+                        fontSize: '11px',
+                        color: 'var(--text-secondary)',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        marginTop: '1px',
+                        display: 'block',
+                        minWidth: 0,
+                        width: '100%',
+                      }}
+                    >
                       {contact.role}
                     </span>
 
                     <p
-                      className="margin-0 text-tertiary truncate"
-                      style={{ fontSize: '11px', marginTop: '3px' }}
+                      className="margin-0 text-tertiary"
+                      style={{
+                        fontSize: '11px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        marginTop: '2px',
+                        display: 'block',
+                        minWidth: 0,
+                        width: '100%',
+                      }}
                     >
                       {contact.lastMessage}
                     </p>

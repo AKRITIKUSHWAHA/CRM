@@ -29,20 +29,11 @@ export const OalAdminDashboard = () => {
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <Breadcrumb items={[{ label: 'OAL Network' }, { label: 'Platform Master Admin' }]} />
-          <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            OAL Platform Governance Dashboard
-          </h1>
-          <p className="text-xs text-secondary margin-0 mt-0.5">
-            Master administration, lender approvals, AI scoring rules, and marketplace audit logs
-          </p>
-        </div>
-
-        <Badge variant="success" icon={ShieldCheck} style={{ fontSize: '11px', padding: '4px 10px' }}>
-          Master Admin Vault Active
-        </Badge>
+      <div>
+        <Breadcrumb items={[{ label: 'OAL Network' }, { label: 'Platform Master Admin' }]} />
+        <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+          OAL Platform Governance Dashboard
+        </h1>
       </div>
 
       {/* 8 KPI Cards */}

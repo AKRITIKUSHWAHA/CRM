@@ -27,18 +27,20 @@ export const OalAdminDashboard = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <Breadcrumb items={[{ label: 'OAL Network' }, { label: 'Platform Master Admin' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>OAL Platform Governance Dashboard</h1>
-          <p className="text-xs text-secondary margin-0">
+          <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            OAL Platform Governance Dashboard
+          </h1>
+          <p className="text-xs text-secondary margin-0 mt-0.5">
             Master administration, lender approvals, AI scoring rules, and marketplace audit logs
           </p>
         </div>
 
-        <Badge variant="success" icon={ShieldCheck}>
+        <Badge variant="success" icon={ShieldCheck} style={{ fontSize: '11px', padding: '4px 10px' }}>
           Master Admin Vault Active
         </Badge>
       </div>
@@ -51,7 +53,7 @@ export const OalAdminDashboard = () => {
         <div onClick={() => navigate('/oal/admin/applications')} className="cursor-pointer">
           <KPICard title="Applications" value="280 Queue" change="86% Verified" changeType="positive" icon={FileText} />
         </div>
-        <div onClick={() => navigate('/oal/admin/applications')} className="cursor-pointer">
+        <div onClick={() => navigate('/oal/admin/scoring')} className="cursor-pointer">
           <KPICard title="Qualified Pre-Scored" value="240 Grade A+" change="92% Match" changeType="positive" icon={CheckCircle2} />
         </div>
         <div onClick={() => navigate('/oal/admin/lenders')} className="cursor-pointer">
@@ -71,29 +73,31 @@ export const OalAdminDashboard = () => {
         </div>
       </div>
 
-      {/* 5 Visual Analytics & Progress Breakdown Grid */}
+      {/* Visual Analytics & Progress Breakdown Grid */}
       <div className="grid-responsive-2col">
         {/* Chart 1 & 2: Applications & Qualification */}
-        <Card className="p-6 flex flex-col gap-4">
-          <h3 className="text-base font-semibold">Application & Qualification Pipeline</h3>
+        <Card className="p-5 flex flex-col gap-4" style={{ borderRadius: '12px' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+            Application & Qualification Pipeline
+          </h3>
           <div className="flex flex-col gap-3">
             <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span>Application Processing Speed (SLA &lt; 24h)</span>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="font-medium text-secondary">Application Processing Speed (SLA &lt; 24h)</span>
                 <span className="font-bold text-success">96%</span>
               </div>
               <ProgressBar value={96} variant="success" showLabel={false} />
             </div>
             <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span>Grade A+ Qualified Borrowers (AI Score &gt; 780)</span>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="font-medium text-secondary">Grade A+ Qualified Borrowers (AI Score &gt; 780)</span>
                 <span className="font-bold text-primary">84%</span>
               </div>
               <ProgressBar value={84} variant="primary" showLabel={false} />
             </div>
             <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span>Grade B+ Qualified Borrowers (AI Score 720-779)</span>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="font-medium text-secondary">Grade B+ Qualified Borrowers (AI Score 720-779)</span>
                 <span className="font-bold text-info">16%</span>
               </div>
               <ProgressBar value={16} variant="info" showLabel={false} />
@@ -102,19 +106,21 @@ export const OalAdminDashboard = () => {
         </Card>
 
         {/* Chart 3, 4 & 5: Funding, Loan Volume, Lender Activity */}
-        <Card className="p-6 flex flex-col gap-4">
-          <h3 className="text-base font-semibold">Funding Volume & Lender Bidding Telemetry</h3>
+        <Card className="p-5 flex flex-col gap-4" style={{ borderRadius: '12px' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+            Funding Volume & Lender Bidding Telemetry
+          </h3>
           <div className="flex flex-col gap-3">
             <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span>Fund Disbursement Settlement Rate ($18.4M)</span>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="font-medium text-secondary">Fund Disbursement Settlement Rate ($18.4M)</span>
                 <span className="font-bold text-success">92%</span>
               </div>
               <ProgressBar value={92} variant="success" showLabel={false} />
             </div>
             <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span>Institutional Lender Bidding Participation</span>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="font-medium text-secondary">Institutional Lender Bidding Participation</span>
                 <span className="font-bold text-primary">88%</span>
               </div>
               <ProgressBar value={88} variant="primary" showLabel={false} />
@@ -123,18 +129,75 @@ export const OalAdminDashboard = () => {
         </Card>
       </div>
 
-      {/* Admin Quick Module Links */}
-      <Card className="p-4">
-        <h4 className="text-xs font-semibold text-tertiary uppercase tracking-wider mb-3">Master Platform Administration Modules</h4>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <Button variant="outline" size="sm" icon={Users} onClick={() => navigate('/oal/admin/borrowers')}>Borrower Directory</Button>
-          <Button variant="outline" size="sm" icon={Building2} onClick={() => navigate('/oal/admin/lenders')}>Lender Approvals</Button>
-          <Button variant="outline" size="sm" icon={FileText} onClick={() => navigate('/oal/admin/applications')}>Master Applications</Button>
-          <Button variant="outline" size="sm" icon={ShieldCheck} onClick={() => navigate('/oal/admin/verification')}>KYC Verification</Button>
-          <Button variant="outline" size="sm" icon={TrendingUp} onClick={() => navigate('/oal/admin/scoring')}>AI Scoring Rules</Button>
-          <Button variant="outline" size="sm" icon={DollarSign} onClick={() => navigate('/oal/admin/payments')}>Payments & Fees</Button>
-          <Button variant="outline" size="sm" icon={LifeBuoy} onClick={() => navigate('/oal/admin/support')}>AI Support Desk</Button>
-          <Button variant="outline" size="sm" icon={ArrowRight} onClick={() => navigate('/oal/admin/audit')}>Audit Log Feed</Button>
+      {/* Admin Quick Module Links - Sleek Compact Working Tiles */}
+      <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
+        <div className="flex items-center justify-between mb-3">
+          <h4 style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+            Master Platform Administration Modules
+          </h4>
+          <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>8 Modules</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          {[
+            { title: 'Borrower Directory', path: '/oal/admin/borrowers', icon: Users, desc: 'Manage borrower accounts' },
+            { title: 'Lender Approvals', path: '/oal/admin/lenders', icon: Building2, desc: 'Review debt funds' },
+            { title: 'Master Applications', path: '/oal/admin/applications', icon: FileText, desc: 'Underwriting pipelines' },
+            { title: 'KYC Verification', path: '/oal/admin/verification', icon: ShieldCheck, desc: 'FinCEN CDD & documents' },
+            { title: 'AI Scoring Rules', path: '/oal/admin/scoring', icon: TrendingUp, desc: 'Credit risk algorithm' },
+            { title: 'Payments & Fees', path: '/oal/admin/payments', icon: DollarSign, desc: 'Origination & ledgers' },
+            { title: 'AI Support Desk', path: '/oal/admin/support', icon: LifeBuoy, desc: 'Helpdesk ticket queues' },
+            { title: 'Audit Log Feed', path: '/oal/admin/audit', icon: ArrowRight, desc: 'Security event stream' },
+          ].map((mod) => {
+            const ModIcon = mod.icon;
+            return (
+              <button
+                key={mod.path}
+                type="button"
+                onClick={() => navigate(mod.path)}
+                className="flex items-center gap-3 p-2.5 rounded-lg border text-left cursor-pointer transition-all w-full"
+                style={{
+                  backgroundColor: 'var(--surface-secondary)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--text-primary)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--accent)';
+                  e.currentTarget.style.backgroundColor = 'var(--surface-hover)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border)';
+                  e.currentTarget.style.backgroundColor = 'var(--surface-secondary)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <div
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(2, 132, 199, 0.1)',
+                    color: 'var(--accent)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  <ModIcon size={16} />
+                </div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }} className="truncate">
+                    {mod.title}
+                  </span>
+                  <span className="text-secondary truncate" style={{ fontSize: '11px' }}>
+                    {mod.desc}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </Card>
     </div>

@@ -851,3 +851,48 @@ html, body, #root, .app-layout, .main-content {
 .kpi-compact [style*="font-size: 1.75rem"] {
   font-size: 1.35rem !important;
 }
+
+/* Master Platform Administration Modules Grid */
+.grid-admin-modules-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .grid-admin-modules-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+}
+
+@media (max-width: 580px) {
+  .grid-admin-modules-4 {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+.admin-module-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  background-color: var(--surface-secondary);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.admin-module-card:hover {
+  border-color: var(--accent);
+  background-color: var(--surface-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+

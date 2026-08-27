@@ -138,7 +138,7 @@ export const OalAdminDashboard = () => {
           <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>8 Modules</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+        <div className="grid-admin-modules-4">
           {[
             { title: 'Borrower Directory', path: '/oal/admin/borrowers', icon: Users, desc: 'Manage borrower accounts' },
             { title: 'Lender Approvals', path: '/oal/admin/lenders', icon: Building2, desc: 'Review debt funds' },
@@ -155,22 +155,7 @@ export const OalAdminDashboard = () => {
                 key={mod.path}
                 type="button"
                 onClick={() => navigate(mod.path)}
-                className="flex items-center gap-3 p-2.5 rounded-lg border text-left cursor-pointer transition-all w-full"
-                style={{
-                  backgroundColor: 'var(--surface-secondary)',
-                  borderColor: 'var(--border)',
-                  color: 'var(--text-primary)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--accent)';
-                  e.currentTarget.style.backgroundColor = 'var(--surface-hover)';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--border)';
-                  e.currentTarget.style.backgroundColor = 'var(--surface-secondary)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
+                className="admin-module-card"
               >
                 <div
                   style={{

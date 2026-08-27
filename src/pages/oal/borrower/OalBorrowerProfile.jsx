@@ -123,7 +123,7 @@ export const OalBorrowerProfile = () => {
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* 1. Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'OAL Network' }, { label: 'Borrower Profile' }]} />
           <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
@@ -131,7 +131,7 @@ export const OalBorrowerProfile = () => {
           </h1>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="header-actions-right">
           <Badge variant="success" icon={ShieldCheck}>
             FinCEN CDD Verified
           </Badge>
@@ -145,15 +145,15 @@ export const OalBorrowerProfile = () => {
             Profile Picture & Avatar
           </h2>
 
-          <Card style={{ padding: '1.25rem', borderRadius: '12px' }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-3.5">
+          <Card style={{ padding: '1.25rem', borderRadius: '12px', width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full min-w-0">
+              <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1 w-full">
                 {/* Large Avatar Container with Overlay */}
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                   <div
                     style={{
-                      width: '70px',
-                      height: '70px',
+                      width: '60px',
+                      height: '60px',
                       borderRadius: '50%',
                       backgroundColor: avatarPreview ? 'transparent' : 'var(--accent)',
                       backgroundImage: avatarPreview ? `url(${avatarPreview})` : 'none',
@@ -164,7 +164,7 @@ export const OalBorrowerProfile = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontWeight: 800,
-                      fontSize: '22px',
+                      fontSize: '18px',
                       border: '3px solid var(--surface-secondary)',
                       boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
                     }}
@@ -180,8 +180,8 @@ export const OalBorrowerProfile = () => {
                       position: 'absolute',
                       bottom: '0',
                       right: '0',
-                      width: '24px',
-                      height: '24px',
+                      width: '22px',
+                      height: '22px',
                       borderRadius: '50%',
                       backgroundColor: 'var(--text-primary)',
                       color: 'var(--surface)',
@@ -193,30 +193,30 @@ export const OalBorrowerProfile = () => {
                     }}
                     title="Upload new photo"
                   >
-                    <Camera size={12} />
+                    <Camera size={11} />
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-1 min-w-0">
+                <div className="flex flex-col gap-1 min-w-0 flex-1" style={{ maxWidth: '100%' }}>
                   <div className="flex items-center gap-2 flex-wrap min-w-0">
-                    <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }} className="truncate">
+                    <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>
                       {formData.name}
                     </span>
-                    <Badge variant="success" icon={CheckCircle2} style={{ fontSize: '11px', padding: '2px 8px' }}>
+                    <Badge variant="success" icon={CheckCircle2} style={{ fontSize: '11px', padding: '2px 8px', whiteSpace: 'nowrap' }}>
                       Verified Signatory
                     </Badge>
                   </div>
-                  <span className="text-secondary truncate" style={{ fontSize: '12px' }}>
+                  <span className="text-secondary" style={{ fontSize: '12px', lineHeight: 1.4, wordBreak: 'break-word' }}>
                     {formData.title} &bull; {formData.company}
                   </span>
-                  <span className="text-tertiary" style={{ fontSize: '11px' }}>
+                  <span className="text-tertiary" style={{ fontSize: '11px', lineHeight: 1.3 }}>
                     Allowed formats: JPG, PNG, WEBP (Max 5MB)
                   </span>
                 </div>
               </div>
 
               {/* Upload & Remove Action Buttons */}
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap flex-shrink-0">
                 <input
                   type="file"
                   ref={fileInputRef}

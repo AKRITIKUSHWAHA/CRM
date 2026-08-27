@@ -37,7 +37,8 @@ export const KPICard = ({
         border: '1px solid var(--border)',
         borderRadius: '14px',
         padding: '0.9rem 1rem',
-        minHeight: '122px',
+        minHeight: '136px',
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -117,7 +118,7 @@ export const KPICard = ({
 
       {/* Contextual Growth Pill Line */}
       {(change || changePeriod) && (
-        <div className="flex items-center gap-1.5 text-xs flex-wrap min-w-0">
+        <div className="flex items-center gap-1.5 text-xs flex-wrap min-w-0" style={{ marginTop: 'auto', paddingTop: '0.2rem' }}>
           {change && (
             <span
               style={{

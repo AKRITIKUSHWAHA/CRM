@@ -79,18 +79,42 @@ export const SupportDashboard = () => {
 
       {/* 2. KPI Cards Strip */}
       <div className="grid-responsive-kpi">
-        <div onClick={() => navigate('/crm/support/tickets')} className="cursor-pointer">
-          <KPICard title="ACTIVE TICKETS" value={openCount} change="SLA 99.4%" changePeriod="vs last 7 days" changeType="positive" icon={LifeBuoy} />
-        </div>
-        <div onClick={() => navigate('/crm/support/tickets')} className="cursor-pointer">
-          <KPICard title="RESOLVED" value={resolvedCount} change="Avg 4.2h" changePeriod="vs last 7 days" changeType="positive" icon={CheckCircle2} />
-        </div>
-        <div onClick={() => navigate('/crm/support/chat')} className="cursor-pointer">
-          <KPICard title="SUPPORT CHAT" value="Gateway" change="Live 24/7" changePeriod="vs last 7 days" changeType="neutral" icon={MessageSquare} />
-        </div>
-        <div onClick={() => navigate('/crm/support/kb')} className="cursor-pointer">
-          <KPICard title="KNOWLEDGE BASE" value={`${kbArticles.length} Articles`} change="3,050 views" changePeriod="vs last 7 days" changeType="positive" icon={BookOpen} />
-        </div>
+        <KPICard
+          title="ACTIVE TICKETS"
+          value={openCount}
+          change="SLA 99.4%"
+          changePeriod="vs last 7 days"
+          changeType="positive"
+          icon={LifeBuoy}
+          onClick={() => navigate('/crm/support/tickets')}
+        />
+        <KPICard
+          title="RESOLVED"
+          value={resolvedCount}
+          change="Avg 4.2h"
+          changePeriod="vs last 7 days"
+          changeType="positive"
+          icon={CheckCircle2}
+          onClick={() => navigate('/crm/support/tickets')}
+        />
+        <KPICard
+          title="SUPPORT CHAT"
+          value="Gateway"
+          change="Live 24/7"
+          changePeriod="vs last 7 days"
+          changeType="neutral"
+          icon={MessageSquare}
+          onClick={() => navigate('/crm/support/chat')}
+        />
+        <KPICard
+          title="KNOWLEDGE BASE"
+          value={`${kbArticles.length} Articles`}
+          change="3,050 views"
+          changePeriod="vs last 7 days"
+          changeType="positive"
+          icon={BookOpen}
+          onClick={() => navigate('/crm/support/kb')}
+        />
       </div>
 
       {/* 3. Support Suite Sub-Modules (Interactive Module Cards) */}

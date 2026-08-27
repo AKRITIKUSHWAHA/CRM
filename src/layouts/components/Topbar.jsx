@@ -254,17 +254,8 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
         boxSizing: 'border-box',
       }}
     >
-      {/* Left: Mobile Menu + Brand Logo (Fits strictly within 240px sidebar section) */}
-      <div style={{ minWidth: '220px', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <Button
-          variant="ghost"
-          size="sm"
-          isIconOnly
-          icon={Menu}
-          onClick={onToggleSidebar}
-          aria-label="Toggle Navigation"
-        />
-
+      {/* Left: Brand Logo + Text + Toggle Menu Button (Fits strictly within sidebar section) */}
+      <div style={{ minWidth: '200px', display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
         <div
           onClick={() => navigate(product === 'crm' ? '/crm/dashboard' : '/oal/dashboard')}
           className="flex items-center gap-2.5 cursor-pointer"
@@ -316,21 +307,31 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
             </span>
           </div>
         </div>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          isIconOnly
+          icon={Menu}
+          onClick={onToggleSidebar}
+          aria-label="Toggle Navigation"
+        />
       </div>
 
       {/* Middle: Crisp Global Search Input */}
-      <div className="hidden-mobile flex-1" style={{ maxWidth: '440px', margin: '0 1.5rem 0 2rem' }}>
+      <div className="hidden-mobile flex-1" style={{ maxWidth: '420px', margin: '0 1.5rem' }}>
         <button
           type="button"
           onClick={() => setIsSearchOpen(true)}
-          className="w-full flex items-center justify-between px-3.5 py-2 transition-all"
+          className="w-full flex items-center justify-between transition-all"
           style={{
             height: '38px',
+            padding: '0 1.15rem',
             cursor: 'pointer',
             backgroundColor: 'var(--surface-secondary)',
             border: '1px solid var(--border)',
             borderRadius: '8px',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.02)',
             boxSizing: 'border-box',
           }}
           onMouseEnter={(e) => {
@@ -342,10 +343,10 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
             e.currentTarget.style.backgroundColor = 'var(--surface-secondary)';
           }}
         >
-          <div className="flex items-center gap-2.5">
-            <Search size={16} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
+          <div className="flex items-center gap-3">
+            <Search size={15} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
             <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 500 }}>
-              Search contacts, deals, tasks, apps...
+              Search...
             </span>
           </div>
           <span
@@ -359,6 +360,9 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
               border: '1px solid var(--border)',
               fontFamily: 'var(--font-mono)',
               lineHeight: 1,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             ⌘K
@@ -536,7 +540,7 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={product === 'crm' ? "Search 30+ CRM modules, leads, contacts, deals, tasks..." : "Search 35+ items across KYC, term sheets, stages, docs, desks..."}
+                placeholder="Search..."
                 style={{
                   width: '100%',
                   border: 'none',

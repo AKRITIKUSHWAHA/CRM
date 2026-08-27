@@ -62,6 +62,27 @@ html, body, #root, .app-layout, .main-content {
   max-width: 100% !important;
   min-width: 0 !important;
   box-sizing: border-box !important;
+  align-items: stretch !important;
+}
+
+.grid-responsive-kpi > * {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.grid-responsive-kpi .kpi-card,
+.grid-responsive-kpi > * > .kpi-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  min-height: 136px !important;
+  flex: 1 1 100% !important;
+  box-sizing: border-box !important;
 }
 
 @media (max-width: 440px) {
@@ -69,12 +90,23 @@ html, body, #root, .app-layout, .main-content {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 8px !important;
   }
+
+  .grid-responsive-kpi .kpi-card,
+  .grid-responsive-kpi > * > .kpi-card {
+    padding: 0.75rem 0.75rem !important;
+    min-height: 136px !important;
+  }
 }
 
 @media (min-width: 1024px) {
   .grid-responsive-kpi {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     gap: 16px !important;
+  }
+
+  .grid-responsive-kpi .kpi-card,
+  .grid-responsive-kpi > * > .kpi-card {
+    min-height: 124px !important;
   }
 }
 
@@ -817,34 +849,68 @@ html, body, #root, .app-layout, .main-content {
 
 /* 5-Card Balanced Lender Grid */
 .grid-lender-kpi-5 {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.85rem;
-  width: 100%;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  align-items: stretch !important;
+}
+
+.grid-lender-kpi-5 > * {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.grid-lender-kpi-5 .kpi-card,
+.grid-lender-kpi-5 > * > .kpi-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  min-height: 128px !important;
+  box-sizing: border-box !important;
 }
 
 @media (max-width: 1200px) {
   .grid-lender-kpi-5 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
   }
 }
 
 @media (max-width: 768px) {
   .grid-lender-kpi-5 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.65rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.65rem !important;
   }
 }
 
 @media (max-width: 480px) {
   .grid-lender-kpi-5 {
-    grid-template-columns: 1fr;
-    gap: 0.65rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+  }
+
+  .grid-lender-kpi-5 > *:last-child {
+    grid-column: span 2 !important;
+  }
+
+  .grid-lender-kpi-5 .kpi-card,
+  .grid-lender-kpi-5 > * > .kpi-card {
+    padding: 0.75rem 0.75rem !important;
+    min-height: 120px !important;
   }
 }
 
 .kpi-compact {
-  height: 110px !important;
+  min-height: 128px !important;
+  height: 100% !important;
   padding: 0.85rem 1rem !important;
 }
 

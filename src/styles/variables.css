@@ -30,7 +30,7 @@
   --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Sidebar dimensions */
-  --sidebar-width: 260px;
+  --sidebar-width: 224px;
   --sidebar-collapsed-width: 72px;
   --topbar-height: 64px;
 

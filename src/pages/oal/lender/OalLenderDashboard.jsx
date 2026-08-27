@@ -11,7 +11,7 @@ export const OalLenderDashboard = () => {
   return (
     <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="page-header-row">
         <div>
           <Breadcrumb items={[{ label: 'OAL Network' }, { label: 'Institutional Lender Portal' }]} />
           <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
@@ -22,7 +22,7 @@ export const OalLenderDashboard = () => {
           </p>
         </div>
 
-        <div className="flex justify-end w-full sm:w-auto">
+        <div className="header-actions-right">
           <Button
             variant="primary"
             size="sm"
@@ -44,56 +44,51 @@ export const OalLenderDashboard = () => {
 
       {/* KPI Cards - Compact Sized 5-in-1 Line on Desktop, Responsive on Mobile */}
       <div className="grid-lender-kpi-5">
-        <div onClick={() => navigate('/oal/lender/leads')} className="cursor-pointer">
-          <KPICard
-            className="kpi-compact"
-            title="Qualified Leads"
-            value={lenderLeads.length}
-            change="Grade A+ Match"
-            changeType="positive"
-            icon={Users}
-          />
-        </div>
-        <div onClick={() => navigate('/oal/lender/applications')} className="cursor-pointer">
-          <KPICard
-            className="kpi-compact"
-            title="Applications"
-            value="8 Active"
-            change="KYC Verified"
-            changeType="positive"
-            icon={FileText}
-          />
-        </div>
-        <div onClick={() => navigate('/oal/lender/offers')} className="cursor-pointer">
-          <KPICard
-            className="kpi-compact"
-            title="Offers Submitted"
-            value={offers.length}
-            change="Active Bids"
-            changeType="positive"
-            icon={Send}
-          />
-        </div>
-        <div onClick={() => navigate('/oal/lender/offers')} className="cursor-pointer">
-          <KPICard
-            className="kpi-compact"
-            title="Accepted Offers"
-            value="3 Deals"
-            change="100% Match"
-            changeType="positive"
-            icon={CheckCircle2}
-          />
-        </div>
-        <div onClick={() => navigate('/oal/lender/analytics')} className="cursor-pointer">
-          <KPICard
-            className="kpi-compact"
-            title="Funded Capital"
-            value="$4,200,000"
-            change="Avg 5.4% APR"
-            changeType="positive"
-            icon={DollarSign}
-          />
-        </div>
+        <KPICard
+          className="kpi-compact"
+          title="Qualified Leads"
+          value={lenderLeads.length}
+          change="Grade A+ Match"
+          changeType="positive"
+          icon={Users}
+          onClick={() => navigate('/oal/lender/leads')}
+        />
+        <KPICard
+          className="kpi-compact"
+          title="Applications"
+          value="8 Active"
+          change="KYC Verified"
+          changeType="positive"
+          icon={FileText}
+          onClick={() => navigate('/oal/lender/applications')}
+        />
+        <KPICard
+          className="kpi-compact"
+          title="Offers Submitted"
+          value={offers.length}
+          change="Active Bids"
+          changeType="positive"
+          icon={Send}
+          onClick={() => navigate('/oal/lender/offers')}
+        />
+        <KPICard
+          className="kpi-compact"
+          title="Accepted Offers"
+          value="3 Deals"
+          change="100% Match"
+          changeType="positive"
+          icon={CheckCircle2}
+          onClick={() => navigate('/oal/lender/offers')}
+        />
+        <KPICard
+          className="kpi-compact"
+          title="Funded Capital"
+          value="$4,200,000"
+          change="Avg 5.4% APR"
+          changeType="positive"
+          icon={DollarSign}
+          onClick={() => navigate('/oal/lender/analytics')}
+        />
       </div>
 
       {/* Qualified Leads Table Preview */}

@@ -278,7 +278,7 @@ export const UnifiedLogin = ({ mode }) => {
               </div>
               <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '2px' }}>
                 {currentPlatform === 'crm'
-                  ? 'All 5 CRM Role Presets — Select any role on the left to auto-fill & login instantly'
+                  ? 'All 5 CRM Role Presets — Select any role on the right to auto-fill & login instantly'
                   : 'All 4 OAL Marketplace Role Presets — Select any persona role to auto-fill & login instantly'}
               </span>
             </div>
@@ -321,172 +321,7 @@ export const UnifiedLogin = ({ mode }) => {
           }}
           className="login-grid-wrapper"
         >
-          {/* Left Panel: All Roles for Current Platform (7 Cols) */}
-          <div
-            style={{
-              gridColumn: 'span 7 / span 7',
-              backgroundColor: 'var(--surface)',
-              borderRadius: '12px',
-              border: '1px solid var(--border)',
-              padding: '1.5rem',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              gap: '1.25rem',
-            }}
-            className="login-left-card"
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '0.75rem',
-                  paddingBottom: '0.75rem',
-                  borderBottom: '1px solid var(--border)',
-                }}
-                className="login-preset-header"
-              >
-                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                  {currentPlatform === 'crm' ? 'CRM nErgy Roles (5 Presets)' : 'OAL Network Roles (4 Presets)'}
-                </span>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    color: primaryThemeColor,
-                    backgroundColor: primaryLightBg,
-                    padding: '3px 8px',
-                    borderRadius: '9999px',
-                    fontWeight: 600,
-                  }}
-                >
-                  Click any role card to auto-fill credentials
-                </span>
-              </div>
-
-              {/* Role Cards List for Current Platform */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-                {roleList.map((r) => {
-                  const Icon = r.icon;
-                  const isSelected = selectedRole.id === r.id;
-
-                  return (
-                    <div
-                      key={r.id}
-                      onClick={() => handleSelectRole(r)}
-                      style={{
-                        padding: '0.875rem 1rem',
-                        borderRadius: '10px',
-                        border: '1px solid',
-                        borderColor: isSelected ? primaryThemeColor : 'var(--border)',
-                        backgroundColor: isSelected ? primaryLightBg : 'var(--surface)',
-                        cursor: 'pointer',
-                        transition: 'all var(--transition-fast)',
-                      }}
-                      className="login-role-card"
-                    >
-                      <div className="login-role-card-left">
-                        <div
-                          style={{
-                            width: '38px',
-                            height: '38px',
-                            borderRadius: '50%',
-                            backgroundColor: isSelected ? primaryThemeColor : 'var(--surface-secondary)',
-                            color: isSelected ? '#ffffff' : 'var(--text-secondary)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                          }}
-                        >
-                          <Icon size={18} />
-                        </div>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', minWidth: 0 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                              {r.title}
-                            </span>
-                            {isSelected && (
-                              <CheckCircle2 size={14} style={{ color: primaryThemeColor }} />
-                            )}
-                          </div>
-                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px', wordBreak: 'break-word' }}>
-                            {r.name} &bull; <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)' }}>{r.email}</span>
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="login-role-card-right">
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '11px',
-                            color: 'var(--text-tertiary)',
-                            backgroundColor: 'var(--surface-secondary)',
-                            padding: '4px 8px',
-                            borderRadius: '4px',
-                            border: '1px solid var(--border)',
-                          }}
-                          className="login-role-card-pass"
-                        >
-                          Pass: {r.password}
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSelectRole(r);
-                            executeLogin(r);
-                          }}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.375rem',
-                            padding: '0.4rem 0.875rem',
-                            borderRadius: '6px',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            border: '1px solid',
-                            borderColor: isSelected ? primaryThemeColor : 'var(--border)',
-                            backgroundColor: isSelected ? primaryThemeColor : 'var(--surface)',
-                            color: isSelected ? '#ffffff' : 'var(--text-primary)',
-                            cursor: 'pointer',
-                            transition: 'all var(--transition-fast)',
-                          }}
-                        >
-                          <span>Sign In</span>
-                          <ChevronRight size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Bottom Left Helper Text */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                fontSize: '12px',
-                color: 'var(--text-tertiary)',
-                paddingTop: '0.75rem',
-                borderTop: '1px solid var(--border)',
-              }}
-            >
-              <span>{currentPlatform === 'crm' ? 'Isolated CRM Tenant Database' : 'OAL Marketplace Underwriting Vault'}</span>
-              <span style={{ fontWeight: 600, color: primaryThemeColor }}>
-                {currentPlatform === 'crm' ? '5 CRM Roles Available' : '4 OAL Roles Available'}
-              </span>
-            </div>
-          </div>
-
-          {/* Right Panel: Premium Authentication Card (5 Cols) */}
+          {/* Left Panel: Premium Authentication Card (5 Cols) */}
           <div
             style={{
               gridColumn: 'span 5 / span 5',
@@ -675,6 +510,171 @@ export const UnifiedLogin = ({ mode }) => {
             >
               <ShieldCheck size={14} style={{ color: 'var(--success)' }} />
               <span>Secure enterprise session &bull; Tenant-isolated workspace</span>
+            </div>
+          </div>
+
+          {/* Right Panel: All Roles for Current Platform (7 Cols) */}
+          <div
+            style={{
+              gridColumn: 'span 7 / span 7',
+              backgroundColor: 'var(--surface)',
+              borderRadius: '12px',
+              border: '1px solid var(--border)',
+              padding: '1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '1.25rem',
+            }}
+            className="login-left-card"
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '0.75rem',
+                  paddingBottom: '0.75rem',
+                  borderBottom: '1px solid var(--border)',
+                }}
+                className="login-preset-header"
+              >
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  {currentPlatform === 'crm' ? 'CRM nErgy Roles (5 Presets)' : 'OAL Network Roles (4 Presets)'}
+                </span>
+                <span
+                  style={{
+                    fontSize: '11px',
+                    color: primaryThemeColor,
+                    backgroundColor: primaryLightBg,
+                    padding: '3px 8px',
+                    borderRadius: '9999px',
+                    fontWeight: 600,
+                  }}
+                >
+                  Click any role card to auto-fill credentials
+                </span>
+              </div>
+
+              {/* Role Cards List for Current Platform */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                {roleList.map((r) => {
+                  const Icon = r.icon;
+                  const isSelected = selectedRole.id === r.id;
+
+                  return (
+                    <div
+                      key={r.id}
+                      onClick={() => handleSelectRole(r)}
+                      style={{
+                        padding: '0.875rem 1rem',
+                        borderRadius: '10px',
+                        border: '1px solid',
+                        borderColor: isSelected ? primaryThemeColor : 'var(--border)',
+                        backgroundColor: isSelected ? primaryLightBg : 'var(--surface)',
+                        cursor: 'pointer',
+                        transition: 'all var(--transition-fast)',
+                      }}
+                      className="login-role-card"
+                    >
+                      <div className="login-role-card-left">
+                        <div
+                          style={{
+                            width: '38px',
+                            height: '38px',
+                            borderRadius: '50%',
+                            backgroundColor: isSelected ? primaryThemeColor : 'var(--surface-secondary)',
+                            color: isSelected ? '#ffffff' : 'var(--text-secondary)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <Icon size={18} />
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                              {r.title}
+                            </span>
+                            {isSelected && (
+                              <CheckCircle2 size={14} style={{ color: primaryThemeColor }} />
+                            )}
+                          </div>
+                          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px', wordBreak: 'break-word' }}>
+                            {r.name} &bull; <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-tertiary)' }}>{r.email}</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="login-role-card-right">
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '11px',
+                            color: 'var(--text-tertiary)',
+                            backgroundColor: 'var(--surface-secondary)',
+                            padding: '4px 8px',
+                            borderRadius: '4px',
+                            border: '1px solid var(--border)',
+                          }}
+                          className="login-role-card-pass"
+                        >
+                          Pass: {r.password}
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSelectRole(r);
+                            executeLogin(r);
+                          }}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.375rem',
+                            padding: '0.4rem 0.875rem',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            border: '1px solid',
+                            borderColor: isSelected ? primaryThemeColor : 'var(--border)',
+                            backgroundColor: isSelected ? primaryThemeColor : 'var(--surface)',
+                            color: isSelected ? '#ffffff' : 'var(--text-primary)',
+                            cursor: 'pointer',
+                            transition: 'all var(--transition-fast)',
+                          }}
+                        >
+                          <span>Sign In</span>
+                          <ChevronRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Bottom Left Helper Text */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '12px',
+                color: 'var(--text-tertiary)',
+                paddingTop: '0.75rem',
+                borderTop: '1px solid var(--border)',
+              }}
+            >
+              <span>{currentPlatform === 'crm' ? 'Isolated CRM Tenant Database' : 'OAL Marketplace Underwriting Vault'}</span>
+              <span style={{ fontWeight: 600, color: primaryThemeColor }}>
+                {currentPlatform === 'crm' ? '5 CRM Roles Available' : '4 OAL Roles Available'}
+              </span>
             </div>
           </div>
         </div>

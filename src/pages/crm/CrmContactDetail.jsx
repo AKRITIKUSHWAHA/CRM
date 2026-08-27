@@ -36,29 +36,77 @@ import {
   Input
 } from '../../components/ui';
 import { useCrm } from '../../context/CrmContext';
+import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 
 export const CrmContactDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { contacts, deals, tasks, messages } = useCrm();
+  const { contacts, deals, tasks, messages, editContact } = useCrm();
+  const { crmUser } = useAuth();
   const { addToast } = useToast();
 
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Notes tab state
-  const [notes, setNotes] = useState([
-    { id: '1', author: 'Alexander Wright', text: 'Client requested updated SLA pricing for Q3 logistics volume expansion.', date: 'Today at 10:15 AM' },
-    { id: '2', author: 'Sarah Jenkins', text: 'Follow-up call completed. Legal team sent NDA draft for review.', date: 'Yesterday at 3:30 PM' },
-  ]);
-  const [newNote, setNewNote] = useState('');
-
   const contact = contacts.find((c) => c.id === id) || contacts[0];
 
+  // Notes tab state with localStorage persistence per contact
+  const getInitialNotes = (contactId) => {
+    if (!contactId) return [];
+    const saved = localStorage.getItem(`crm_contact_notes_${contactId}`);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        // ignore JSON parse error
+      }
+    }
+    // Default initial mock notes for initial seed contacts
+    if (contactId === 'CNT-101' || contactId === 'CNT-102' || contactId === 'CNT-103') {
+      return [
+        { id: '1', author: 'Alexander Wright', text: 'Client requested updated SLA pricing for Q3 logistics volume expansion.', date: 'Today at 10:15 AM' },
+        { id: '2', author: 'Sarah Jenkins', text: 'Follow-up call completed. Legal team sent NDA draft for review.', date: 'Yesterday at 3:30 PM' },
+      ];
+    }
+    return [];
+  };
+
+  const [notes, setNotes] = useState(() => getInitialNotes(contact?.id || id));
+  const [newNote, setNewNote] = useState('');
+
+  React.useEffect(() => {
+    if (contact?.id) {
+      setNotes(getInitialNotes(contact.id));
+    }
+  }, [contact?.id]);
+
+  const saveNotes = (updatedNotes) => {
+    setNotes(updatedNotes);
+    if (contact?.id) {
+      localStorage.setItem(`crm_contact_notes_${contact.id}`, JSON.stringify(updatedNotes));
+      if (editContact) {
+        editContact(contact.id, { notesCount: updatedNotes.length });
+      }
+    }
+  };
+
   const handleAddNote = (e) => {
-    e.preventDefault();
-    if (!newNote.trim()) return;
-    setNotes([{ id: Date.now().toString(), author: 'Alexander Wright', text: newNote, date: 'Just now' }, ...notes]);
+    if (e) e.preventDefault();
+    const trimmed = newNote.trim();
+    if (!trimmed) {
+      addToast({ title: 'Validation Warning', message: 'Please enter note content before saving.', type: 'warning' });
+      return;
+    }
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const newNoteObj = {
+      id: Date.now().toString(),
+      author: crmUser?.name || 'Alexander Wright',
+      text: trimmed,
+      date: `Today at ${timeStr}`,
+    };
+    const updated = [newNoteObj, ...notes];
+    saveNotes(updated);
     setNewNote('');
     addToast({ title: 'Note Added', message: 'Saved note to contact history.', type: 'success' });
   };
@@ -125,15 +173,15 @@ export const CrmContactDetail = () => {
           <Card>
             <CardHeader title="Contact Metadata & Ownership" />
             <CardBody className="flex flex-col gap-0 text-xs">
-              <div className="flex items-center justify-between py-2.5 border-b" style={{ borderColor: 'var(--border)' }}>
+              <div className="flex items-center justify-between py-2.5">
                 <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Record ID:</span>
                 <span className="font-mono text-primary font-semibold" style={{ fontSize: '13px' }}>{contact.id}</span>
               </div>
-              <div className="flex items-center justify-between py-2.5 border-b" style={{ borderColor: 'var(--border)' }}>
+              <div className="flex items-center justify-between py-2.5">
                 <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Account Owner:</span>
                 <span className="font-semibold text-primary" style={{ fontSize: '13px' }}>{contact.owner}</span>
               </div>
-              <div className="flex items-center justify-between py-2.5 border-b" style={{ borderColor: 'var(--border)' }}>
+              <div className="flex items-center justify-between py-2.5">
                 <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Total Deal Value:</span>
                 <span className="font-bold text-success" style={{ fontSize: '13px' }}>{contact.totalValue}</span>
               </div>

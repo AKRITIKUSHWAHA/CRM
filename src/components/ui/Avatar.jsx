@@ -9,9 +9,16 @@ export const Avatar = ({
   className = '',
 }) => {
   const getInitials = (n) => {
-    const parts = n.split(' ');
-    if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-    return n.slice(0, 2).toUpperCase();
+    if (!n || typeof n !== 'string') return 'U';
+    const trimmed = n.trim();
+    if (!trimmed) return 'U';
+    const parts = trimmed.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) {
+      const first = parts[0][0] || '';
+      const last = parts[parts.length - 1][0] || '';
+      return `${first}${last}`.toUpperCase();
+    }
+    return trimmed.slice(0, 2).toUpperCase();
   };
 
   const sizePx = size === 'sm' ? 28 : size === 'lg' ? 48 : size === 'xl' ? 64 : 36;

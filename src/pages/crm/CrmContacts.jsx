@@ -116,11 +116,19 @@ export const CrmContacts = () => {
   // Add Contact Handler
   const handleCreateContact = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email) {
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    if (!name || !email) {
       addToast({ title: 'Validation Error', message: 'Name and email are required.', type: 'error' });
       return;
     }
-    const created = addContact(formData);
+    const created = addContact({
+      ...formData,
+      name,
+      email,
+      company: formData.company?.trim() || '',
+      phone: formData.phone?.trim() || '',
+    });
     addToast({ title: 'Contact Created', message: `Added ${created.name} to database.`, type: 'success' });
     setIsAddModalOpen(false);
     setFormData({ name: '', company: '', email: '', phone: '', type: 'Enterprise Client', owner: 'Alexander Wright', status: 'Active' });
@@ -144,8 +152,20 @@ export const CrmContacts = () => {
   const handleSaveEdit = (e) => {
     e.preventDefault();
     if (!contactToEdit) return;
-    editContact(contactToEdit.id, formData);
-    addToast({ title: 'Contact Updated', message: `Updated details for ${formData.name}.`, type: 'success' });
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    if (!name || !email) {
+      addToast({ title: 'Validation Error', message: 'Name and email are required.', type: 'error' });
+      return;
+    }
+    editContact(contactToEdit.id, {
+      ...formData,
+      name,
+      email,
+      company: formData.company?.trim() || '',
+      phone: formData.phone?.trim() || '',
+    });
+    addToast({ title: 'Contact Updated', message: `Updated details for ${name}.`, type: 'success' });
     setIsEditModalOpen(false);
   };
 

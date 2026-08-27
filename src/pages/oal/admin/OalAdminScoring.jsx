@@ -29,66 +29,87 @@ export const OalAdminScoring = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <Breadcrumb items={[{ label: 'OAL Admin' }, { label: 'AI Risk Scoring Config' }]} />
-          <h1 style={{ fontSize: 'var(--text-2xl)' }}>AI Credit Risk Scoring Rules Engine</h1>
+          <h1 style={{ fontSize: '22px', fontWeight: 800, margin: '0.25rem 0 0 0', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            AI Credit Risk Scoring Rules Engine
+          </h1>
         </div>
 
-        <Badge variant="success" icon={Sparkles}>
-          Underwriting Model v3.4 Active
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="success" icon={Sparkles} style={{ fontSize: '11px', padding: '4px 10px' }}>
+            Underwriting Model v3.4 Active
+          </Badge>
+        </div>
       </div>
 
       {/* Profile Selector Tabs */}
-      <Card>
+      <Card style={{ borderRadius: '12px', overflow: 'hidden' }}>
         <CardBody className="p-2">
-          <Tabs
-            tabs={[
-              { id: 'applicant', label: 'Regular Applicant Score Engine', icon: Sliders },
-              { id: 'investor', label: 'Qualified Verified Investor Score Engine', icon: ShieldCheck },
-            ]}
-            activeTab={scoringProfile}
-            onChange={setScoringProfile}
-          />
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none' }}>
+            <Tabs
+              tabs={[
+                { id: 'applicant', label: 'Regular Applicant Score Engine', icon: Sliders },
+                { id: 'investor', label: 'Qualified Verified Investor Score Engine', icon: ShieldCheck },
+              ]}
+              activeTab={scoringProfile}
+              onChange={setScoringProfile}
+            />
+          </div>
         </CardBody>
       </Card>
 
       {/* Rules Engine Configuration Table */}
       <form onSubmit={handleSaveScoringRules} className="flex flex-col gap-4">
-        <Card>
+        <Card style={{ borderRadius: '12px', overflow: 'hidden' }}>
           <CardHeader
             title={scoringProfile === 'applicant' ? 'Regular Borrower Credit Factors & Weights' : 'Verified Investor Liquidity Factors & Weights'}
             subtitle="Configure algorithmic weighting, evaluation rules, and minimum qualification thresholds"
           />
           <CardBody className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableCell isHeader>Evaluation Factor</TableCell>
-                  <TableCell isHeader>Algorithmic Rule Description</TableCell>
-                  <TableCell isHeader>Factor Weight (%)</TableCell>
-                  <TableCell isHeader>Qualification Threshold</TableCell>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {(scoringProfile === 'applicant' ? applicantFactors : investorFactors).map((f) => (
-                  <TableRow key={f.id}>
-                    <TableCell><span className="font-semibold text-primary">{f.factor}</span></TableCell>
-                    <TableCell><span className="text-xs text-secondary">{f.rule}</span></TableCell>
-                    <TableCell><Badge variant="primary">{f.weight}</Badge></TableCell>
-                    <TableCell><Badge variant="success">{f.threshold}</Badge></TableCell>
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableCell isHeader>Evaluation Factor</TableCell>
+                    <TableCell isHeader>Algorithmic Rule Description</TableCell>
+                    <TableCell isHeader>Factor Weight (%)</TableCell>
+                    <TableCell isHeader>Qualification Threshold</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {(scoringProfile === 'applicant' ? applicantFactors : investorFactors).map((f) => (
+                    <TableRow key={f.id}>
+                      <TableCell><span className="font-semibold text-primary">{f.factor}</span></TableCell>
+                      <TableCell><span className="text-xs text-secondary">{f.rule}</span></TableCell>
+                      <TableCell><Badge variant="primary">{f.weight}</Badge></TableCell>
+                      <TableCell><Badge variant="success">{f.threshold}</Badge></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </CardBody>
         </Card>
 
-        <div className="flex justify-end">
-          <Button variant="primary" size="md" type="submit" icon={Save} style={{ backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' }}>
+        <div className="flex justify-end w-full sm:w-auto">
+          <Button
+            variant="primary"
+            size="md"
+            type="submit"
+            icon={Save}
+            style={{
+              backgroundColor: 'var(--accent)',
+              borderColor: 'var(--accent)',
+              padding: '0 1.5rem',
+              fontWeight: 700,
+              fontSize: '13px',
+              width: 'auto',
+            }}
+          >
             Save Scoring Engine Parameters
           </Button>
         </div>
